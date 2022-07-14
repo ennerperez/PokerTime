@@ -1,12 +1,13 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ScopeSafeMediatorDecoratorTests.cs
 //  Project         : PokerTime.Web.Tests.Unit
 // ******************************************************************************
 
 namespace PokerTime.Web.Tests.Unit.Services {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
@@ -55,6 +56,14 @@ namespace PokerTime.Web.Tests.Unit.Services {
             }
 
             public Task<object> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
+
+            public IAsyncEnumerable<TResponse> CreateStream<TResponse>(
+                IStreamRequest<TResponse> request,
+                CancellationToken cancellationToken = new CancellationToken()
+            ) =>
+                throw new NotImplementedException();
+
+            public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
             public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => throw new System.NotImplementedException();
 
