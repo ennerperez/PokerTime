@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{D6A25E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerTime.Web.Tests.Integration", "tests\PokerTime.Web.Tests.Integration\PokerTime.Web.Tests.Integration.csproj", "{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerTime.Desktop", "src\PokerTime.Desktop\PokerTime.Desktop.csproj", "{D0331784-9FE5-4FCA-A1A6-2598ED913473}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0331784-9FE5-4FCA-A1A6-2598ED913473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0331784-9FE5-4FCA-A1A6-2598ED913473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0331784-9FE5-4FCA-A1A6-2598ED913473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0331784-9FE5-4FCA-A1A6-2598ED913473}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +125,7 @@ Global
 		{4C3695A0-5F39-422D-82E5-6D394D738582} = {E3D9368D-D98C-4E89-B681-D444BF548688}
 		{B946FB03-8FD6-47CB-8A1B-5ECA5EFB269A} = {E3D9368D-D98C-4E89-B681-D444BF548688}
 		{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E} = {E3D9368D-D98C-4E89-B681-D444BF548688}
+		{D0331784-9FE5-4FCA-A1A6-2598ED913473} = {C661858D-42EE-42DA-8D05-094E7C5B37AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73E1A111-F2B0-4572-8345-36721BEF16DC}
