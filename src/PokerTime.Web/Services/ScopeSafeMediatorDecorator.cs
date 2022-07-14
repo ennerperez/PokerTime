@@ -1,12 +1,13 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ScopeSafeMediatorDecorator.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
 
 namespace PokerTime.Web.Services {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Common.Behaviours;
@@ -51,6 +52,14 @@ namespace PokerTime.Web.Services {
             }
         }
         public Task<object?> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotSupportedException("We don't implement this currently. If this exception is thrown, we should probably implement it!");
+
+        public IAsyncEnumerable<TResponse> CreateStream<TResponse>(
+            IStreamRequest<TResponse> request,
+            CancellationToken cancellationToken = new CancellationToken()
+        ) =>
+            throw new NotImplementedException();
+
+        public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => this._mediator.Publish(notification, cancellationToken);
 

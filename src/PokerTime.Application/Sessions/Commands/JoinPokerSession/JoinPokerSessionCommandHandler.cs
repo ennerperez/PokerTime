@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : JoinPokerSessionCommandHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -38,7 +38,7 @@ namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
 
         public async Task<ParticipantInfo> Handle(JoinPokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            Session Session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session? Session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
             if (Session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);

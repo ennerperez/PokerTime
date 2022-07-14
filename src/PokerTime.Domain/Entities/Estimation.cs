@@ -12,7 +12,7 @@ namespace PokerTime.Domain.Entities {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public int UserStoryId { get; set; }
 
-        public UserStory UserStory { get; set; }
+        public UserStory? UserStory { get; set; }
 
         public int ParticipantId { get; set; }
         public Participant Participant { get; set; }

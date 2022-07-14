@@ -10,4 +10,9 @@
     <ProjectReference Include="..\PokerTime.Application\PokerTime.Application.csproj" />
     <ProjectReference Include="..\PokerTime.Common\PokerTime.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.AspNetCore.Components.Analyzers" Version="6.0.7" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.108" />
+  </ItemGroup>
 </Project>
