@@ -39,7 +39,7 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession
 
         public string ToBase64()
         {
-            //TODO: Use a better encoding
+            //TODO: Use a better implementation
 #if NET6_0_WINDOWS
             using var base64QrCode = new Base64QRCode(this._qrCodeData);
 
