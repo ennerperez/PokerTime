@@ -27,7 +27,7 @@ namespace PokerTime.Domain.Entities {
         public int Order { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-        public SymbolSet SymbolSet { get; set; }
+        public SymbolSet? SymbolSet { get; set; }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         public int SymbolSetId { get; set; }

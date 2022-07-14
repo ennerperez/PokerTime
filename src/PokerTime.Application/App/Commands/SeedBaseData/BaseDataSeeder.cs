@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : BaseDataSeeder.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -32,8 +32,8 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
         private async Task SeedPokerCardSymbols(CancellationToken cancellationToken) {
             int order = 1;
 
-            async Task SeedSymbolSet(string name, Action<SymbolSet> callback) {
-                SymbolSet symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
+            async Task SeedSymbolSet(string name, Action<SymbolSet?> callback) {
+                SymbolSet? symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x != null && x.Name == name, cancellationToken);
 
                 if (symbolSet == null) {
                     // Reset order
@@ -45,7 +45,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 }
             }
 
-            void IntSymbol(int num, SymbolSet symbolSet) {
+            void IntSymbol(int num, SymbolSet? symbolSet) {
                 this._pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Number,
                     SymbolSet = symbolSet,
@@ -55,7 +55,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 });
             }
 
-            void StringSymbol(string str, SymbolSet symbolSet, int? intValue = null) {
+            void StringSymbol(string str, SymbolSet? symbolSet, int? intValue = null) {
                 this._pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Characters,
                     SymbolSet = symbolSet,
@@ -65,7 +65,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 });
             }
 
-            void TypeSymbol(SymbolType symbolType, SymbolSet symbolSet) {
+            void TypeSymbol(SymbolType symbolType, SymbolSet? symbolSet) {
                 string symbolString = symbolType switch
                 {
                     SymbolType.Break => "☕",

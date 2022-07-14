@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : GetSessionStatusQueryHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -28,7 +28,7 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
         public async Task<SessionStatus> Handle(GetSessionStatusQuery request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            Session session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session? session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
             if (session == null) {
                 throw new NotFoundException();

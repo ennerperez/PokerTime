@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : RequestPerformanceBehaviour.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -14,7 +14,7 @@ namespace PokerTime.Application.Common.Behaviours {
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public sealed class RequestPerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull {
+    public sealed class RequestPerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull, IRequest<TResponse> {
         private readonly ICurrentParticipantService _currentParticipantService;
         private readonly ILogger<TRequest> _logger;
         private readonly Stopwatch _timer;

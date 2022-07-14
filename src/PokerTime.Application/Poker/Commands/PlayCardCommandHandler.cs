@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PlayCardCommandHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -38,17 +38,17 @@ namespace PokerTime.Application.Poker.Commands {
 
             using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
 
-            Session session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session? session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);
             }
 
-            UserStory userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
+            UserStory? userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
             if (userStory == null) {
                 throw new NotFoundException(nameof(UserStory), request.UserStoryId);
             }
 
-            Symbol desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x.Id == request.SymbolId, cancellationToken);
+            Symbol? desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x != null && x.Id == request.SymbolId, cancellationToken);
             if (desiredSymbol == null) {
                 throw new NotFoundException(nameof(Symbol), request.SymbolId);
             }
@@ -60,10 +60,10 @@ namespace PokerTime.Application.Poker.Commands {
             CurrentParticipantModel currentParticipantInfo = await this._currentParticipantService.GetParticipant();
 
             // Add or update estimation
-            Estimation estimation = await dbContext.Estimations
-                .Include(x => x.Participant)
-                .Where(x => x.UserStory.Session.UrlId.StringId == session.UrlId.StringId)
-                .FirstOrDefaultAsync(x => x.UserStory.Id == userStory.Id && x.ParticipantId == currentParticipantInfo.Id, cancellationToken);
+            Estimation? estimation = await dbContext.Estimations
+                .Include(x => x!.Participant)
+                .Where(x => x != null && x.UserStory != null && x.UserStory.Session.UrlId.StringId == session.UrlId.StringId)
+                .FirstOrDefaultAsync(x => x != null && x.UserStory != null && x.UserStory.Id == userStory.Id && x.ParticipantId == currentParticipantInfo.Id, cancellationToken);
 
             if (estimation == null) {
                 estimation = new Estimation {
