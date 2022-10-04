@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : Program.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -24,12 +24,29 @@ namespace PokerTime.Web {
     using Microsoft.Extensions.Logging;
     using Persistence;
     using Services;
+    using Serilog;
 
     [ExcludeFromCodeCoverage]
     public static class Program {
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         public static async Task Main(string[] args) {
-            IWebHost host = CreateWebHostBuilder(args: args).Build();
+
+
+            var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", false, true)
+                .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
+
+            // Initialize Logger
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .CreateLogger();
+
+            IWebHost host = CreateWebHostBuilder(args: args)
+                .Build();
 
             using (IServiceScope scope = host.Services.CreateScope()) {
                 IServiceProvider services = scope.ServiceProvider;
@@ -45,11 +62,10 @@ namespace PokerTime.Web {
                     await mediator.Send(new SeedBaseDataCommand());
                 }
                 catch (Exception ex) {
-                    ILogger logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
+                    var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(Program));
                     logger.LogError(ex, "An error occurred while migrating or initializing the database.");
                 }
             }
-
             await host.RunAsync();
         }
 
@@ -72,6 +88,7 @@ namespace PokerTime.Web {
 
                     Console.WriteLine($"Current environment: {env.EnvironmentName}");
 
+                    logging.AddSerilog();
                     logging.AddConfiguration(config.GetSection("Logging"));
                     logging.AddConsole();
 
