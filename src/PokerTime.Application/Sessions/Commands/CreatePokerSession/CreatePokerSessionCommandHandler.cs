@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : CreatePokerSessionCommandHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -16,7 +16,7 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
-    using QRCoder;
+    using Net.Codecrete.QrCodeGenerator;
     using PokerTime.Common;
     using Services;
 
@@ -26,6 +26,9 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
         private readonly IUrlGenerator _urlGenerator;
         private readonly IPassphraseService _passphraseService;
         private readonly ILogger<CreatePokerSessionCommandHandler> _logger;
+
+        private static readonly QrCode.Ecc[] errorCorrectionLevels = { QrCode.Ecc.Low, QrCode.Ecc.Medium, QrCode.Ecc.Quartile, QrCode.Ecc.High };
+
 
         public CreatePokerSessionCommandHandler(IPokerTimeDbContext pokerTimeDbContext, IPassphraseService passphraseService, ISystemClock systemClock, IUrlGenerator urlGenerator, ILogger<CreatePokerSessionCommandHandler> logger) {
             this._pokerTimeDbContext = pokerTimeDbContext;
@@ -47,7 +50,6 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
                 return !String.IsNullOrEmpty(plainText) ? this._passphraseService.CreateHashedPassphrase(plainText) : null;
             }
 
-            using var qrCodeGenerator = new QRCodeGenerator();
             var retrospective = new Session {
                 CreationTimestamp = this._systemClock.CurrentTimeOffset,
                 Title = request.Title,
@@ -59,10 +61,11 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
             this._logger.LogInformation($"Creating new retrospective with id {retrospective.UrlId}");
 
             string retroLocation = this._urlGenerator.GenerateUrlToPokerSessionLobby(retrospective.UrlId).ToString();
-            var payload = new PayloadGenerator.Url(retroLocation);
+
+            var qrCode =  QrCode.EncodeText(retroLocation, QrCode.Ecc.Low);
+
             var result = new CreatePokerSessionCommandResponse(
-                retrospective.UrlId,
-                new QrCode(qrCodeGenerator.CreateQrCode(payload.ToString(), QRCodeGenerator.ECCLevel.L)),
+                retrospective.UrlId, qrCode,
                 retroLocation);
 
             this._pokerTimeDbContext.Sessions.Add(retrospective);

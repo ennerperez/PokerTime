@@ -2,6 +2,7 @@
 @inherits MediatorComponent
 @using Microsoft.Extensions.Logging
 @using Microsoft.Extensions.Options
+@using Net.Codecrete.QrCodeGenerator
 @using PokerTime.Application.Common.Models
 @using PokerTime.Application.Common.Settings
 @using PokerTime.Application.Sessions.Commands.CreatePokerSession
@@ -35,9 +36,9 @@
             <input class="input" id="pokertime-location" type="text" readonly="readonly" value="@Result.Location">
         </div>
 
-        <div>
+        <div style="margin-top: 1em;" >
             <p>
-                <img src="@Result.QrCode.ToBase64()" class="pokertime-qrcode" />
+                <img src="@Result.QrCode.ToBase64(4,0)" class="pokertime-qrcode" alt="" />
             </p>
         </div>
 
