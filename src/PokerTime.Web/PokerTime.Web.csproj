@@ -39,4 +39,9 @@
     <Compile Remove="wwwroot\**\*;node_modules\**\*" />
     <TypeScriptCompile Remove="wwwroot\**\*;node_modules\**\*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Watch Include="**\*.razor" />
+  </ItemGroup>
+  
 </Project>
