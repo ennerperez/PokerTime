@@ -1,7 +1,7 @@
 @using PokerTime.Domain.Entities
 
-<article class="message poker-status-panel">
-    <div class="message-header">
+<article class="card poker-status-panel">
+    <div class="card-header bg-dark text-light">
         @* Each stage has its own title *@
         <SessionStageText ApplicableTo="@SessionStage.NotStarted"
                                 Text="Not started yet" />
@@ -14,7 +14,7 @@
         <SessionStageText ApplicableTo="@SessionStage.Finished"
                                 Text="Finished" />
     </div>
-    <div class="message-body">
+    <div class="card-body">
         @* Each stage has its own explanation *@
         <p class="poker-status-panel__primary-explanation">
             <SessionStageText ApplicableTo="@SessionStage.NotStarted"

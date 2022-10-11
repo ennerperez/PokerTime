@@ -2,43 +2,39 @@
 
 <aside class="menu">
     <TopMenu BrandIsClickable="false">
-        <div class="navbar-start navbar-poker-start">
-            <div class="navbar-item">
-                <h1 class="poker-title">@this._layoutInfo.Title</h1>
-            </div>
-        </div>
-
-        <div class="navbar-end">
-            <div class="navbar-item poker-progress-container">
-                <div class="poker-progress @(this.CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : String.Empty)">
-                    <PokerSessionProgressItem 
-                        CurrentStage="@this.CurrentStage"
-                        ApplicableTo="@SessionStage.Discussion"
-                        Text="Discuss"/>
-
-                    <PokerSessionProgressItem 
-                        CurrentStage="@this.CurrentStage"
-                        ApplicableTo="@SessionStage.Estimation"
-                        Text="Estimation"/>
-
-                    <PokerSessionProgressItem 
-                        CurrentStage="@this.CurrentStage"
-                        ApplicableTo="@SessionStage.EstimationDiscussion"
-                        Text="Consolidate"/>
-
-                    <PokerSessionProgressItem 
-                        CurrentStage="@this.CurrentStage"
-                        ApplicableTo="@SessionStage.Finished"
-                        Text="Finished"/>
-                </div>
-            </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <NavLink class="nav-link" href="#" Match="NavLinkMatch.All">
+                    @this._layoutInfo.Title
+                </NavLink>
+            </li>
+        </ul>
+        <div class="poker-progress-container">
+        <ul class="navbar-nav poker-progress @(this.CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : String.Empty)">
+                <PokerSessionProgressItem
+                    CurrentStage="@this.CurrentStage"
+                    ApplicableTo="@SessionStage.Discussion"
+                    Text="Discuss"/>
+                <PokerSessionProgressItem
+                    CurrentStage="@this.CurrentStage"
+                    ApplicableTo="@SessionStage.Estimation"
+                    Text="Estimation"/>
+                <PokerSessionProgressItem
+                    CurrentStage="@this.CurrentStage"
+                    ApplicableTo="@SessionStage.EstimationDiscussion"
+                    Text="Consolidate"/>
+                <PokerSessionProgressItem
+                    CurrentStage="@this.CurrentStage"
+                    ApplicableTo="@SessionStage.Finished"
+                    Text="Finished"/>
+        </ul>
         </div>
     </TopMenu>
 </aside>
 
 @code
 {
-    #nullable disable
+#nullable disable
     private PokerSessionLayoutInfo _layoutInfo = new PokerSessionLayoutInfo("Loading...");
 
     private SessionStage CurrentStage => this._layoutInfo.Stage ?? SessionStage.NotStarted;

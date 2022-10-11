@@ -14,15 +14,18 @@ $fa-font-path: '/build/fonts';
 @import '../node_modules/@fortawesome/fontawesome-free/scss/regular.scss';
 @import '../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
 
-// Import bulma
-@import '../node_modules/bulma/sass/utilities/_all';
-@import '../node_modules/bulma/sass/base/_all';
-@import '../node_modules/bulma/sass/elements/_all';
-@import '../node_modules/bulma/sass/form/_all';
-@import '../node_modules/bulma/sass/components/_all';
-@import '../node_modules/bulma/sass/grid/_all';
-@import '../node_modules/bulma/sass/helpers/_all';
-@import '../node_modules/bulma/sass/layout/_all';
+// Import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+//// Import bulma
+//@import '../node_modules/bulma/sass/utilities/_all';
+//@import '../node_modules/bulma/sass/base/_all';
+//@import '../node_modules/bulma/sass/elements/_all';
+//@import '../node_modules/bulma/sass/form/_all';
+//@import '../node_modules/bulma/sass/components/_all';
+//@import '../node_modules/bulma/sass/grid/_all';
+//@import '../node_modules/bulma/sass/helpers/_all';
+//@import '../node_modules/bulma/sass/layout/_all';
 
 // Vars
 $reveal-shadow-color: yellow;
@@ -33,19 +36,43 @@ $poker-card-shadow-color: #666;
 $poker-card-shadow-size: 2px;
 $poker-card-shadow-spread: 8px;
 
+$bg-body: #eff0eb;
+
+body {
+    background-color: $bg-body !important;
+}
+
+#main-content{
+    margin-top: 2em;
+}
+
 // App imports
 // ... General components
 @import 'common';
-@import 'circle-progress/circle';
+//@import 'circle-progress/circle';
 @import 'reveal';
-@import 'blazor-integration';
+//@import 'blazor-integration';
 
 // ... Specific
 @import 'poker-status-panel';
-@import 'online-list';
+//@import 'online-list';
 @import 'poker-card';
 @import 'estimated-card';
 @import 'user-card';
 @import 'preview-card';
 @import 'poker-progress';
 @import 'session-overview-table';
+
+
+.validation-message{
+    color: $danger;
+    font-size: $small-font-size;
+}
+
+.table > :not(caption) > * > * {
+    padding: 0;
+}
+
+th,td{
+    padding: 0.5em !important;
+}

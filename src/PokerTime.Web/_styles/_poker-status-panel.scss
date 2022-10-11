@@ -1,7 +1,7 @@
 .poker-status-panel {
     &__next-step-title {
-        @extend .title;
-        font-size: $size-5;
+        //@extend .title;
+        //font-size: $size;
         margin-bottom: 0.5rem !important;
     }
 

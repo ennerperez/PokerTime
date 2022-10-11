@@ -14,9 +14,9 @@
                                  ButtonText="Start session">
             <div class="field">
                 <div class="control">
-                    <label class="label" for="pokertime-userstory-title">User story title</label>
+                    <label class="form-label" for="pokertime-userstory-title">User story title</label>
                     <div class="control">
-                        <InputText id="pokertime-userstory-title" class="input" type="text" @bind-Value="@Command.UserStoryTitle" placeholder="" />
+                        <InputText id="pokertime-userstory-title" class="form-control" type="text" @bind-Value="@Command.UserStoryTitle" placeholder="" />
                     </div>
 
                     <ValidationMessage For="() => Command.UserStoryTitle"></ValidationMessage>

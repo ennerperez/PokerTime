@@ -12,11 +12,11 @@
     return;
 }
 
-<article class="message is-dark" id="poker-online-list">
-    <div class="message-header">
+<article class="card" id="poker-online-list">
+    <div class="card-header bg-dark text-light">
         Who already joined?
     </div>
-    <div class="message-body">
+    <div class="card-body">
         @if (this.Participants.Participants.Count == 0)
         {
             <text>No one. You are the first to join this planning poker session.</text>
@@ -56,7 +56,7 @@
 
     protected readonly RenderFragment<ParticipantInfo> RenderParticipant = participantInfo =>
         @<span style="color: #@participantInfo.Color.HexString" data-participant-id="@participantInfo.Id">
-            @if (participantInfo.IsFacilitator) { <span class="fas fa-crown"></span> }
+            @if (participantInfo.IsFacilitator) { <span class="fas fa-crown me-1"></span> }
             @participantInfo.Name
          </span>;
 

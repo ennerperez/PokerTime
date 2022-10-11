@@ -6,14 +6,21 @@
     string uniqueVersionId = ThisAssembly.AssemblyInformationalVersion;
 }
 
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-             <span title="@uniqueVersionId"><strong>PokerTime</strong> v@(version)</span> by <a href="https://damsteen.nl/">Sebastiaan Dammann</a>
-            <a href="https://github.com/Sebazzz/PokerTime" target="_blank" class="footer__gh-link">
-                <span class="icon"><span class="fab fa-github"></span></span>
-                <span>Github</span>
-            </a>
-        </p>
-    </div>
+<footer class="d-none d-sm-block mt-5">
+    <nav class="navbar navbar-light bg-light fixed-bottom border-top pb-2">
+        <div class="container-fluid">
+            <span class="navbar-text p-0 m-0">
+                <span title="@uniqueVersionId">
+                    <strong>PokerTime</strong> v@(version)
+                </span> by <a href="https://damsteen.nl/">Sebastiaan Dammann</a>
+            </span>
+            <span class="navbar-text p-0 m-0">
+                <a href="https://github.com/Sebazzz/PokerTime" target="_blank" class="footer__gh-link">
+                    <span class="icon">
+                        <span class="fab fa-github"></span>
+                    </span>
+                </a>
+            </span>
+        </div>
+    </nav>
 </footer>

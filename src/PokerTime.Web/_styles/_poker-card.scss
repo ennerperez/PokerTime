@@ -5,7 +5,7 @@ $poker-card-font-size-divider: 2.5;
 $symbol-offset-transform: translateY(-50%);
 
 @mixin poker-card-base($base-width) {
-    $symbol-font-size: $base-width / $poker-card-font-size-divider;
+    $symbol-font-size: calc($base-width / $poker-card-font-size-divider);
     $height: $base-width * $poker-card-height-ratio;
 
     display: inline-block;

@@ -15,20 +15,21 @@
 
 @if (this.SessionInfo == null)
 {
-    <h1 class="title">Session not found</h1>
-
-    <p class="form-explanation">
-        Sorry, I can't find that planning poker session. Please check if the URL is correct.
-    </p>
+    <section class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Session not found</h4>
+        <p>
+            Sorry, I can't find that planning poker session. Please check if the URL is correct.
+        </p>
+    </section>
 }
 else
 {
-    <h1 class="title">Join planning poker session: @this.SessionInfo.Title</h1>
-    <h2 class="subtitle">To estimate your next moves</h2>
+    <h1>Join planning poker session: @this.SessionInfo.Title</h1>
+    <p class="lead">To estimate your next moves</p>
 
-    <div class="columns">
-        <div class="column is-three-quarters">
-            <p class="form-explanation">
+    <div class="row">
+        <div class="col">
+            <p class="lead">
                 Join the planning poker session "@this.SessionInfo.Title" by filling in the necessary information on the form below.
             </p>
 
@@ -47,74 +48,61 @@ else
 
             @if (ShowErrorMessage)
             {
-                <ErrorMessage Text="Something went wrong joining the session. Please try again." />
+                <ErrorMessage Text="Something went wrong joining the session. Please try again."/>
             }
 
             <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-                <Blazored.FluentValidation.FluentValidationValidator />
+                <Blazored.FluentValidation.FluentValidationValidator/>
 
-                <div class="field">
-                    <label class="label" for="pokertime-name">Your name</label>
-                    <div class="control">
-                        <InputText id="pokertime-name"
-                                   class="input"
-                                   type="text"
-                                   @bind-Value="@Model.Name"
-                                   @onblur="@OnParticipantNameChanged"
-                                   placeholder="Enter your name, so we know who you are" />
-                    </div>
-
+                <div class="mt-3">
+                    <label class="form-label" for="pokertime-name">Your name</label>
+                    <InputText id="pokertime-name"
+                               class="form-control"
+                               type="text"
+                               @bind-Value="@Model.Name"
+                               @onblur="@OnParticipantNameChanged"
+                               placeholder="Enter your name, so we know who you are"/>
                     <ValidationMessage For="() => Model.Name"></ValidationMessage>
                     @if (this.ShowParticipantAlreadyJoinedWarning)
                     {
-                        <p class="help is-info">@Model.Name has already joined the session. If this was not you, please choose a different name.</p>
+                        <p class="text-muted small">@Model.Name has already joined the session. If this was not you, please choose a different name.</p>
                     }
                 </div>
 
                 @if (UseOwnColor || this.AvailablePredefinedColors.Count == 0)
                 {
-                    <div class="field">
-                        <label class="label" for="pokertime-color">Your custom color</label>
-                        <div class="control">
-                            <InputText id="pokertime-color" type="color" class="input input--pokertime-color" @bind-Value="@Model.Color" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)" />
+                    <div class="mt-3">
+                        <label class="form-label" for="pokertime-color">Your custom color</label>
+                        <div class="input-group">
+                            <InputText id="pokertime-color" type="color" class="form-control input--pokertime-color" @bind-Value="@Model.Color" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
                         </div>
-
                         <ValidationMessage For="() => Model.Color"></ValidationMessage>
                     </div>
                 }
                 else
                 {
-                    <div class="field">
-                        <label class="label">Your color</label>
-                        <div class="control">
-                            <div class="field has-addons">
-                                <div class="control">
-                                    <div class="select">
-                                        <InputSelect @bind-Value="@Model.Color" id="pokertime-color-choices">
-                                            <option value="">Select an option</option>
-                                            @foreach (AvailableParticipantColorModel color in this.AvailablePredefinedColors)
-                                                    {
-                                                <option style="color: #@color.HexString" value="#@color.HexString">@color.Name</option>
-                                                    }
-                                        </InputSelect>
-                                    </div>
-                                </div>
-                                <div class="control">
-                                    <button type="button" class="button is-info" @onclick="@ChooseOwnColor">
-                                        Custom color
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="mt-3">
+                        <label class="form-label">Your color</label>
+                        <div class="input-group">
+                            <InputSelect @bind-Value="@Model.Color" id="pokertime-color-choices" class="form-control">
+                                <option value="">Select an option</option>
+                                @foreach (AvailableParticipantColorModel color in this.AvailablePredefinedColors)
+                                {
+                                    <option style="color: #@color.HexString" value="#@color.HexString">@color.Name</option>
+                                }
+                            </InputSelect>
+                            <button type="button" class="btn btn-primary" @onclick="@ChooseOwnColor">
+                                Custom color
+                            </button>
                         </div>
-
                         <ValidationMessage For="() => Model.Color"></ValidationMessage>
                     </div>
                 }
 
-                <div class="field">
-                    <div class="control">
-                        <label class="checkbox">
-                            <InputCheckbox @bind-Value="@Model.JoiningAsFacilitator" id="pokertime-is-facilitator" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)" />
+                <div class="mt-3">
+                    <div class="form-check">
+                        <InputCheckbox class="form-check-input" @bind-Value="@Model.JoiningAsFacilitator" id="pokertime-is-facilitator" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
+                        <label class="form-check-label" for="pokertime-is-facilitator">
                             I'm the facilitator of this planning poker
                         </label>
                     </div>
@@ -122,42 +110,33 @@ else
 
                 @if (Model.JoiningAsFacilitator)
                 {
-                    <div class="field">
-                        <label class="label" for="pokertime-facilitator-passphrase">Facilitator passphrase</label>
-                        <div class="control">
-                            <InputText id="pokertime-facilitator-passphrase" class="input" type="text" @bind-Value="@Model.Passphrase" placeholder="" />
-                        </div>
-
+                    <div class="mt-3">
+                        <label class="form-label" for="pokertime-facilitator-passphrase">Facilitator passphrase</label>
+                        <InputText id="pokertime-facilitator-passphrase" class="form-control" type="text" @bind-Value="@Model.Passphrase" placeholder=""/>
                         <ValidationMessage For="() => Model.Passphrase"></ValidationMessage>
-                        <p class="help">You should have set this password yourself. If you've lost it, create a new planning poker instead.</p>
+                        <p class="text-muted small">You should have set this password yourself. If you've lost it, create a new planning poker instead.</p>
                     </div>
                 }
                 else if (this.SessionInfo.NeedsParticipantPassphrase)
                 {
-                    <div class="field">
-                        <label class="label" for="pokertime-passphrase">Passphrase</label>
-                        <div class="control">
-                            <InputText id="pokertime-passphrase" class="input" type="text" @bind-Value="@Model.Passphrase" placeholder="" />
-                        </div>
-
+                    <div class="mt-3">
+                        <label class="form-label" for="pokertime-passphrase">Passphrase</label>
+                        <InputText id="pokertime-passphrase" class="form-control" type="text" @bind-Value="@Model.Passphrase" placeholder=""/>
                         <ValidationMessage For="() => Model.Passphrase"></ValidationMessage>
-                        <p class="help">You should have got this in the invitation.</p>
+                        <p class="text-muted small">You should have got this in the invitation.</p>
                     </div>
                 }
 
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-link" id="join-pokertime-button">
-                            <span class="icon is-small"><i class="fas fa-door-open"></i></span>
-                            <span>Continue</span>
-                        </button>
-                    </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" id="join-pokertime-button">
+                        <span>Continue</span>
+                    </button>
                 </div>
             </EditForm>
         </div>
 
-        <div class="column">
-            <SessionOnlineList SessionId="@this.SessionId" />
+        <div class="col-3">
+            <SessionOnlineList SessionId="@this.SessionId"/>
         </div>
     </div>
 }
@@ -185,7 +164,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        this.SessionInfo = await this.Mediator.Send(new GetJoinPokerSessionInfoQuery { SessionId = this.SessionId });
+        this.SessionInfo = await this.Mediator.Send(new GetJoinPokerSessionInfoQuery {SessionId = this.SessionId});
 
         if (this.SessionInfo != null)
         {
@@ -222,14 +201,14 @@ else
 
         if (result != null)
         {
-            // Disable controls as the choice has already been made
+    // Disable controls as the choice has already been made
             this.Model.JoiningAsFacilitator = result.IsFacilitator;
             this.UseOwnColor = this.AvailablePredefinedColors.Any(x => x.HasSameColors(result.Color)) == false;
             this.Model.Color = "#" + result.Color.HexString;
         }
         else if (wasShowingParticipantWarning)
         {
-            // Reset form to use normal controls
+    // Reset form to use normal controls
             this.UseOwnColor = false;
             this.Model.Color = null;
             this.Model.JoiningAsFacilitator = false;

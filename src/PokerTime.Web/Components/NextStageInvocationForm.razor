@@ -13,18 +13,16 @@
 
 @if (ShowErrorMessage)
 {
-    <ErrorMessage Text="Something went wrong executing your command. Please try again." />
+    <ErrorMessage Text="Something went wrong executing your command. Please try again."/>
 }
 
 <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-    <Blazored.FluentValidation.FluentValidationValidator />
+    <Blazored.FluentValidation.FluentValidationValidator/>
 
     @this.ChildContent
 
-    <div class="field">
-        <div class="control">
-            <button type="submit" class="button is-primary is-large" data-test-element-id="@TestButtonId">@ButtonText</button>
-        </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary btn-lg" data-test-element-id="@TestButtonId">@ButtonText</button>
     </div>
 </EditForm>
 
@@ -78,4 +76,5 @@
             this.ShowErrorMessage = true;
         }
     }
+
 }

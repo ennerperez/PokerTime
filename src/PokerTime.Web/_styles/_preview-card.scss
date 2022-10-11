@@ -25,15 +25,3 @@ $preview-card-color: darken($beige-light, 10%);
         }
     }
 }
-
-.poker-card-preview-container {
-    margin-bottom: 1.5em;
-    display: inline-block;
-
-    &__title {
-        font-weight: bold;
-        font-size: 0.8em;
-
-        margin: -10px 5px 5px -8px;
-    }
-}
