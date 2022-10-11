@@ -9,7 +9,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>PokerTime - Planning poker</title>
   <base href="~/" />
   <link href="build/css/main.css" asp-append-version="true" rel="stylesheet" />
@@ -18,7 +17,6 @@
 <app>
   @(await Html.RenderComponentAsync<App>(renderMode: RenderMode.ServerPrerendered))
 </app>
-  
 <script>
   window.Promise || (function () {
     var tag = document.createElement('script');
@@ -28,6 +26,6 @@
   })();
 </script>
 <script src="_framework/blazor.server.js"></script>
-<script src="js/pokertime.js"></script>
+<script src="build/js/main.js" asp-append-version="true"></script>
 </body>
 </html>
