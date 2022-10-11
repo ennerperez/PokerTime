@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ScreenshotTests.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -28,7 +28,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
     /// <summary>
     /// Not really a real test, but more because I'm tired of creating screenshots. Note these tests don't really
-    /// run independently, and they are ordered by the [Order] attribute. 
+    /// run independently, and they are ordered by the [Order] attribute.
     /// </summary>
     /// <remarks>
     /// Client1: Roger (facilitator)
@@ -214,7 +214,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             // Scroll to top, set cursor / focus to 0,0
             Thread.Sleep(1000);
             webDriver.ExecuteJavaScript("window.scrollTo(0, 0)");
-            new Actions(webDriver).MoveToElement(webDriver.FindElement(By.ClassName("navbar-menu")), 0, 0, MoveToElementOffsetOrigin.Center).Click().Perform();
+            //new Actions(webDriver).MoveToElement(webDriver.FindElement(By.ClassName("navbar-menu")), 0, 0, MoveToElementOffsetOrigin.Center).Click().Perform();
             Thread.Sleep(1000);
 
             // Create a path
