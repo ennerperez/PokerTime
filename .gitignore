@@ -183,3 +183,5 @@ FakesAssemblies/
 /src/App/stats.json
 *.db
 .idea
+*.db-wal
+*.db-shm
