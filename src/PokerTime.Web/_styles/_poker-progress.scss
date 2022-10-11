@@ -1,7 +1,7 @@
 $poker-progress-arrow-width: 12px;
-$poker-progress-arrow-height-modifier: 36px / 2;
-$poker-progress-active-color: $grey-dark;
-$poker-progress-previous-color: $grey-light;
+$poker-progress-arrow-height-modifier: calc(48px/2);
+$poker-progress-active-color: $gray-400;
+$poker-progress-previous-color: $gray-200;
 
 .poker-title {
     font-weight: bold;
@@ -62,7 +62,7 @@ $poker-progress-previous-color: $grey-light;
 
         &--is-current {
             background-color: $poker-progress-active-color;
-            color: $white-ter;
+            color: $white;
 
             &::after {
                 border-left-color: $poker-progress-active-color;

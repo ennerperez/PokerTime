@@ -1,12 +1,11 @@
 @using PokerTime.Domain.Entities
 
-<div class="poker-progress__item @this.CssClass">
-    <span>
-        @this.Text
-    </span>
-</div>
+<li class="nav-item poker-progress__item @this.CssClass">
+    <span class="nav-link">@this.Text</span>
+</li>
 
 @code {
+
     [Parameter]
     public SessionStage CurrentStage { get; set; }
 
@@ -25,7 +24,7 @@
         {
             if (this.IsCurrent)
             {
-                return "poker-progress__item--is-current";
+                return "poker-progress__item--is-current active";
             }
 
             if (this.IsPrevious)

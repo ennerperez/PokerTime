@@ -5,11 +5,11 @@
 <PokerSessionLobbyTopMenu @ref="this._topMenu"/>
 
 <section class="section">
-    <div class="container">
+    <main role="main" id="main-content" class="container p-0">
         <CascadingValue Value=@this IsFixed="true" TValue="IPokerSessionLayout">
             @Body
         </CascadingValue>
-    </div>
+    </main>
 </section>
 
 <CommonButtonMenu />

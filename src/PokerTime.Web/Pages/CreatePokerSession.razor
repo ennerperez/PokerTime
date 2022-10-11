@@ -8,37 +8,42 @@
 @using PokerTime.Application.Sessions.Commands.CreatePokerSession
 @using PokerTime.Application.Symbols.Queries
 @using PokerTime.Application.SymbolSets.Queries
+@using PokerTime.Web.Services
 @inject ILogger<CreatePokerSession> Logger
 @inject IOptions<SecuritySettings> SecuritySettingsAccessor
+@inject IJSRuntime JSRuntime
+@inject ClipboardService ClipboardService
 
 @if (ShowCompletionMessage)
 {
-    <section class="hero is-success">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title">
-                    Success
-                </h1>
-                <h2 class="subtitle">
-                    Your planning poker lobby has been created.
-                </h2>
-            </div>
-        </div>
+    <section class="alert alert-success" role="alert">
+        <h4 class="alert-heading">
+            Success
+        </h4>
+        <p>
+            Your planning poker lobby has been created.
+        </p>
     </section>
 
     if (Result != null)
     {
-        <p class="form-explanation">
+        <p class="form-label">
             Please share the following URL and QR code with your team.
         </p>
 
-        <div class="control">
-            <input class="input" id="pokertime-location" type="text" readonly="readonly" value="@Result.Location">
+        <div class="input-group mb-3">
+            <input class="form-control" id="pokertime-location" type="text" readonly="readonly" value="@Result.Location">
+            <button class="input-group-text" id="copy-link" @onclick="CopyToClipboard">
+                <i class="fas fa-copy"></i>
+            </button>
+            <button class="input-group-text" id="open-link" @onclick="NavigateInNewTab">
+                <i class="fas fa-link"></i>
+            </button>
         </div>
 
-        <div style="margin-top: 1em;" >
+        <div class="mt-3">
             <p>
-                <img src="@Result.QrCode.ToBase64(4,0)" class="pokertime-qrcode" alt="" />
+                <img src="@Result.QrCode.ToBase64(4, 0)" class="pokertime-qrcode" alt=""/>
             </p>
         </div>
 
@@ -66,121 +71,128 @@
 }
 else
 {
-    <h1 class="title">Create a planning poker session</h1>
-    <h2 class="subtitle">To estimate your next moves</h2>
+    <h1>Create a planning poker session</h1>
+    <p class="lead">To estimate your next moves</p>
 
-    <p class="form-explanation">
+    <p class="lead">
         Create a planning poker session with the form below. After completion you will receive a url to share with your team members.
     </p>
 
     if (ShowErrorMessage)
     {
-        <ErrorMessage Text="Something went wrong creating the planning poker session. Please try again." />
+        <ErrorMessage Text="Something went wrong creating the planning poker session. Please try again."/>
     }
 
     if (ShowLoadErrorMessage)
     {
-        <ErrorMessage Text="Something went wrong loading the form. Please try again." />
+        <ErrorMessage Text="Something went wrong loading the form. Please try again."/>
     }
 
-<EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
-    <Blazored.FluentValidation.FluentValidationValidator />
+    <EditForm Model="@Model" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+        <Blazored.FluentValidation.FluentValidationValidator/>
 
-    <div class="field">
-        <label class="label" for="pokertime-title">Title</label>
-        <div class="control">
-            <InputText id="pokertime-title" class="input" type="text" @bind-Value="@Model.Title" placeholder="Give the planning poker session a title" />
+        <div class="mb-3">
+            <label class="form-label" for="pokertime-title">Title</label>
+            <div class="control">
+                <InputText id="pokertime-title" class="form-control" type="text" @bind-Value="@Model.Title" placeholder="Give the planning poker session a title"/>
+            </div>
+
+            <ValidationMessage For="() => Model.Title"></ValidationMessage>
         </div>
 
-        <ValidationMessage For="() => Model.Title"></ValidationMessage>
-    </div>
+        <div class="mb-3">
+            <label class="form-label" for="pokertime-session-symbol-set">Poker card set</label>
 
-    <div class="field">
-        <label class="label" for="pokertime-session-symbol-set">Poker card set</label>
-
-        <div class="control">
-            <div class="select">
-                <select @bind="@Model.SymbolSetId" id="pokertime-session-symbol-set">
-                    @foreach (SymbolSetModel symbolSet in this.SymbolSets)
-                    {
-                        <option value="@symbolSet.Id">@symbolSet.Name</option>
-                    }
-                </select>
+            <div class="control">
+                <div class="select">
+                    <select class="form-control" @bind="@Model.SymbolSetId" id="pokertime-session-symbol-set">
+                        @foreach (SymbolSetModel symbolSet in this.SymbolSets)
+                        {
+                            <option value="@symbolSet.Id">@symbolSet.Name</option>
+                        }
+                    </select>
+                </div>
             </div>
+
+            <ValidationMessage For="() => Model.SymbolSetId"></ValidationMessage>
         </div>
 
-        <ValidationMessage For="() => Model.SymbolSetId"></ValidationMessage>
-    </div>
-    
-    @{
-        SymbolSetModel selectedSymbolSet = this.SelectedSymbolSet;
+        @{
+            SymbolSetModel selectedSymbolSet = this.SelectedSymbolSet;
 
-        if (selectedSymbolSet != null) {
-            <div class="box poker-card-preview-container">
-                <h2 class="poker-card-preview-container__title">Preview: @selectedSymbolSet.Name</h2>
-                
-                @foreach (SymbolModel symbol in this.SelectedSymbolSet.Symbols) {
-                    <PreviewCard Symbol="@symbol"/>
-                }
-            </div>
+            if (selectedSymbolSet != null)
+            {
+                <div class="mb-3">
+                    <label class="form-label poker-card-preview-container__title">Preview</label>
+                    <div class="card poker-card-preview-container w-100">
+                        <div class="card-body">
+                            <div>
+                                @foreach (SymbolModel symbol in this.SelectedSymbolSet.Symbols)
+                                {
+                                    <PreviewCard Symbol="@symbol"/>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         }
-    }
 
-    <div class="columns">
-        <div class="column">
-            <div class="field">
-                <label class="label" for="pokertime-facilitator-passphrase">Facilitator passphrase</label>
-                <div class="control">
-                    <InputText id="pokertime-facilitator-passphrase" class="input" type="text" @bind-Value="@Model.FacilitatorPassphrase" placeholder="" />
-                </div>
-
-                <ValidationMessage For="() => Model.FacilitatorPassphrase"></ValidationMessage>
-                <p class="help">This is the password you need to start and control the progress of the planning poker session.</p>
-            </div>
-        </div>
-        <div class="column">
-            <div class="field">
-                <label class="label" for="pokertime-passphrase">Participant passphrase</label>
-                <div class="control">
-                    <InputText id="pokertime-passphrase" class="input" type="text" @bind-Value="@Model.Passphrase" placeholder="" />
-                </div>
-                <ValidationMessage For="() => Model.Passphrase"></ValidationMessage>
-                <p class="help">Optional passphrase required for participants to enter the lobby.</p>
-            </div>
-        </div>
-    </div>
-
-    @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
-    {
-        <Modal IsShown="@this.ShowPasswordModal">
-            <div class="box" data-test-element-id="lobby-creation-passphrase-modal">
-                <div class="field">
-                    <label class="label" for="pokertime-lobby-creation-passphrase">Session creation passphrase</label>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="pokertime-facilitator-passphrase">Facilitator passphrase</label>
                     <div class="control">
-                        <InputText id="pokertime-lobby-creation-passphrase" class="input" type="password" @bind-Value="@Model.LobbyCreationPassphrase" />
+                        <InputText id="pokertime-facilitator-passphrase" class="form-control" type="text" @bind-Value="@Model.FacilitatorPassphrase" placeholder=""/>
                     </div>
 
-                    <ValidationMessage For="() => Model.LobbyCreationPassphrase"></ValidationMessage>
+                    <ValidationMessage For="() => Model.FacilitatorPassphrase"></ValidationMessage>
+                    <p class="text-muted small">This is the password you need to start and control the progress of the planning poker session.</p>
                 </div>
-
-                <button class="button is-link" id="modal-create-pokertime-button">Submit</button>
             </div>
-        </Modal>
-    }
-
-    <div class="field is-grouped">
-        <div class="control">
-            @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
-            {
-                <button class="button is-link" id="create-pokertime-button" type="button" @onclick="@HandleProtectedFormSubmit">Submit</button>
-            }
-            else
-            {
-                <button class="button is-link" id="create-pokertime-button">Submit</button>
-            }
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="pokertime-passphrase">Participant passphrase</label>
+                    <div class="control">
+                        <InputText id="pokertime-passphrase" class="form-control" type="text" @bind-Value="@Model.Passphrase" placeholder=""/>
+                    </div>
+                    <ValidationMessage For="() => Model.Passphrase"></ValidationMessage>
+                    <p class="text-muted small">Optional passphrase required for participants to enter the lobby.</p>
+                </div>
+            </div>
         </div>
-    </div>
-</EditForm>
+
+        @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
+        {
+            <Modal IsShown="@this.ShowPasswordModal">
+                <div class="box" data-test-element-id="lobby-creation-passphrase-modal">
+                    <div class="field">
+                        <label class="label" for="pokertime-lobby-creation-passphrase">Session creation passphrase</label>
+                        <div class="control">
+                            <InputText id="pokertime-lobby-creation-passphrase" class="input" type="password" @bind-Value="@Model.LobbyCreationPassphrase"/>
+                        </div>
+
+                        <ValidationMessage For="() => Model.LobbyCreationPassphrase"></ValidationMessage>
+                    </div>
+
+                    <button class="btn btn-primary" id="modal-create-pokertime-button">Submit</button>
+                </div>
+            </Modal>
+        }
+
+        <div class="field is-grouped">
+            <div class="control">
+                @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
+                {
+                    <button class="btn btn-primary" id="create-pokertime-button" type="button" @onclick="@HandleProtectedFormSubmit">Submit</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" id="create-pokertime-button">Submit</button>
+                }
+            </div>
+        </div>
+    </EditForm>
 }
 
 @code {
@@ -236,7 +248,7 @@ else
 
             Logger.LogError(ex, "Error loading planning poker session form");
         }
-}
+    }
 
     private CreatePokerSessionCommandResponse Result { get; set; }
 
@@ -250,4 +262,10 @@ else
 
     [Parameter]
     public CreatePokerSessionCommand Model { get; set; } = new CreatePokerSessionCommand();
+
+    private async void CopyToClipboard() => await ClipboardService.WriteTextAsync(Result.Location);
+
+    private async void NavigateInNewTab() =>
+        await JSRuntime.InvokeVoidAsync("open", Result.Location, "_blank");
+
 }
