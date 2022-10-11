@@ -1,36 +1,33 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+    <div class="container-fluid">
         @if (BrandIsClickable)
         {
-            <a class="navbar-item" href="/">
-                <Brand />
+            <a class="navbar-brand" href="/">
+                <Brand/>
             </a>
         }
         else
         {
-            <span class="navbar-item">
-                <Brand />
+            <span class="navbar-brand">
+                <Brand/>
             </span>
         }
+        <button @onclick="@ToggleNavMenu" class="navbar-toggler @NavMenuCssClass" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <a role="button" @onclick="@ToggleNavMenu" class="navbar-burger burger @NavMenuCssClass" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div class="navbar-menu @NavMenuCssClass">
-        @ChildContent
+        <div class="collapse navbar-collapse @NavMenuCssClass" id="navbarSupportedContent">
+            @ChildContent
+        </div>
     </div>
 </nav>
 
 @code {
-    #nullable disable
+#nullable disable
 
     bool _collapseNavMenu = true;
 
-    string NavMenuCssClass => _collapseNavMenu ? null : "is-active";
+    string NavMenuCssClass => _collapseNavMenu ? null : "active";
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
@@ -42,4 +39,5 @@
     {
         this._collapseNavMenu = !_collapseNavMenu;
     }
+
 }
