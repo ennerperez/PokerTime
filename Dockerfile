@@ -29,8 +29,8 @@ RUN dotnet restore
 RUN dotnet tool restore
 
 # Yarn (although it isn't as large, still worth caching)
-COPY src/PokerTime.Web/package.json src/PokerTime.Web/
-COPY src/PokerTime.Web/yarn.lock src/PokerTime.Web/
+COPY src/package.json src/PokerTime.Web/
+COPY src/yarn.lock src/PokerTime.Web/
 RUN yarn --cwd src/PokerTime.Web/
 
 ## Skip build script pre-warm
@@ -53,7 +53,7 @@ COPY . .
 RUN ./build.sh --target=Publish-Ubuntu-20.04-x64 --publish-dir=publish --verbosity=verbose --skip-compression=true
 
 ### RUNTIME IMAGE
-FROM mcr.microsoft.com/dotnet/runtime-deps:5.0
+FROM mcr.microsoft.com/dotnet/runtime-deps:6.0
 WORKDIR /app
 
 # ... Run libgdi install

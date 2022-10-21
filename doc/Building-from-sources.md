@@ -10,7 +10,7 @@ If using docker, simply run:
 
 ## Prequisites
 
--   [.NET Core 3.1 SDK](https://www.microsoft.com/net/download/core).
+-   [.NET Core 6.0 SDK](https://www.microsoft.com/net/download/core).
 -   [Node.js LTS](https://nodejs.org/en/download/) or higher (Node.js 10.x is supported too).
 -   [Yarn](https://yarnpkg.com/en/docs/install) or higher
 
@@ -31,7 +31,7 @@ For running the build script:
 
 ## Check-out
 
-Pull the sources from this repository's [home page](https://github.com/Sebazzz/PokerTime).
+Pull the sources from this repository's [home page](https://github.com/ennerperez/PokerTime).
 
 ## Building
 

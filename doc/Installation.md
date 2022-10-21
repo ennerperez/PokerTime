@@ -10,16 +10,16 @@ This guide will help you in installation of the application. The application is 
 ### Using Docker
 PokerTime is available as a docker image. Simply pull it from the Docker hub, and run it:
 
-    docker pull sebazzz/pokertime:latest
-	docker run -p 80:80 sebazzz/pokertime
+    docker pull ennerperez/pokertime:latest
+	docker run -p 80:80 ennerperez/pokertime
 	
 For further configuration you may want to mount a directory with [the configuration](#Configuration):
 
-    docker run -p 80:80 -v /path/to/my/configuration/directory:/etc/pokertime sebazzz/pokertime
+    docker run -p 80:80 -v /path/to/my/configuration/directory:/etc/pokertime ennerperez/pokertime
 
 ### Getting a release
 
-Download a release from the [releases](https://github.com/Sebazzz/PokerTime/releases) tab. You may also [build the application from sources](Building-from-sources.md) if you like or get a build from AppVeyor.
+Download a release from the [releases](https://github.com/ennerperez/PokerTime/releases) tab. You may also [build the application from sources](Building-from-sources.md) if you like or get a build from AppVeyor.
 
 ### Prequisites
 
