@@ -29,8 +29,8 @@ RUN dotnet restore
 RUN dotnet tool restore
 
 # Yarn (although it isn't as large, still worth caching)
-COPY src/package.json src/PokerTime.Web/
-COPY src/yarn.lock src/PokerTime.Web/
+#COPY package.json src/PokerTime.Web/
+#COPY yarn.lock src/PokerTime.Web/
 RUN yarn --cwd src/PokerTime.Web/
 
 ## Skip build script pre-warm
