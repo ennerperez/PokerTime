@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.9" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.32.0" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.5" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -22,6 +23,13 @@
     <PackageReference Update="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Update="nunit" Version="3.13.3" />
     <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="coverlet.msbuild">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

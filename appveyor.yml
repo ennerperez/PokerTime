@@ -11,10 +11,11 @@ dotnet_csproj:
 install:
     - ps: Install-Product node LTS x64
     - choco install firefox
-    - choco install googlechrome
+    - choco install microsoft-edge
 cache: '%LOCALAPPDATA%\Yarn'
 environment:
     RETURN_TEST_WAIT_TIME: 30
+    SCREENSHOT_TEST_FAILURE_TOLERANCE: True
 build_script:
     - cmd: build.cmd --target=build --verbosity=verbose
 after_build:
@@ -30,6 +31,6 @@ deploy: off
 artifacts:
     - path: build\testresults\*.trx
       name: test logs
-    - path: build\testresults\**\*.*
+    - path: build\testresults\**
       name: test artifacts
       type: zip

@@ -28,6 +28,13 @@ if (!(Test-Path $ToolPath)) {
     New-Item -Path $ToolPath -Type Directory -Force | out-null
 }
 
+$PlaywrightBrowserDir = Join-Path $PSScriptRoot "tools/browsers"
+if (!(Test-Path $PlaywrightBrowserDir)) {
+    Write-Verbose "Creating browsers directory..."
+    New-Item -Path $PlaywrightBrowserDir -Type Directory -Force | out-null
+}
+
+$ENV:PLAYWRIGHT_BROWSERS_PATH = $PlaywrightBrowserDir
 
 if ($PSVersionTable.PSEdition -ne 'Core') {
     # Attempt to set highest encryption available for SecurityProtocol.
@@ -76,10 +83,10 @@ $FoundDotNetCliVersion = $null;
 if (Get-Command dotnet -ErrorAction SilentlyContinue) {
     $FoundDotNetCliVersion = dotnet --version;
 }
-
 if($FoundDotNetCliVersion -lt $DotNetVersion -or
     $FoundDotNetVersion -gt $DotNetVersion.SubString($DotNetVersion.IndexOf('.'))) {
     $InstallPath = Join-Path $PSScriptRoot ".dotnet"
+    
     if (!(Test-Path $InstallPath)) {
         New-Item -Path $InstallPath -ItemType Directory -Force | Out-Null;
     }
@@ -87,8 +94,7 @@ if($FoundDotNetCliVersion -lt $DotNetVersion -or
     if ($IsMacOS -or $IsLinux) {
         (New-Object System.Net.WebClient).DownloadFile($DotNetUnixInstallerUri, "$InstallPath\dotnet-install.sh");
         & bash $InstallPath\dotnet-install.sh --version "$DotNetVersion" --install-dir "$InstallPath" --channel "$DotNetChannel" --no-path
-    }
-    else {
+    } else {
         (New-Object System.Net.WebClient).DownloadFile($DotNetInstallerUri, "$InstallPath\dotnet-install.ps1");
         & $InstallPath\dotnet-install.ps1 -Channel $DotNetChannel -Version $DotNetVersion -InstallDir $InstallPath;
     }
@@ -99,7 +105,7 @@ if($FoundDotNetCliVersion -lt $DotNetVersion -or
 
 $DotNetRoot = Get-Command dotnet -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source | Split-Path -Parent
 
-$env:DOTNET_ROOT=1
+$env:DOTNET_ROOT=$DotNetRoot
 $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
 $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 
@@ -143,8 +149,7 @@ else {
 # RUN BUILD SCRIPT
 ###########################################################################
 & "$CakeExePath" ./build.cake --bootstrap
-if ($LASTEXITCODE -eq 0)
-{
+if ($LASTEXITCODE -eq 0){
     & "$CakeExePath" ./build.cake $args
 }
 exit $LASTEXITCODE
