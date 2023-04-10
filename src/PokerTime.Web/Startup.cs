@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace PokerTime.Web {
+namespace PokerTime.Web
+{
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Application;
@@ -24,15 +25,18 @@ namespace PokerTime.Web {
 
     [ExcludeFromCodeCoverage]
     [SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "ASP.NET Core conventions")]
-    public class Startup {
-        public Startup(IConfiguration configuration) {
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
             this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
 
-        public void ConfigureServices(IServiceCollection services) {
+        public void ConfigureServices(IServiceCollection services)
+        {
             // App
             services.AddInfrastructure();
             services.AddPersistence();
@@ -67,7 +71,8 @@ namespace PokerTime.Web {
             services.AddDataProtection();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        {
             if (app == null) throw new ArgumentNullException(nameof(app));
             if (env == null) throw new ArgumentNullException(nameof(env));
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
@@ -83,10 +88,12 @@ namespace PokerTime.Web {
             app.UseRequestEnvironmentDetection();
             app.UseCurrentParticipantService();
 
-            if (env.IsDevelopment()) {
+            if (env.IsDevelopment())
+            {
                 app.UseDeveloperExceptionPage();
             }
-            else {
+            else
+            {
                 app.UseExceptionHandler("/Error");
             }
 
@@ -95,7 +102,8 @@ namespace PokerTime.Web {
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapHealthChecks("/health");
 
                 endpoints.MapBlazorHub();
