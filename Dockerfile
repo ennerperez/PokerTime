@@ -8,19 +8,19 @@ RUN utils/install-all-prereqs.sh
 
 # Copy csproj and restore as distinct layers
 # ... sources
-COPY src/PockerTime.Application/*.csproj src/PockerTime.Application/
-COPY src/PockerTime.Common/*.csproj src/PockerTime.Common/
-COPY src/PockerTime.Domain/*.csproj src/PockerTime.Domain/
-COPY src/PockerTime.Infrastructure/*.csproj src/PockerTime.Infrastructure/
-COPY src/PockerTime.Persistence/*.csproj src/PockerTime.Persistence/
-COPY src/PockerTime.Web/*.csproj src/PockerTime.Web/
+COPY src/PokerTime.Application/*.csproj src/PokerTime.Application/
+COPY src/PokerTime.Common/*.csproj src/PokerTime.Common/
+COPY src/PokerTime.Domain/*.csproj src/PokerTime.Domain/
+COPY src/PokerTime.Infrastructure/*.csproj src/PokerTime.Infrastructure/
+COPY src/PokerTime.Persistence/*.csproj src/PokerTime.Persistence/
+COPY src/PokerTime.Web/*.csproj src/PokerTime.Web/
 COPY src/*.props src/
 
 # ... tests
-COPY tests/PockerTime.Application.Tests.Unit/*.csproj tests/PockerTime.Application.Tests.Unit/
-COPY tests/PockerTime.Domain.Tests.Unit/*.csproj tests/PockerTime.Domain.Tests.Unit/
-COPY tests/PockerTime.Web.Tests.Unit/*.csproj tests/PockerTime.Web.Tests.Unit/
-COPY tests/PockerTime.Web.Tests.Integration/*.csproj tests/PockerTime.Web.Tests.Integration/
+COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
+COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
+COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
+COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
 COPY tests/*.props tests/
 
 COPY *.sln .
@@ -30,9 +30,9 @@ RUN dotnet restore
 RUN dotnet tool restore
 
 # Yarn (although it isn't as large, still worth caching)
-#COPY package.json src/PockerTime.Web/
-#COPY yarn.lock src/PockerTime.Web/
-RUN yarn --cwd src/PockerTime.Web/
+#COPY package.json src/PokerTime.Web/
+#COPY yarn.lock src/PokerTime.Web/
+RUN yarn --cwd src/PokerTime.Web/
 
 ## Skip build script pre-warm
 ## This causes later invocations of the build script to fail with "Failed to uninstall tool package 'cake.tool': Invalid cross-device link"
@@ -69,7 +69,7 @@ COPY --from=publish /source/publish/ubuntu.22.04-x64/ .
 ENV ASPNETCORE_ENVIRONMENT Production
 
 # Config directory
-VOLUME ["/etc/PockerTime"]
+VOLUME ["/etc/PokerTime"]
 
 # Set some defaults for a "direct run" experience
 ENV DATABASE__DATABASE "/app/data.db"
