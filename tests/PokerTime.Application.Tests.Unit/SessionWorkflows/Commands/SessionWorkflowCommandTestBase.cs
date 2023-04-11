@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionWorkflowCommandTestBase.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -42,7 +42,7 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
 
             this.SessionId = session.UrlId.StringId;
             this.Session = session;
-            this.ConfigureRetrospective(session);
+            this.ConfigureSession(session);
 
             this.Context.Sessions.Add(session);
             await this.Context.SaveChangesAsync(CancellationToken.None);
@@ -59,6 +59,6 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
             this.Session = newEditContext.Sessions.FirstOrDefault(x => x.Id == this.Session.Id);
         }
 
-        protected virtual void ConfigureRetrospective(Session session) { }
+        protected virtual void ConfigureSession(Session session) { }
     }
 }

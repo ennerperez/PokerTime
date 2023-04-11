@@ -13,7 +13,7 @@ namespace PokerTime.Application.Services {
     using Domain.Entities;
     using Microsoft.EntityFrameworkCore;
 
-    public static class RetrospectiveQueryExtensions {
+    public static class QueryExtensions {
         public static Task<Session?> FindBySessionId(
             this IQueryable<Session> queryable,
             string sessionIdentifier,

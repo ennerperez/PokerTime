@@ -16,7 +16,7 @@
     <div class="card-header bg-dark text-light">
         Who already joined?
     </div>
-    <div class="card-body">
+     <div class="card-body p-2">
         @if (this.Participants.Participants.Count == 0)
         {
             <text>No one. You are the first to join this planning poker session.</text>
@@ -25,7 +25,7 @@
         {
             ParticipantInfo participant = this.Participants.Participants[0];
 
-            <text>@RenderParticipant(participant) has already joined the retrospective</text>
+            <text>@RenderParticipant(participant) has already joined the session</text>
         }
         else
         {
@@ -70,7 +70,7 @@
     [Parameter]
     public CurrentParticipantModel CurrentParticipant { get; set; }
 
-    public Task OnParticipantJoinedRetrospective(SessionEvent<ParticipantInfo> eventArgs)
+    public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs)
     {
         if (eventArgs.SessionId != this.SessionId)
         {

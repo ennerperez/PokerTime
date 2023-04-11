@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : AbstractStageCommandHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -34,13 +34,13 @@ namespace PokerTime.Application.SessionWorkflows.Commands {
 
             try {
                 this.DbContext = this._dbContextFactory.CreateForEditContext();
-                Session? retrospective = await this.DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+                Session? session = await this.DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
-                if (retrospective == null) {
+                if (session == null) {
                     throw new NotFoundException();
                 }
 
-                return await this.HandleCore(request, retrospective, cancellationToken);
+                return await this.HandleCore(request, session, cancellationToken);
             }
             finally {
                 this.DbContext?.Dispose();

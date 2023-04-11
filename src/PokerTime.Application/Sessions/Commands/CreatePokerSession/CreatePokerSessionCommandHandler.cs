@@ -50,7 +50,7 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
                 return !String.IsNullOrEmpty(plainText) ? this._passphraseService.CreateHashedPassphrase(plainText) : null;
             }
 
-            var retrospective = new Session {
+            var session = new Session {
                 CreationTimestamp = this._systemClock.CurrentTimeOffset,
                 Title = request.Title,
                 HashedPassphrase = HashOptionalPassphrase(request.Passphrase),
@@ -58,17 +58,17 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
                 SymbolSet = symbolSet
             };
 
-            this._logger.LogInformation($"Creating new retrospective with id {retrospective.UrlId}");
+            this._logger.LogInformation($"Creating new session with id {session.UrlId}");
 
-            string retroLocation = this._urlGenerator.GenerateUrlToPokerSessionLobby(retrospective.UrlId).ToString();
+            string retroLocation = this._urlGenerator.GenerateUrlToPokerSessionLobby(session.UrlId).ToString();
 
             var qrCode =  QrCode.EncodeText(retroLocation, QrCode.Ecc.Low);
 
             var result = new CreatePokerSessionCommandResponse(
-                retrospective.UrlId, qrCode,
+                session.UrlId, qrCode,
                 retroLocation);
 
-            this._pokerTimeDbContext.Sessions.Add(retrospective);
+            this._pokerTimeDbContext.Sessions.Add(session);
 
             await this._pokerTimeDbContext.SaveChangesAsync(cancellationToken);
 

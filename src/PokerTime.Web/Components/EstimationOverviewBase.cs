@@ -107,7 +107,7 @@ namespace PokerTime.Web.Components {
             return LoadCore();
         }
 
-        public Task OnParticipantJoinedRetrospective(SessionEvent<ParticipantInfo> eventArgs) {
+        public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs) {
             if (eventArgs == null) throw new ArgumentNullException(nameof(eventArgs));
 
             if (eventArgs.SessionId != this.SessionStatus?.SessionId) {
