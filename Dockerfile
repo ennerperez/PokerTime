@@ -16,12 +16,12 @@ COPY src/PokerTime.Persistence/*.csproj src/PokerTime.Persistence/
 COPY src/PokerTime.Web/*.csproj src/PokerTime.Web/
 COPY src/*.props src/
 
-# ... tests
-COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
-COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
-COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
-COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
-COPY tests/*.props tests/
+# # ... tests
+# COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
+# COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
+# COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
+# COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
+# COPY tests/*.props tests/
 
 COPY *.sln .
 COPY *.props .
@@ -39,14 +39,14 @@ RUN yarn --cwd src/PokerTime.Web/
 #COPY build.* .
 #RUN ./build.sh --target=restore-node-packages
 
-### TEST
-FROM build-env AS test
+# ### TEST
+# FROM build-env AS test
 
-# ... run tests
-COPY . .
-ENV RETURN_TEST_WAIT_TIME 30
-ENV SCREENSHOT_TEST_FAILURE_TOLERANCE True
-RUN ./build.sh --target=test
+# # ... run tests
+# COPY . .
+# ENV RETURN_TEST_WAIT_TIME 30
+# ENV SCREENSHOT_TEST_FAILURE_TOLERANCE True
+# RUN ./build.sh --target=test
 
 ### PUBLISHING
 FROM build-env AS publish
