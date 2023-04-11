@@ -16,12 +16,12 @@ COPY src/PokerTime.Persistence/*.csproj src/PokerTime.Persistence/
 COPY src/PokerTime.Web/*.csproj src/PokerTime.Web/
 COPY src/*.props src/
 
-# # ... tests
-# COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
-# COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
-# COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
-# COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
-# COPY tests/*.props tests/
+# ... tests
+COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
+COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
+COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
+COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
+COPY tests/*.props tests/
 
 COPY *.sln .
 COPY *.props .

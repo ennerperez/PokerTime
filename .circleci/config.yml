@@ -10,7 +10,7 @@ jobs:
             - setup_remote_docker
 
             - run:
-                  name: Run docker-compose tests
+                  name: Run docker-compose publish
                   command: |
-                      docker-compose --file docker-compose.test.yml build
-                      docker-compose --file docker-compose.test.yml run sut
+                      docker-compose --file docker-compose.publish.yml build
+                      docker-compose --file docker-compose.publish.yml run sut
