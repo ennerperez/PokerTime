@@ -52,12 +52,12 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             createRetroPage.InitializeFrom(this.Client1);
             createRetroPage.Navigate(this.App);
 
-            void SetResolution(IWebDriver webDriver) {
-                webDriver.Manage().Window.Size = new Size(1450, 1024);
-            }
-
-            SetResolution(this.Client1.WebDriver);
-            SetResolution(this.Client2.WebDriver);
+            // void SetResolution(IWebDriver webDriver) {
+            //     webDriver.Manage().Window.Size = new Size(1450, 1024);
+            // }
+            //
+            // SetResolution(this.Client1.WebDriver);
+            // SetResolution(this.Client2.WebDriver);
 
             // When
             createRetroPage.SessionTitleInput.SendKeys("Sprint 1: Initial prototype");
@@ -68,6 +68,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             // Then
             CreateDocScreenshot(createRetroPage.WebDriver, "create-session");
 
+            createRetroPage.ScrollDown();
             createRetroPage.Submit();
 
             string url = createRetroPage.GetUrlShown();

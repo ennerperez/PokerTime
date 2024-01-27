@@ -38,7 +38,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App, sessionIdentifier);
 
             // Then
-            Assert.That(this.Page.Title.Text, Contains.Substring("not found"));
+            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-danger")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
@@ -48,6 +48,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App, sessionId);
 
             // When
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -75,7 +76,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App, sessionId);
 
             // Then
-            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".notification.is-info")), Has.Count.EqualTo(1).Retry());
+            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-info")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
@@ -88,7 +89,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App, sessionId);
 
             // Then
-            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".notification.is-warning")), Has.Count.EqualTo(1).Retry());
+            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-warning")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
@@ -102,6 +103,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.NameInput.SendKeys(myName);
             new SelectElement(this.Page.ColorSelect).SelectByIndex(1);
             this.Page.ParticipantPassphraseInput.SendKeys("secret");
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -122,6 +124,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.NameInput.SendKeys(myName);
             new SelectElement(this.Page.ColorSelect).SelectByIndex(1);
             this.Page.ParticipantPassphraseInput.SendKeys("secret");
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -154,6 +157,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
             this.Page.NameInput.SendKeys(myName);
             this.Page.ParticipantPassphraseInput.SendKeys("secret");
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -178,6 +182,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
                 this.Page.FacilitatorPassphraseInput.SendKeys("scrummaster");
                 return true;
             });
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             Thread.Sleep(500);
@@ -198,7 +203,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
         private async Task<string> CreatePokerSession(string facilitatorPassword, string password) {
             var command = new CreatePokerSessionCommand {
-                Title = TestContext.CurrentContext.Test.FullName,
+                Title = TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault(),
                 FacilitatorPassphrase = facilitatorPassword,
                 Passphrase = password,
                 SymbolSetId = (await this.ServiceScope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>().SymbolSets.FirstAsync()).Id
