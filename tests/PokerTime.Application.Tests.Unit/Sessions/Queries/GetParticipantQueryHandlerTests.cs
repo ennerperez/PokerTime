@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : GetParticipantQueryHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -28,7 +28,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                     new Participant {Name = "John", Color = Color.BlueViolet},
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
             this._retro1Id = retro.UrlId.StringId;
             this.Context.Sessions.Add(retro);
@@ -40,7 +41,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                     new Participant {Name = "Foo", Color = Color.BlueViolet},
                     new Participant {Name = "Baz", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
             this._retro2Id = retro2.UrlId.StringId;
             this.Context.Sessions.Add(retro2);

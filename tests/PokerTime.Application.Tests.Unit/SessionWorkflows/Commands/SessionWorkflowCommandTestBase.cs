@@ -37,6 +37,7 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
                     new Participant { Name = "Jane", Color = Color.Aqua },
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.NotStarted
             };
 
