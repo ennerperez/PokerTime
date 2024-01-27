@@ -33,22 +33,22 @@ namespace PokerTime.Application.Poker.Commands {
             this._mapper = mapper;
         }
 
-        public async Task<Unit> Handle(PlayCardCommand request, CancellationToken cancellationToken) {
+        public async Task Handle(PlayCardCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
 
-            Session? session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);
             }
 
-            UserStory? userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
+            UserStory userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
             if (userStory == null) {
                 throw new NotFoundException(nameof(UserStory), request.UserStoryId);
             }
 
-            Symbol? desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x != null && x.Id == request.SymbolId, cancellationToken);
+            Symbol desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x != null && x.Id == request.SymbolId, cancellationToken);
             if (desiredSymbol == null) {
                 throw new NotFoundException(nameof(Symbol), request.SymbolId);
             }
@@ -60,7 +60,7 @@ namespace PokerTime.Application.Poker.Commands {
             CurrentParticipantModel currentParticipantInfo = await this._currentParticipantService.GetParticipant();
 
             // Add or update estimation
-            Estimation? estimation = await dbContext.Estimations
+            Estimation estimation = await dbContext.Estimations
                 .Include(x => x!.Participant)
                 .Where(x => x != null && x.UserStory != null && x.UserStory.Session.UrlId.StringId == session.UrlId.StringId)
                 .FirstOrDefaultAsync(x => x != null && x.UserStory != null && x.UserStory.Id == userStory.Id && x.ParticipantId == currentParticipantInfo.Id, cancellationToken);
@@ -87,8 +87,6 @@ namespace PokerTime.Application.Poker.Commands {
             );
 
             await this._mediator.Publish(estimationNotification, cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

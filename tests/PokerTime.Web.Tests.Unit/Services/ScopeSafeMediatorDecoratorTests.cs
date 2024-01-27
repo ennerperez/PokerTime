@@ -54,6 +54,7 @@ namespace PokerTime.Web.Tests.Unit.Services {
 
                 return (TResponse)Activator.CreateInstance(typeof(TResponse));
             }
+            public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = new CancellationToken()) where TRequest : IRequest => throw new NotImplementedException();
 
             public Task<object> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 

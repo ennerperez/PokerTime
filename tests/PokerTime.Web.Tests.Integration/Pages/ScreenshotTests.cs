@@ -224,7 +224,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             string fileName = Path.Combine(docStagingDirectory, name + ".png");
 
             TestContext.WriteLine($"Creating doc screenshot: {fileName}");
-            webDriver.TakeScreenshot().SaveAsFile(fileName, ScreenshotImageFormat.Png);
+            webDriver.TakeScreenshot().SaveAsFile(fileName);
         }
 
         private void EnsureSessionInStage(SessionStage sessionStage) {

@@ -20,7 +20,7 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
     using Support;
 
     public abstract class SessionWorkflowCommandTestBase : CommandTestBase {
-#nullable disable
+
         protected Session Session { get; private set; }
         protected string SessionId { get; private set; }
         protected ISessionStatusUpdateDispatcher SessionStatusUpdateDispatcherMock { get; set; }

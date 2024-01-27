@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : CustomWebApplicationFactory.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -25,6 +25,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Logging;
+    using NReco.Logging.File;
     using NUnit.Framework;
     using Persistence;
     using PokerTime.Common;
@@ -108,7 +109,6 @@ namespace PokerTime.Web.Tests.Integration.Common {
             // ... Base seeding
             try {
                 scope.SetNoAuthenticationInfo();
-
                 scope.Send(new SeedBaseDataCommand()).ConfigureAwait(false).GetAwaiter().GetResult();
             }
             catch (Exception ex) {

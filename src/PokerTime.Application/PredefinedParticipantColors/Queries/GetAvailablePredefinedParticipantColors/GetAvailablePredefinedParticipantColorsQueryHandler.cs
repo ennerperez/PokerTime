@@ -25,7 +25,7 @@
         public async Task<IList<AvailableParticipantColorModel>> Handle(GetAvailablePredefinedParticipantColorsQuery query, CancellationToken cancellationToken) {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
-            Session? session = await this._dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.SessionId, cancellationToken);
+            Session session = await this._dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), query.SessionId);
             }

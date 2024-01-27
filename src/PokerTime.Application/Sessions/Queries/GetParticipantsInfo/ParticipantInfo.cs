@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ParticipantInfo.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -13,7 +13,7 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
     using Common.Models;
     using Domain.Entities;
 
-#nullable disable
+
     [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
     public class ParticipantInfo : IMapFrom<Participant>, IEquatable<ParticipantInfo> {
         public int Id { get; set; }

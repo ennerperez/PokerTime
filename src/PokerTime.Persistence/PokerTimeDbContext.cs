@@ -26,7 +26,7 @@ namespace PokerTime.Persistence {
         private const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
 
         private readonly DbContextOptions _options;
-        private readonly IDatabaseOptions? _databaseOptions;
+        private readonly IDatabaseOptions _databaseOptions;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public PokerTimeDbContext(DbContextOptions options) : base(options) {

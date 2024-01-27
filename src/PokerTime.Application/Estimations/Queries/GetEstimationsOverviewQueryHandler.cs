@@ -34,7 +34,7 @@ namespace PokerTime.Application.Estimations.Queries {
 
             using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
 
-            Session? session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);
             }

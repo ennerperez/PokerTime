@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : EstimationOverviewBase.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -23,7 +23,7 @@ namespace PokerTime.Web.Components {
     public abstract class EstimationOverviewBase : MediatorComponent, IDisposable, IEstimationGivenSubscriber, ISessionJoinedSubscriber {
         private int _userStoryId;
 
-#nullable disable
+
         [CascadingParameter]
         public SessionStatus SessionStatus { get; set; }
 

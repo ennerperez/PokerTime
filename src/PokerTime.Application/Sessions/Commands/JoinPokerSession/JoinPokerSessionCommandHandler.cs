@@ -38,7 +38,7 @@ namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
 
         public async Task<ParticipantInfo> Handle(JoinPokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            Session? Session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session Session = await this._pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
             if (Session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);
@@ -76,7 +76,7 @@ namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
         }
 
         private async Task<Participant> GetOrCreateParticipantAsync(string sessionId, string name, CancellationToken cancellationToken) {
-            Participant? existingParticipant = await this._pokerTimeDbContext.Participants.FirstOrDefaultAsync(x => x.Name == name && x.Session.UrlId.StringId == sessionId, cancellationToken);
+            Participant existingParticipant = await this._pokerTimeDbContext.Participants.FirstOrDefaultAsync(x => x.Name == name && x.Session.UrlId.StringId == sessionId, cancellationToken);
 
             if (existingParticipant == null) {
                 return new Participant();

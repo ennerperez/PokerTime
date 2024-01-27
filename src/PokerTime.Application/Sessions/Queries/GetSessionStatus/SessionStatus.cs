@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionStatus.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -19,7 +19,7 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
 
         public SessionStage Stage { get; }
 
-        public UserStoryModel? UserStory { get; }
+        public UserStoryModel UserStory { get; }
 
         public bool CanViewOwnCards => this.Stage != SessionStage.Finished && this.Stage != SessionStage.NotStarted;
         public bool CanChooseCards => this.Stage == SessionStage.Estimation;
@@ -33,7 +33,7 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
             string title,
             SessionStage sessionStage,
             int symbolSetId,
-            UserStoryModel? currentUserStory
+            UserStoryModel currentUserStory
         ) {
             this.SessionId = sessionId;
             this.Title = title;

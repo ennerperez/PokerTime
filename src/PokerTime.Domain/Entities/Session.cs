@@ -18,7 +18,7 @@ namespace PokerTime.Domain.Entities {
     /// </summary>
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "EFCore")]
     public class Session {
-        private ICollection<Participant>? _participants;
+        private ICollection<Participant> _participants;
 
         private readonly SessionIdentifier _urlId = SessionIdentifierService.CreateNewInternal();
 
@@ -38,7 +38,7 @@ namespace PokerTime.Domain.Entities {
         /// <summary>
         /// Gets the optional hashed passphrase necessary to access the session lobby
         /// </summary>
-        public string? HashedPassphrase { get; set; }
+        public string HashedPassphrase { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public string Title { get; set; }

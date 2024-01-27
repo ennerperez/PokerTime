@@ -11,7 +11,7 @@ namespace PokerTime.Web.Components {
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Rendering;
 
-#nullable disable
+
 
     /// <summary>
     /// Represents a panel which will only render in the case the session is in a certain stage

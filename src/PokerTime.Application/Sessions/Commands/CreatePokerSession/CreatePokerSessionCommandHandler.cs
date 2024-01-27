@@ -41,12 +41,12 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
         public async Task<CreatePokerSessionCommandResponse> Handle(CreatePokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            SymbolSet? symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x.Id == request.SymbolSetId, cancellationToken);
+            SymbolSet symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x.Id == request.SymbolSetId, cancellationToken);
             if (symbolSet == null) {
                 throw new NotFoundException(nameof(SymbolSet), request.SymbolSetId);
             }
 
-            string? HashOptionalPassphrase(string? plainText) {
+            string HashOptionalPassphrase(string plainText) {
                 return !String.IsNullOrEmpty(plainText) ? this._passphraseService.CreateHashedPassphrase(plainText) : null;
             }
 

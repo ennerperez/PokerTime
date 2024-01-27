@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : UserStory.cs
 //  Project         : PokerTime.Domain
 // ******************************************************************************
@@ -12,7 +12,7 @@ namespace PokerTime.Domain.Entities {
     /// User stories are estimated by team members
     /// </summary>
     public class UserStory {
-        private ICollection<Estimation>? _estimations;
+        private ICollection<Estimation> _estimations;
 
         public int Id { get; set; }
 
@@ -24,6 +24,6 @@ namespace PokerTime.Domain.Entities {
 
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public string? Title { get; set; }
+        public string Title { get; set; }
     }
 }

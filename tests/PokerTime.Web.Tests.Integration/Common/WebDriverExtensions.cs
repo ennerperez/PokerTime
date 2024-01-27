@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : WebDriverExtensions.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -105,7 +105,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             try {
                 TestContext.WriteLine($"Creating screenshot: {screenshotPath}");
-                webDriver.TakeScreenshot().SaveAsFile(screenshotPath, ScreenshotImageFormat.Png);
+                webDriver.TakeScreenshot().SaveAsFile(screenshotPath);
             }
             catch (Exception ex) {
                 TestContext.WriteLine($"--> Unable to create screenshot: {ex}");

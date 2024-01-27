@@ -5,7 +5,7 @@
 
     [ExcludeFromCodeCoverage]
     internal static class SqliteConfigurator {
-        private static SqliteConnection? InMemoryConnection;
+        private static SqliteConnection InMemoryConnection;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "EF will manage lifetime")]
         public static void ConfigureDbContext(
