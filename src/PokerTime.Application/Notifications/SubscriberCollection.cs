@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SubscriberCollection.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -29,14 +29,14 @@ namespace PokerTime.Application.Notifications {
         }
 
         public IEnumerable<TSubscriber> GetItems() {
-            // While we iterate through the queue we need to take note of any dead subscribers 
+            // While we iterate through the queue we need to take note of any dead subscribers
             var deadSubscribers = new List<Guid>();
 
             // We need to take a read lock on the queue so at least stuff does not get removed while iterating
             this._subscriberCollectionLock.EnterReadLock();
             try {
                 foreach (KeyValuePair<Guid, WeakReference<TSubscriber>> subscriberItem in this._subscribers) {
-                    if (!subscriberItem.Value.TryGetTarget(out TSubscriber? subscriber)) {
+                    if (!subscriberItem.Value.TryGetTarget(out TSubscriber subscriber)) {
                         deadSubscribers.Add(subscriberItem.Key);
                     }
                     else {

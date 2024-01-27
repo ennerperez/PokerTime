@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : EstimationModel.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -11,7 +11,7 @@ namespace PokerTime.Application.Common.Models {
     using Domain.Entities;
     using Mapping;
 
-#nullable disable
+
 
     public sealed class EstimationModel : IMapFrom<Estimation> {
         public int Id { get; set; }

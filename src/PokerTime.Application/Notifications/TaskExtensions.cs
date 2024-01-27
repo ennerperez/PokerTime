@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : TaskExtensions.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -20,7 +20,7 @@ namespace PokerTime.Application.Notifications {
             return TaskRunner(task, cancellationToken);
         }
         private static async Task TaskRunner(Task task, CancellationToken cancellationToken) {
-            static void Callback(object? raw) {
+            static void Callback(object raw) {
                 if (raw is TaskCompletionSource<bool> tcs) {
                     tcs.TrySetResult(true);
                 }

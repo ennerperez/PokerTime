@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionStatusMapper.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -32,11 +32,11 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
         public async Task<SessionStatus> GetSessionStatus(Session session, CancellationToken cancellationToken) {
             if (session == null) throw new ArgumentNullException(nameof(session));
 
-            UserStory? currentUserStory = await this._pokerTimeDbContext.UserStories.Where(x => x.SessionId == session.Id).
+            UserStory currentUserStory = await this._pokerTimeDbContext.UserStories.Where(x => x.SessionId == session.Id).
                 OrderByDescending(x => x.Id).
                 FirstOrDefaultAsync(cancellationToken);
 
-            UserStoryModel? currentUserStoryModel = currentUserStory != null ? this._mapper.Map<UserStoryModel>(currentUserStory) : null;
+            UserStoryModel currentUserStoryModel = currentUserStory != null ? this._mapper.Map<UserStoryModel>(currentUserStory) : null;
             var sessionStatus = new SessionStatus(session.UrlId.StringId, session.Title, session.CurrentStage, session.SymbolSetId, currentUserStoryModel);
 
             return sessionStatus;

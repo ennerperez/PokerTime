@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PokerSessionLobbyBase.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -27,7 +27,7 @@ namespace PokerTime.Web.Pages {
     public abstract class PokerSessionLobbyBase : MediatorComponent, ISessionStatusUpdatedSubscriber, IDisposable {
         public Guid UniqueId { get; } = Guid.NewGuid();
 
-#nullable disable
+
 
         [Inject]
         public INotificationSubscription<ISessionStatusUpdatedSubscriber> SessionStatusUpdatedSubscription { get; set; }

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ServiceCollectionExtensions.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -19,10 +19,15 @@ namespace PokerTime.Application {
     public static class ServiceCollectionExtensions {
         public static IServiceCollection AddApplication(this IServiceCollection services) {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddMediatR(opts => opts.AsScoped(), Assembly.GetExecutingAssembly());
 
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+            var assemblies = new[] { Assembly.GetExecutingAssembly() };
+            services.AddMediatR(opts =>
+            {
+                opts.RegisterServicesFromAssemblies(assemblies);
+                opts.AddBehavior(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
+                opts.AddBehavior(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehaviour<,>));
+            });
+
 
             services.AddScoped<ISessionStatusMapper, SessionStatusMapper>();
             services.AddScoped<ISessionStatusUpdateDispatcher, SessionStatusUpdateDispatcher>();

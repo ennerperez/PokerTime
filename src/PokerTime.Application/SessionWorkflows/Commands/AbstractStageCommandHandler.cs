@@ -20,27 +20,27 @@ namespace PokerTime.Application.SessionWorkflows.Commands {
         private readonly ISessionStatusUpdateDispatcher _sessionStatusUpdateDispatcher;
         private readonly IPokerTimeDbContextFactory _dbContextFactory;
 
-#nullable disable
+
         protected IPokerTimeDbContext DbContext { get; private set; }
-#nullable enable
+
 
         protected AbstractStageCommandHandler(IPokerTimeDbContextFactory pokerTimeDbContext, ISessionStatusUpdateDispatcher sessionStatusUpdateDispatcher) {
             this._dbContextFactory = pokerTimeDbContext;
             this._sessionStatusUpdateDispatcher = sessionStatusUpdateDispatcher;
         }
 
-        public async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken) {
+        public async Task Handle(TRequest request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             try {
                 this.DbContext = this._dbContextFactory.CreateForEditContext();
-                Session? session = await this.DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+                Session session = await this.DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
                 if (session == null) {
                     throw new NotFoundException();
                 }
 
-                return await this.HandleCore(request, session, cancellationToken);
+                await this.HandleCore(request, session, cancellationToken);
             }
             finally {
                 this.DbContext?.Dispose();

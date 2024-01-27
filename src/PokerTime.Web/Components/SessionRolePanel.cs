@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionRolePanel.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -10,7 +10,7 @@ namespace PokerTime.Web.Components {
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Rendering;
 
-#nullable disable
+
 
     /// <summary>
     /// Represents a panel which will only render one content or the other based on the role of the user

@@ -14,7 +14,7 @@ namespace PokerTime.Application.Services {
     using Microsoft.EntityFrameworkCore;
 
     public static class QueryExtensions {
-        public static Task<Session?> FindBySessionId(
+        public static Task<Session> FindBySessionId(
             this IQueryable<Session> queryable,
             string sessionIdentifier,
             CancellationToken cancellationToken

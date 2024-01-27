@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : DesignTimeDbContextFactoryBase.cs
 //  Project         : PokerTime.Persistence
 // ******************************************************************************
@@ -26,7 +26,7 @@ namespace PokerTime.Persistence {
 
         protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
 
-        private TContext Create(string basePath, string? environmentName) {
+        private TContext Create(string basePath, string environmentName) {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")

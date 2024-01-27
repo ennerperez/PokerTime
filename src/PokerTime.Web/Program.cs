@@ -23,6 +23,7 @@ namespace PokerTime.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using NReco.Logging.File;
     using Persistence;
     using Services;
     using Serilog;
@@ -107,7 +108,7 @@ namespace PokerTime.Web
                     else
                     {
                         IConfigurationSection fileSection = config.GetSection("Logging").GetSection("File");
-                        string? fileName = fileSection?.GetValue<string>("Path");
+                        string fileName = fileSection?.GetValue<string>("Path");
 
                         if (!String.IsNullOrEmpty(fileName))
                         {
