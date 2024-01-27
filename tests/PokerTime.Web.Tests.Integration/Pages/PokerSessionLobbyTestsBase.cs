@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PokerSessionLobbyTestsBase.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -70,7 +70,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
                 Task.Run(() => WaitNavigatedToLobby(this.Client2))
             );
 
-        protected Task SetRetrospective(Action<Session> action) {
+        protected Task SetSession(Action<Session> action) {
             using IServiceScope scope = this.App.CreateTestServiceScope();
             return scope.SetSession(this.SessionId, action);
         }
@@ -85,7 +85,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             sw.Start();
 
             Assume.That(() => pageObject.WebDriver.Url, Does.Match("/lobby").Retry(), "We didn't navigate to the lobby");
-            Assume.That(() => pageObject.WebDriver.Retry(wd => wd.FindElementByTestElementId("main-board").Displayed), Is.True.Retry(count: 2), "The retrospective board does not load");
+            Assume.That(() => pageObject.WebDriver.Retry(wd => wd.FindElementByTestElementId("main-board").Displayed), Is.True.Retry(count: 2), "The session board does not load");
 
             sw.Stop();
             TestContext.WriteLine($"Navigated to lobby in {sw.Elapsed}");

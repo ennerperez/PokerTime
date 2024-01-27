@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PokerLobbyWorkflowTests.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -74,7 +74,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task PokerLobby_ShowsInteractableCards_OnEstimationSession() {
             await this.SetCurrentUserStory();
-            await this.SetRetrospective(s => s.CurrentStage = SessionStage.Discussion);
+            await this.SetSession(s => s.CurrentStage = SessionStage.Discussion);
 
             // Given
             await Task.WhenAll(
@@ -110,7 +110,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task PokerLobby_CardEstimation_UpdatesOtherView() {
             await this.SetCurrentUserStory();
-            await this.SetRetrospective(s => s.CurrentStage = SessionStage.Estimation);
+            await this.SetSession(s => s.CurrentStage = SessionStage.Estimation);
 
             // Given
             await Task.WhenAll(
@@ -143,7 +143,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task PokerLobby_JoiningWithInProgress_UpdatesUnestimatedCardSection() {
             await this.SetCurrentUserStory();
-            await this.SetRetrospective(s => s.CurrentStage = SessionStage.Estimation);
+            await this.SetSession(s => s.CurrentStage = SessionStage.Estimation);
 
             // Given
             string client1Name = Name.Create();
@@ -172,7 +172,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task PokerLobby_CardEstimationDiscussion_CardsBecomeNonChoosable() {
             await this.SetCurrentUserStory();
-            await this.SetRetrospective(s => s.CurrentStage = SessionStage.Estimation);
+            await this.SetSession(s => s.CurrentStage = SessionStage.Estimation);
 
             // Given
             await Task.WhenAll(
@@ -197,7 +197,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task PokerLobby_CardFinished_EndMessageBecomesVisible() {
             await this.SetCurrentUserStory();
-            await this.SetRetrospective(s => s.CurrentStage = SessionStage.EstimationDiscussion);
+            await this.SetSession(s => s.CurrentStage = SessionStage.EstimationDiscussion);
 
             // Given
             await Task.WhenAll(

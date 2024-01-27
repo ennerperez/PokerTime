@@ -30,7 +30,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
     [TestFixture]
     public sealed class JoinPokerSessionTests : PageFixture<JoinPokerSessionPage> {
         [Test]
-        public void JoinPokerSessionPage_UnknownRetrospective_ShowNotFoundMessage() {
+        public void JoinPokerSessionPage_UnknownSession_ShowNotFoundMessage() {
             // Given
             string sessionIdentifier = new SessionIdentifierService().CreateNew().StringId;
 
@@ -42,7 +42,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospective_FormShownWithValidation() {
+        public async Task JoinPokerSessionPage_KnownSession_FormShownWithValidation() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
             this.Page.Navigate(this.App, sessionId);
@@ -66,10 +66,10 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospectiveAlreadyStarted_ShowMessage() {
+        public async Task JoinPokerSessionPage_KnownSessionAlreadyStarted_ShowMessage() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            await this.SetRetrospective(sessionId, retro => retro.CurrentStage = SessionStage.Discussion);
+            await this.SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Discussion);
 
             // When
             this.Page.Navigate(this.App, sessionId);
@@ -79,10 +79,10 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospectiveFinished_ShowMessage() {
+        public async Task JoinPokerSessionPage_KnownSessionFinished_ShowMessage() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            await this.SetRetrospective(sessionId, retro => retro.CurrentStage = SessionStage.Finished);
+            await this.SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Finished);
 
             // When
             this.Page.Navigate(this.App, sessionId);
@@ -92,7 +92,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospective_ValidatesParticipantPassphaseAndRedirectsToLobby() {
+        public async Task JoinPokerSessionPage_KnownSession_ValidatesParticipantPassphaseAndRedirectsToLobby() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
             string myName = Name.Create();
@@ -109,7 +109,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospective_JoinParticipantUpdatesParticipantListInRealtime() {
+        public async Task JoinPokerSessionPage_KnownSession_JoinParticipantUpdatesParticipantListInRealtime() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
             string myName = Name.Create();
@@ -129,7 +129,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospective_JoinParticipantUpdatesColorListInRealtime() {
+        public async Task JoinPokerSessionPage_KnownSession_JoinParticipantUpdatesColorListInRealtime() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
             string myName = Name.Create();
@@ -161,7 +161,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         [Test]
-        public async Task JoinPokerSessionPage_KnownRetrospective_JoinAsFacilitatorUpdatesParticipantListInRealtime() {
+        public async Task JoinPokerSessionPage_KnownSession_JoinAsFacilitatorUpdatesParticipantListInRealtime() {
             // Given
             string sessionId = await this.CreatePokerSession("scrummaster", "secret");
             string myName = Name.Create();
@@ -192,7 +192,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             Assert.That(() => secondInstance.OnlineList.GetListItem(facilitator.Id).FindElements(By.ClassName("fa-crown")), Is.Not.Empty.Retry());
         }
 
-        private Task SetRetrospective(string sessionId, Action<Session> action) {
+        private Task SetSession(string sessionId, Action<Session> action) {
             using IServiceScope scope = this.App.CreateTestServiceScope();
             return scope.SetSession(sessionId, action);
         }

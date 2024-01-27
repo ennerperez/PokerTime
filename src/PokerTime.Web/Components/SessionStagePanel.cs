@@ -1,7 +1,7 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RetrospectiveStageText2.cs
+//
+//  File:           : SessionStageText2.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
 
@@ -14,7 +14,7 @@ namespace PokerTime.Web.Components {
 #nullable disable
 
     /// <summary>
-    /// Represents a panel which will only render in the case the retrospective is in a certain stage
+    /// Represents a panel which will only render in the case the session is in a certain stage
     /// </summary>
     public sealed class SessionStagePanel : ComponentBase {
         [Parameter]

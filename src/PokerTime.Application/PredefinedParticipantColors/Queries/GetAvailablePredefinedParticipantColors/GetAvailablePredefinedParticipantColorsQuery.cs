@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ParticipantColor.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -10,13 +10,13 @@ namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailable
     using MediatR;
 
     public class GetAvailablePredefinedParticipantColorsQuery : IRequest<IList<AvailableParticipantColorModel>> {
-        public string RetrospectiveId { get; }
+        public string SessionId { get; }
 
-        public GetAvailablePredefinedParticipantColorsQuery(string retrospectiveId) {
-            this.RetrospectiveId = retrospectiveId;
+        public GetAvailablePredefinedParticipantColorsQuery(string sessionId) {
+            this.SessionId = sessionId;
         }
 
-        public override string ToString() => $"[{nameof(GetAvailablePredefinedParticipantColorsQuery)}] {this.RetrospectiveId}";
+        public override string ToString() => $"[{nameof(GetAvailablePredefinedParticipantColorsQuery)}] {this.SessionId}";
     }
 
 }

@@ -46,7 +46,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
         [Test]
         [Order((int)SessionStage.NotStarted)]
-        public void Screenshot_CreateRetrospective() {
+        public void Screenshot_CreateSession() {
             // Given
             using var createRetroPage = new CreatePokerSessionPage();
             createRetroPage.InitializeFrom(this.Client1);
@@ -227,12 +227,12 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             webDriver.TakeScreenshot().SaveAsFile(fileName, ScreenshotImageFormat.Png);
         }
 
-        private void EnsureSessionInStage(SessionStage retrospectiveStage) {
+        private void EnsureSessionInStage(SessionStage sessionStage) {
             using IServiceScope scope = this.App.CreateTestServiceScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
             Assume.That(() => dbContext.Sessions.AsNoTracking().FindBySessionId(this.SessionId, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult(),
-                Has.Property(nameof(Session.CurrentStage)).EqualTo(retrospectiveStage).Retry(),
-                $"Session {this.SessionId} is not in stage {retrospectiveStage} required for this test. Are the tests running in the correct order?");
+                Has.Property(nameof(Session.CurrentStage)).EqualTo(sessionStage).Retry(),
+                $"Session {this.SessionId} is not in stage {sessionStage} required for this test. Are the tests running in the correct order?");
         }
     }
 }

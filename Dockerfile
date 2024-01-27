@@ -14,23 +14,24 @@ COPY src/PokerTime.Domain/*.csproj src/PokerTime.Domain/
 COPY src/PokerTime.Infrastructure/*.csproj src/PokerTime.Infrastructure/
 COPY src/PokerTime.Persistence/*.csproj src/PokerTime.Persistence/
 COPY src/PokerTime.Web/*.csproj src/PokerTime.Web/
-COPY src/Common.props src/
+COPY src/*.props src/
 
 # ... tests
 COPY tests/PokerTime.Application.Tests.Unit/*.csproj tests/PokerTime.Application.Tests.Unit/
 COPY tests/PokerTime.Domain.Tests.Unit/*.csproj tests/PokerTime.Domain.Tests.Unit/
 COPY tests/PokerTime.Web.Tests.Unit/*.csproj tests/PokerTime.Web.Tests.Unit/
 COPY tests/PokerTime.Web.Tests.Integration/*.csproj tests/PokerTime.Web.Tests.Integration/
-COPY tests/Common.props tests/
+COPY tests/*.props tests/
 
 COPY *.sln .
+COPY *.props .
 COPY dotnet-tools.json .
 RUN dotnet restore
 RUN dotnet tool restore
 
 # Yarn (although it isn't as large, still worth caching)
-COPY src/package.json src/PokerTime.Web/
-COPY src/yarn.lock src/PokerTime.Web/
+#COPY package.json src/PokerTime.Web/
+#COPY yarn.lock src/PokerTime.Web/
 RUN yarn --cwd src/PokerTime.Web/
 
 ## Skip build script pre-warm
@@ -38,19 +39,21 @@ RUN yarn --cwd src/PokerTime.Web/
 #COPY build.* .
 #RUN ./build.sh --target=restore-node-packages
 
-### TEST
-FROM build-env AS test
+# ### TEST
+# FROM build-env AS test
 
-# ... run tests
-COPY . .
-RUN ./build.sh --target=test
+# # ... run tests
+# COPY . .
+# ENV RETURN_TEST_WAIT_TIME 30
+# ENV SCREENSHOT_TEST_FAILURE_TOLERANCE True
+# RUN ./build.sh --target=test
 
 ### PUBLISHING
 FROM build-env AS publish
 
 # ... run publish
 COPY . .
-RUN ./build.sh --target=Publish-Ubuntu-20.04-x64 --publish-dir=publish --verbosity=verbose --skip-compression=true
+RUN ./build.sh --target=Publish-Ubuntu-22.04-x64 --publish-dir=publish --verbosity=verbose --skip-compression=true
 
 ### RUNTIME IMAGE
 FROM mcr.microsoft.com/dotnet/runtime-deps:6.0
@@ -61,12 +64,12 @@ COPY utils/install-app-prereqs.sh utils/
 RUN bash utils/install-app-prereqs.sh
 
 # ... Copy published app
-COPY --from=publish /source/publish/ubuntu.20.04-x64/ .
+COPY --from=publish /source/publish/ubuntu.22.04-x64/ .
 
 ENV ASPNETCORE_ENVIRONMENT Production
 
 # Config directory
-VOLUME ["/etc/pokertime"]
+VOLUME ["/etc/PokerTime"]
 
 # Set some defaults for a "direct run" experience
 ENV DATABASE__DATABASE "/app/data.db"

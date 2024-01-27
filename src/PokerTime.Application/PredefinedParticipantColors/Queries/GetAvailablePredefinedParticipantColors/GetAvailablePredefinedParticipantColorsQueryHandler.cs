@@ -25,9 +25,9 @@
         public async Task<IList<AvailableParticipantColorModel>> Handle(GetAvailablePredefinedParticipantColorsQuery query, CancellationToken cancellationToken) {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
-            Session? retrospective = await this._dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.RetrospectiveId, cancellationToken);
-            if (retrospective == null) {
-                throw new NotFoundException(nameof(Session), query.RetrospectiveId);
+            Session? session = await this._dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.SessionId, cancellationToken);
+            if (session == null) {
+                throw new NotFoundException(nameof(Session), query.SessionId);
             }
 
             // This looks weird, but is necessary to work around "System.ArgumentException : must be reducible node" EF bug
@@ -35,7 +35,7 @@
                 from predefinedColor in this._dbContext.PredefinedParticipantColors.AsNoTracking().AsEnumerable()
                 let innerColor = predefinedColor.Color
                 where !(
-                    from p in retrospective.Participants
+                    from p in session.Participants
                     let pColor = p.Color
                     where pColor.R == innerColor.R && pColor.G == innerColor.G && pColor.B == innerColor.B
                     select pColor).Any()

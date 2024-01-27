@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SecurityValidatorTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -29,7 +29,7 @@ namespace PokerTime.Application.Tests.Unit.Common.Security {
         [SetUp]
         public void SetUp() => this._currentParticipantService.Reset();
 
-        private static Session GetRetrospectiveInStage(SessionStage sessionStage) {
+        private static Session GetSessionInStage(SessionStage sessionStage) {
             return new Session {
                 CurrentStage = sessionStage
             };

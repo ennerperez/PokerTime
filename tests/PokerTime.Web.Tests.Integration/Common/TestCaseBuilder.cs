@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : TestCaseBuilder.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -197,7 +197,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             return this;
         }
-        public TestCaseBuilder WithRetrospectiveStage(SessionStage stage) => this.EnqueueRetrospectiveAction(r => r.CurrentStage = stage);
+        public TestCaseBuilder WithSessionStage(SessionStage stage) => this.EnqueueSessionAction(r => r.CurrentStage = stage);
 
         private ParticipantInfo GetParticipatorInfo(string name) {
             if (!this._participators.TryGetValue(name, out ParticipantInfo val)) {
@@ -227,7 +227,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             this._lastAddedItem = (typeof(T), id);
         }
 
-        private TestCaseBuilder EnqueueRetrospectiveAction(Action<Session> action) {
+        private TestCaseBuilder EnqueueSessionAction(Action<Session> action) {
             this._actions.Enqueue(() => this._scope.SetSession(this._sessionId, action));
 
             return this;
