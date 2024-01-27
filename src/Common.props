@@ -4,7 +4,9 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Nullable>enable</Nullable>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
 
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningsAsErrors />

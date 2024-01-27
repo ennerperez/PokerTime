@@ -2,8 +2,6 @@
   <Import Project="../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-
     <!-- Skip warnings on migrations -->
     <NoWarn>$(NoWarn);CA1062</NoWarn>
     <LangVersion>default</LangVersion>

@@ -2,7 +2,6 @@
   <Import Project="../Common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>PokerTime.Web.Tests.Integration</AssemblyName>
     <ApplicationIcon />

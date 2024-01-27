@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../Common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\PokerTime.Application\PokerTime.Application.csproj" />
     <ProjectReference Include="..\..\src\PokerTime.Persistence\PokerTime.Persistence.csproj" />
