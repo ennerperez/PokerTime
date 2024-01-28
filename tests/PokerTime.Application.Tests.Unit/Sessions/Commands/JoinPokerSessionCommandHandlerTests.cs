@@ -39,7 +39,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
                     new Participant {Name = "John", Color = Color.BlueViolet},
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
 
             this.Context.Sessions.Add(retro);

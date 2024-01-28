@@ -41,7 +41,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                     new Participant {Name = "John", Color = Color.BlueViolet},
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
             string sessionId = retro.UrlId.StringId;
             this.Context.Sessions.Add(retro);

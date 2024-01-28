@@ -37,7 +37,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
             var session = new Session {
                 Title = "Hello",
                 CreationTimestamp = DateTimeOffset.Now,
-                HashedPassphrase = "hello"
+                HashedPassphrase = "hello",
+                FacilitatorHashedPassphrase = "xxx"
             };
             string sessionId = session.UrlId.StringId;
             this.Context.Sessions.Add(session);

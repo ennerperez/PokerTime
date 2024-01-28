@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : GetEstimationsQueryHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -43,6 +43,7 @@ namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
                     new Participant { Name = "Jane", Color = Color.Aqua },
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
             string sessionId = session.UrlId.StringId;
@@ -70,6 +71,7 @@ namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
                     new Participant { Name = "Jane", Color = Color.Aqua },
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
             string sessionId = session.UrlId.StringId;

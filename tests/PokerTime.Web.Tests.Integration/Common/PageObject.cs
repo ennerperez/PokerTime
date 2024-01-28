@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PageObject.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -9,6 +9,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using NUnit.Framework;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Support.Extensions;
 
     public abstract class PageObject : IPageObject {
         private bool _ownsWebdriver;
@@ -32,6 +33,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public void InitializeFrom(PageObject owner) {
             this._webDriverContainer = owner._webDriverContainer;
             this._ownsWebdriver = false;
+        }
+
+        public void ScrollDown()
+        {
+            this.WebDriver.ExecuteJavaScript("window.scrollTo(0, document.body.scrollHeight)");
         }
 
         protected virtual void Dispose(bool disposing) {

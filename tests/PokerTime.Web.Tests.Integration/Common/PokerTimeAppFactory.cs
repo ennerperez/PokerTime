@@ -17,6 +17,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Support.Events;
+    using OpenQA.Selenium.Support.Extensions;
     using Persistence;
     using WebDriverManager;
     using WebDriverManager.DriverConfigs.Impl;
@@ -47,31 +48,36 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             var webDriverOptions = new ChromeOptions {
                 PageLoadStrategy = PageLoadStrategy.Normal,
-                AcceptInsecureCertificates = true,
+                AcceptInsecureCertificates = true
             };
 
-            const int windowWidth = 1680, windowHeight = 1050;
 
             if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MOZ_HEADLESS"))) {
+                const int windowWidth = 1600, windowHeight = 900;
                 TestContext.WriteLine("Going to run Chrome headless");
                 webDriverOptions.AddArgument("headless");
+                webDriverOptions.AddArguments("disable-gpu");
 
                 TestContext.WriteLine($"Going to run Chrome at {windowWidth}x{windowHeight}");
                 webDriverOptions.AddArgument($"window-size={windowWidth},{windowHeight}");
-
                 webDriverOptions.AddArgument("shm-size=1gb");
             }
+            else
+            {
+                webDriverOptions.AddArgument("start-maximized");
+            }
+            webDriverOptions.AddArgument("zoom=50%");
 
             var webDriver = new ChromeDriver(webDriverOptions);
 
-            var window = webDriver.Manage().Window;
-            try {
-                TestContext.WriteLine($"Setting window size in WebDriver at {windowWidth}x{windowHeight}");
-                window.Size = new Size(windowWidth, windowHeight);
-            }
-            catch (Exception ex) {
-                TestContext.WriteLine($"Setting driver window size not supported: {ex}");
-            }
+            // var window = webDriver.Manage().Window;
+            // try {
+            //     TestContext.WriteLine($"Setting window size in WebDriver at {windowWidth}x{windowHeight}");
+            //     window.Size = new Size(windowWidth, windowHeight);
+            // }
+            // catch (Exception ex) {
+            //     TestContext.WriteLine($"Setting driver window size not supported: {ex}");
+            // }
 
             // Overridable timeout for tests for known CI failures
             if (!Int32.TryParse(Environment.GetEnvironmentVariable("RETURN_TEST_WAIT_TIME"), out int waitTime)) {
@@ -93,7 +99,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                     TestContext.WriteLine($"Cannot log action {args.ToString()}: [{ex.GetType().FullName}] {ex.Message}");
                 }
             }
-
+            webDriver.ExecuteJavaScript("document.body.style.zoom = '75%'");
             var wrapper = new EventFiringWebDriver(webDriver);
             wrapper.ElementClicked += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: click - {args.Element.TagName}"), "element-clicked");
             wrapper.ElementClicking += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: clicking - {args.Element.TagName}"), "element-clicking");
@@ -106,8 +112,16 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             wrapper.FindingElement += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: finding element - {args.FindMethod}"));
             wrapper.FindElementCompleted += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: finding element completed - {args.FindMethod}"));
-            wrapper.Navigating += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: navigating - {args.Url}"), "navigate");
-            wrapper.Navigated += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: navigated - {args.Url}"), "navigate");
+            wrapper.Navigating += (_, args) =>
+            {
+                //webDriver.ExecuteJavaScript("document.body.style.zoom = '75%'");
+                WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: navigating - {args.Url}"), "navigate");
+            };
+            wrapper.Navigated += (_, args) =>
+            {
+                //webDriver.ExecuteJavaScript("document.body.style.zoom = '75%'");
+                WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: navigated - {args.Url}"), "navigate");
+            };
             //wrapper.ElementValueChanging += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: element value changing - {args.Element.TagName} [{args.Element.GetProperty("outerHTML")}]"));
             //wrapper.ElementValueChanged += (_, args) => WrapLoggerAction(args, () => TestContext.WriteLine($"WebDriver: element value changed - {args.Element.TagName} [{args.Element.GetProperty("outerHTML")}]"));
 

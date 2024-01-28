@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PageFixture.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -16,7 +16,10 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
         protected TPageObject Page { get; private set; }
 
-        public override void OnInitialized() => this.Page = this.App.CreatePageObject<TPageObject>();
+        public override void OnInitialized()
+        {
+            this.Page = this.App.CreatePageObject<TPageObject>();
+        }
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
                 this.Page?.Dispose();

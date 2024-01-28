@@ -60,6 +60,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
             submitCallback?.Invoke();
             Thread.Sleep(500);
+            joinPage.ScrollDown();
             joinPage.Submit();
             Thread.Sleep(500);
         }

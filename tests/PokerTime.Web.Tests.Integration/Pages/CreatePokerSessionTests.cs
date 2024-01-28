@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : CreatePokerSessionTests.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -13,6 +13,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
     using NUnit.Framework;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
+    using System.Threading;
 
     [TestFixture]
     public class CreatePokerSessionTests : PageFixture<CreatePokerSessionPage> {
@@ -22,6 +23,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App);
 
             // When
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -44,10 +46,11 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName);
+            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
             this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
             this.Page.ParticipantPassphraseInput.SendKeys("the participator password");
 
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
@@ -63,9 +66,10 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             this.Page.Navigate(this.App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName);
+            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
             this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
+            this.Page.ScrollDown();
             this.Page.Submit();
 
             // Then
