@@ -306,8 +306,8 @@ void WindowsPublishTask(string taskId, string versionId, string description) {
 	windowsAllPublishTask.IsDependentOn(taskName);
 }
 
-WindowsPublishTask("10-x64", "win10-x64", "Windows 10 / Windows Server 2016 64-bit");
-WindowsPublishTask("8-x64", "win81-x64", "Windows 8.1 / Windows Server 2012 R2 64-bit");
+WindowsPublishTask("10-x64", "win-x64", "Windows 10 / Windows Server 2016 64-bit");
+WindowsPublishTask("8-x64", "win-x64", "Windows 8.1 / Windows Server 2012 R2 64-bit");
 
 var ubuntuAllPublishTask = Task("Publish-Ubuntu");
 
@@ -333,7 +333,7 @@ void UbuntuPublishTask(string taskId, string versionId, string description) {
 	ubuntuAllPublishTask.IsDependentOn(taskName);
 }
 
-UbuntuPublishTask("22.04-x64", "ubuntu.22.04-x64", "Ubuntu 22.04 64-bit");
+UbuntuPublishTask("22.04-x64", "linux-x64", "Ubuntu 22.04 64-bit");
 
 Task("Publish")
     .IsDependentOn("Publish-Windows")
