@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : RejoinPokerSessionCommandHandler.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -26,10 +26,10 @@ namespace PokerTime.Application.Sessions.Commands.RejoinPokerSession {
             this._currentParticipantService = currentParticipantService;
         }
 
-        public async Task<Unit> Handle(RejoinPokerSessionCommand request, CancellationToken cancellationToken) {
+        public async Task Handle(RejoinPokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            Participant? result = await this._pokerTimeDbContext.Participants.AsNoTracking().
+            Participant result = await this._pokerTimeDbContext.Participants.AsNoTracking().
                 Where(x => x.Session.UrlId.StringId == request.SessionId && x.Id == request.ParticipantId).
                 FirstOrDefaultAsync(cancellationToken);
 
@@ -40,7 +40,6 @@ namespace PokerTime.Application.Sessions.Commands.RejoinPokerSession {
             this._currentParticipantService.SetParticipant(
                 new CurrentParticipantModel(result.Id, result.Name, result.Color.ToHex(), result.IsFacilitator));
 
-            return Unit.Value;
         }
     }
 }

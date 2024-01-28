@@ -67,4 +67,4 @@ gulp.task('clean', function (cb) {
 
 gulp.task('build', gulp.parallel('styles-main', 'scripts-main', 'copy-fonts'));
 
-gulp.task('default', gulp.series('clean', 'build'));
+gulp.task('default', gulp.series('watch', 'clean', 'build'));

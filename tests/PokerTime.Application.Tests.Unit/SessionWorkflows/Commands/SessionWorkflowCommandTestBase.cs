@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionWorkflowCommandTestBase.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -20,7 +20,7 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
     using Support;
 
     public abstract class SessionWorkflowCommandTestBase : CommandTestBase {
-#nullable disable
+
         protected Session Session { get; private set; }
         protected string SessionId { get; private set; }
         protected ISessionStatusUpdateDispatcher SessionStatusUpdateDispatcherMock { get; set; }
@@ -37,12 +37,13 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
                     new Participant { Name = "Jane", Color = Color.Aqua },
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.NotStarted
             };
 
             this.SessionId = session.UrlId.StringId;
             this.Session = session;
-            this.ConfigureRetrospective(session);
+            this.ConfigureSession(session);
 
             this.Context.Sessions.Add(session);
             await this.Context.SaveChangesAsync(CancellationToken.None);
@@ -59,6 +60,6 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
             this.Session = newEditContext.Sessions.FirstOrDefault(x => x.Id == this.Session.Id);
         }
 
-        protected virtual void ConfigureRetrospective(Session session) { }
+        protected virtual void ConfigureSession(Session session) { }
     }
 }

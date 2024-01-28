@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : PlayCardCommandHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -44,6 +44,7 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 SymbolSet = symbolSet
             };
 

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionIdentifierTests.cs
 //  Project         : PokerTime.Domain.Tests.Unit
 // ******************************************************************************
@@ -10,6 +10,7 @@ namespace PokerTime.Domain.Tests.Unit.ValueObjects {
     using Domain.Services;
     using Domain.ValueObjects;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public sealed class SessionIdentifierTests {
@@ -39,7 +40,7 @@ namespace PokerTime.Domain.Tests.Unit.ValueObjects {
             bool isValid = this._sessionIdentifierService.IsValid(sessionIdentifier.StringId);
 
             // Then
-            Assert.IsTrue(isValid, $"Id {sessionIdentifier} is not valid");
+            ClassicAssert.IsTrue(isValid, $"Id {sessionIdentifier} is not valid");
         }
 
 

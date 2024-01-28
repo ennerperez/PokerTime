@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SeedBaseDataCommand.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -21,12 +21,10 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
             this._pokerTimeDbContext = pokerTimeDbContext;
         }
 
-        public async Task<Unit> Handle(SeedBaseDataCommand request, CancellationToken cancellationToken) {
+        public async Task Handle(SeedBaseDataCommand request, CancellationToken cancellationToken) {
             var seeder = new BaseDataSeeder(this._pokerTimeDbContext);
 
             await seeder.SeedAllAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

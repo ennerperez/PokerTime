@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : AvailableParticipantColorModel.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -12,7 +12,7 @@ namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailable
     using Common.Models;
     using Domain.Entities;
 
-#nullable disable
+
 
     public class AvailableParticipantColorModel : ColorModel {
         public string Name { get; set; }

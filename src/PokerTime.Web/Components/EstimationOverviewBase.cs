@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : EstimationOverviewBase.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -23,7 +23,7 @@ namespace PokerTime.Web.Components {
     public abstract class EstimationOverviewBase : MediatorComponent, IDisposable, IEstimationGivenSubscriber, ISessionJoinedSubscriber {
         private int _userStoryId;
 
-#nullable disable
+
         [CascadingParameter]
         public SessionStatus SessionStatus { get; set; }
 
@@ -107,7 +107,7 @@ namespace PokerTime.Web.Components {
             return LoadCore();
         }
 
-        public Task OnParticipantJoinedRetrospective(SessionEvent<ParticipantInfo> eventArgs) {
+        public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs) {
             if (eventArgs == null) throw new ArgumentNullException(nameof(eventArgs));
 
             if (eventArgs.SessionId != this.SessionStatus?.SessionId) {

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ServiceCollectionExtensions.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -24,7 +24,7 @@ namespace PokerTime.Application.Notifications {
         }
 
         public static void AddNotificationDispatcher(this IServiceCollection services, Type dispatcherType) {
-            Type? dispatcherBase = dispatcherType.BaseType;
+            Type dispatcherBase = dispatcherType.BaseType;
 
             if (dispatcherBase == null || dispatcherBase.GetGenericTypeDefinition() != typeof(NotificationDispatcher<,>)) {
                 throw new InvalidOperationException(

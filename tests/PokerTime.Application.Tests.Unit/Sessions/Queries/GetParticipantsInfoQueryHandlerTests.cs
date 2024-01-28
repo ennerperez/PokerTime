@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : GetParticipantsInfoQueryHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -18,7 +18,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     [TestFixture]
     public sealed class GetParticipantsInfoQueryHandlerTests : QueryTestBase {
         [Test]
-        public async Task GetParticipantsInfoCommand_ReturnsEmptyList_OnRetrospectiveNotFound() {
+        public async Task GetParticipantsInfoCommand_ReturnsEmptyList_OnSessionNotFound() {
             // Given
             const string sessionId = "surely-not-found";
             var query = new GetParticipantsInfoQuery(sessionId);
@@ -32,7 +32,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         }
 
         [Test]
-        public async Task GetParticipantsInfoCommand_ReturnsList_OnRetrospectiveFound() {
+        public async Task GetParticipantsInfoCommand_ReturnsList_OnSessionFound() {
             // Given
             var retro = new Session {
                 Title = "What",
@@ -41,7 +41,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                     new Participant {Name = "John", Color = Color.BlueViolet},
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
             string sessionId = retro.UrlId.StringId;
             this.Context.Sessions.Add(retro);

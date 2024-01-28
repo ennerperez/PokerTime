@@ -164,18 +164,19 @@ else
 
         @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
         {
-            <Modal IsShown="@this.ShowPasswordModal">
-                <div class="box" data-test-element-id="lobby-creation-passphrase-modal">
-                    <div class="field">
-                        <label class="label" for="pokertime-lobby-creation-passphrase">Session creation passphrase</label>
-                        <div class="control">
-                            <InputText id="pokertime-lobby-creation-passphrase" class="input" type="password" @bind-Value="@Model.LobbyCreationPassphrase"/>
-                        </div>
-
-                        <ValidationMessage For="() => Model.LobbyCreationPassphrase"></ValidationMessage>
+            <Modal Id="lobby-creation-passphrase-modal" IsShown="@this.ShowPasswordModal">
+                <div class="modal-header">
+                    <h5 class="modal-title" for="pokertime-lobby-creation-passphrase">Session creation passphrase</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="control">
+                        <InputText id="pokertime-lobby-creation-passphrase" class="form-control" type="password" @bind-Value="@Model.LobbyCreationPassphrase"/>
                     </div>
-
-                    <button class="btn btn-primary" id="modal-create-pokertime-button">Submit</button>
+                    <ValidationMessage For="() => Model.LobbyCreationPassphrase"></ValidationMessage>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="modal-create-pokertime-button" data-bs-dismiss="modal" @onclick="@HandleProtectedFormSubmit">Submit</button>
                 </div>
             </Modal>
         }
@@ -184,7 +185,8 @@ else
             <div class="control">
                 @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
                 {
-                    <button class="btn btn-primary" id="create-pokertime-button" type="button" @onclick="@HandleProtectedFormSubmit">Submit</button>
+                    <button class="btn btn-primary" id="create-pokertime-button" type="button" data-bs-toggle="modal" data-bs-target="#lobby-creation-passphrase-modal" @onclick="@HandleProtectedFormSubmit">Submit</button>
+                    <ValidationMessage For="() => Model.LobbyCreationPassphrase"></ValidationMessage>
                 }
                 else
                 {
@@ -197,7 +199,7 @@ else
 
 @code {
 
-#nullable disable
+
 
     Task HandleInvalidSubmit(EditContext editContext)
     {
@@ -260,8 +262,7 @@ else
     private SymbolSetModel[] SymbolSets = new SymbolSetModel[0];
     private SymbolSetModel SelectedSymbolSet => this.SymbolSets.FirstOrDefault(x => x.Id == this.Model.SymbolSetId);
 
-    [Parameter]
-    public CreatePokerSessionCommand Model { get; set; } = new CreatePokerSessionCommand();
+    [Parameter] public CreatePokerSessionCommand Model { get; set; } = new CreatePokerSessionCommand();
 
     private async void CopyToClipboard() => await ClipboardService.WriteTextAsync(Result.Location);
 

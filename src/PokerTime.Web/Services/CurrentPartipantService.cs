@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : CurrentPartipantService.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
@@ -24,11 +24,11 @@ namespace PokerTime.Web.Services {
         private const string ParticipantColorClaimType = ClaimTypes.Country;
         private const string FacilitatorClaimType = ClaimTypes.Role;
         private const string FacilitatorClaimContent = "Facilitator";
-        private HttpContext? _httpContext;
+        private HttpContext _httpContext;
 
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private bool _hasNoHttpContext;
-        private ClaimsPrincipal? _currentClaimsPrincipal;
+        private ClaimsPrincipal _currentClaimsPrincipal;
 
         public CurrentParticipantService(AuthenticationStateProvider authenticationStateProvider) {
             this._authenticationStateProvider = authenticationStateProvider ?? throw new ArgumentNullException(nameof(authenticationStateProvider));
@@ -57,7 +57,7 @@ namespace PokerTime.Web.Services {
                 return;
             }
 
-            (int participantId, string? name, string? color, bool isFacilitator) = currentParticipant;
+            (int participantId, string name, string color, bool isFacilitator) = currentParticipant;
 
             var identity = new ClaimsIdentity();
             identity.AddClaim(new Claim(ParticipantClaimType, participantId.ToString(Culture.Invariant), participantId.GetType().FullName));
@@ -110,7 +110,7 @@ namespace PokerTime.Web.Services {
         private static string GetColor(ClaimsPrincipal user) => user.FindFirstValue(ParticipantColorClaimType);
 
         private static bool IsFacilitator(ClaimsPrincipal user) {
-            string? rawParticipantId = user.FindFirstValue(FacilitatorClaimType);
+            string rawParticipantId = user.FindFirstValue(FacilitatorClaimType);
             if (String.IsNullOrEmpty(rawParticipantId)) {
                 return default;
             }
@@ -119,7 +119,7 @@ namespace PokerTime.Web.Services {
         }
 
         private static int GetParticipantId(ClaimsPrincipal user) {
-            string? rawParticipantId = user.FindFirstValue(ParticipantClaimType);
+            string rawParticipantId = user.FindFirstValue(ParticipantClaimType);
             if (String.IsNullOrEmpty(rawParticipantId)) {
                 return default;
             }

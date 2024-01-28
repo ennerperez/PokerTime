@@ -4,5 +4,5 @@ services:
     sut:
         build:
             context: .
-            target: test
+            target: publish
         command: echo 1 # This is fake, the real build is in the docker file

@@ -33,7 +33,7 @@ namespace PokerTime.Application.Estimations.Queries {
 
             using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
 
-            UserStory? userStory = await dbContext.UserStories.
+            UserStory userStory = await dbContext.UserStories.
                 Where(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId).
                 FirstOrDefaultAsync(cancellationToken);
 

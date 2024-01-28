@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : GetJoinPokerSessionInfoQueryHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -18,7 +18,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     [TestFixture]
     public sealed class GetJoinPokerSessionInfoQueryHandlerTests : QueryTestBase {
         [Test]
-        public async Task GetJoinPokerSessionInfoCommandHandler_ReturnsNull_OnRetrospectiveNotFound() {
+        public async Task GetJoinPokerSessionInfoCommandHandler_ReturnsNull_OnSessionNotFound() {
             // Given
             string sessionId = "whatever-whatever";
             var handler = new GetJoinPokerSessionInfoQueryHandler(this.Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());
@@ -32,15 +32,16 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         }
 
         [Test]
-        public async Task GetJoinPokerSessionInfoCommandHandler_ReturnsInfo_OnRetrospectiveFound() {
+        public async Task GetJoinPokerSessionInfoCommandHandler_ReturnsInfo_OnSessionFound() {
             // Given
-            var retrospective = new Session {
+            var session = new Session {
                 Title = "Hello",
                 CreationTimestamp = DateTimeOffset.Now,
-                HashedPassphrase = "hello"
+                HashedPassphrase = "hello",
+                FacilitatorHashedPassphrase = "xxx"
             };
-            string sessionId = retrospective.UrlId.StringId;
-            this.Context.Sessions.Add(retrospective);
+            string sessionId = session.UrlId.StringId;
+            this.Context.Sessions.Add(session);
             await this.Context.SaveChangesAsync(CancellationToken.None);
 
             var handler = new GetJoinPokerSessionInfoQueryHandler(this.Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());

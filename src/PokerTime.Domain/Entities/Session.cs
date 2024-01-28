@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : Session.cs
 //  Project         : PokerTime.Domain
 // ******************************************************************************
@@ -14,37 +14,37 @@ namespace PokerTime.Domain.Entities {
     using ValueObjects;
 
     /// <summary>
-    /// A retrospective consists of notes created by participants. A retrospective has a unique identifier.
+    /// A session consists of notes created by participants. A session has a unique identifier.
     /// </summary>
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "EFCore")]
     public class Session {
-        private ICollection<Participant>? _participants;
+        private ICollection<Participant> _participants;
 
         private readonly SessionIdentifier _urlId = SessionIdentifierService.CreateNewInternal();
 
         public int Id { get; set; }
 
         /// <summary>
-        /// Identifier (random string) of the retrospective
+        /// Identifier (random string) of the session
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public SessionIdentifier UrlId => this._urlId;
 
         /// <summary>
-        /// Gets or sets the current stage of the retrospective
+        /// Gets or sets the current stage of the session
         /// </summary>
         public SessionStage CurrentStage { get; set; }
 
         /// <summary>
-        /// Gets the optional hashed passphrase necessary to access the retrospective lobby
+        /// Gets the optional hashed passphrase necessary to access the session lobby
         /// </summary>
-        public string? HashedPassphrase { get; set; }
+        public string HashedPassphrase { get; set; }
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets the passphrase used for the facilitator to log into the retrospective lobby
+        /// Gets the passphrase used for the facilitator to log into the session lobby
         /// </summary>
         public string FacilitatorHashedPassphrase { get; set; }
 

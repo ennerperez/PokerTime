@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : MappingProfile.cs
 //  Project         : PokerTime.Application
 // ******************************************************************************
@@ -27,14 +27,14 @@ namespace PokerTime.Application.Common.Mapping {
                 ToList();
 
             foreach (Type type in types) {
-                object? instance = Activator.CreateInstance(type: type);
+                object instance = Activator.CreateInstance(type: type);
 
                 foreach (Type interfaceType in type.GetInterfaces())
                 {
                     if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == mapFromType)
                     {
-                        MethodInfo? methodInfo = interfaceType.GetMethod(name: "Mapping");
-                        methodInfo?.Invoke(obj: instance, new object[] { this });
+                        MethodInfo methodInfo = interfaceType.GetMethod(name: "Mapping");
+                        methodInfo.Invoke(obj: instance, new object[] { this });
                     }
                 }
             }

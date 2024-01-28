@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ExecuteMediatorCommand.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -40,6 +40,17 @@ namespace PokerTime.Web.Tests.Integration.Common {
             currentParticipantService.SetNoHttpContext();
         }
 
+        public static Task Send(
+            this IServiceScope serviceScope,
+            IRequest request,
+            CancellationToken cancellationToken = default
+            ) {
+            TestContext.WriteLine($"[{nameof(TestServiceScopeUtilities)}] Sending Mediator request [{request}]");
+
+            IServiceProvider sp = serviceScope.ServiceProvider;
+            return sp.Send(request, cancellationToken);
+        }
+
         public static Task<TResponse> Send<TResponse>(
             this IServiceScope serviceScope,
             IRequest<TResponse> request,
@@ -56,6 +67,17 @@ namespace PokerTime.Web.Tests.Integration.Common {
             IRequest<TResponse> request,
             CancellationToken cancellationToken = default
         ) {
+            TestContext.WriteLine($"[{nameof(TestServiceScopeUtilities)}] Sending Mediator request [{request}]");
+
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            return mediator.Send(request, cancellationToken);
+        }
+
+        public static Task Send(
+            this IServiceProvider serviceProvider,
+            IRequest request,
+            CancellationToken cancellationToken = default
+            ) {
             TestContext.WriteLine($"[{nameof(TestServiceScopeUtilities)}] Sending Mediator request [{request}]");
 
             var mediator = serviceProvider.GetRequiredService<IMediator>();

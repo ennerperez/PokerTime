@@ -27,7 +27,7 @@
 </EditForm>
 
 @code {
-#nullable disable
+
 
     [Parameter]
     public string TestButtonId { get; set; } = "workflow-continue-button";
@@ -72,7 +72,7 @@
         }
         catch (Exception ex)
         {
-            this.Logger.LogError(ex, $"Unable to start the next stage of retrospective {this.SessionId} from form: {this.ButtonText}");
+            this.Logger.LogError(ex, $"Unable to start the next stage of session {this.SessionId} from form: {this.ButtonText}");
             this.ShowErrorMessage = true;
         }
     }

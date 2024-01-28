@@ -51,7 +51,30 @@ namespace PokerTime.Web.Services {
                 }
             }
         }
-        public Task<object?> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotSupportedException("We don't implement this currently. If this exception is thrown, we should probably implement it!");
+        private async Task SendWithRequestLock(IRequest request, CancellationToken cancellationToken) {
+            try {
+                await this._lock.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+                await this._mediator.Send(request, cancellationToken).ConfigureAwait(false);
+            }
+            finally {
+                try {
+                    this._lock.Release();
+                }
+                catch (ObjectDisposedException ex) {
+                    this._logger.LogWarning(ex, "Semaphore was already disposed - this may happen after a crash.");
+                }
+            }
+        }
+        public Task<object> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotSupportedException("We don't implement this currently. If this exception is thrown, we should probably implement it!");
+        public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = new CancellationToken()) where TRequest : IRequest // => throw new NotImplementedException();
+        {
+            if (request is ILockFreeRequest) {
+                return this._mediator.Send(request, cancellationToken);
+            }
+
+            return this.SendWithRequestLock(request: request, cancellationToken: cancellationToken);
+        }
 
         public IAsyncEnumerable<TResponse> CreateStream<TResponse>(
             IStreamRequest<TResponse> request,
@@ -59,7 +82,7 @@ namespace PokerTime.Web.Services {
         ) =>
             throw new NotImplementedException();
 
-        public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
+        public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
         public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => this._mediator.Publish(notification, cancellationToken);
 

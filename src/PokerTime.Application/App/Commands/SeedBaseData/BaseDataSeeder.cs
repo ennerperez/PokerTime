@@ -32,8 +32,8 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
         private async Task SeedPokerCardSymbols(CancellationToken cancellationToken) {
             int order = 1;
 
-            async Task SeedSymbolSet(string name, Action<SymbolSet?> callback) {
-                SymbolSet? symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x != null && x.Name == name, cancellationToken);
+            async Task SeedSymbolSet(string name, Action<SymbolSet> callback) {
+                SymbolSet symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x != null && x.Name == name, cancellationToken);
 
                 if (symbolSet == null) {
                     // Reset order
@@ -45,7 +45,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 }
             }
 
-            void IntSymbol(int num, SymbolSet? symbolSet) {
+            void IntSymbol(int num, SymbolSet symbolSet) {
                 this._pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Number,
                     SymbolSet = symbolSet,
@@ -55,7 +55,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 });
             }
 
-            void StringSymbol(string str, SymbolSet? symbolSet, int? intValue = null) {
+            void StringSymbol(string str, SymbolSet symbolSet, int? intValue = null) {
                 this._pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Characters,
                     SymbolSet = symbolSet,
@@ -65,7 +65,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
                 });
             }
 
-            void TypeSymbol(SymbolType symbolType, SymbolSet? symbolSet) {
+            void TypeSymbol(SymbolType symbolType, SymbolSet symbolSet) {
                 string symbolString = symbolType switch
                 {
                     SymbolType.Break => "☕",
@@ -153,18 +153,18 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
 
             // Seed note lanes
             this._pokerTimeDbContext.PredefinedParticipantColors.AddRange(
-                new PredefinedParticipantColor("Driver red", Color.Red),
-                new PredefinedParticipantColor("Analytic blue", Color.Blue),
-                new PredefinedParticipantColor("Amiable green", Color.Green),
-                new PredefinedParticipantColor("Expressive yellow", Color.Yellow),
-                new PredefinedParticipantColor("Juicy orange", Color.DarkOrange),
-                new PredefinedParticipantColor("Participator purple", Color.Purple),
-                new PredefinedParticipantColor("Boring blue-gray", Color.DarkSlateGray),
-                new PredefinedParticipantColor("Adapting aquatic", Color.DodgerBlue),
-                new PredefinedParticipantColor("Fresh lime", Color.Lime),
-                new PredefinedParticipantColor("Tomàto tomató", Color.Tomato),
-                new PredefinedParticipantColor("Goldie the bird", Color.Gold),
-                new PredefinedParticipantColor("Farmer wheat", Color.Wheat)
+                new PredefinedParticipantColor("Red", Color.Red),
+                new PredefinedParticipantColor("Blue", Color.Blue),
+                new PredefinedParticipantColor("Green", Color.Green),
+                //new PredefinedParticipantColor("Yellow", Color.Yellow),
+                new PredefinedParticipantColor("Orange", Color.DarkOrange),
+                new PredefinedParticipantColor("Purple", Color.Purple),
+                new PredefinedParticipantColor("Dark Slate Gray", Color.DarkSlateGray),
+                new PredefinedParticipantColor("Dodger Blue", Color.DodgerBlue),
+                //new PredefinedParticipantColor("Lime", Color.Lime),
+                new PredefinedParticipantColor("Tomato", Color.Tomato)
+                //new PredefinedParticipantColor("Gold", Color.Gold),
+                //new PredefinedParticipantColor("Wheat", Color.Wheat)
             );
         }
     }

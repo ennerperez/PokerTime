@@ -17,7 +17,7 @@ namespace PokerTime.Web.Services {
 
     public class SiteUrlDetectionService : ISiteUrlDetectionService {
         private readonly ILogger<SiteUrlDetectionService> _logger;
-        private string? _siteUrl;
+        private string _siteUrl;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We log it and continue")]
         public SiteUrlDetectionService(IOptions<ServerOptions> serverOptions, ILogger<SiteUrlDetectionService> logger) {

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : JoinPokerSessionCommandHandlerTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -39,7 +39,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
                     new Participant {Name = "John", Color = Color.BlueViolet},
                     new Participant {Name = "Jane", Color = Color.Aqua},
                 },
-                HashedPassphrase = "abef"
+                HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx"
             };
 
             this.Context.Sessions.Add(retro);
@@ -64,7 +65,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
         }
 
         [Test]
-        public async Task JoinPokerSessionCommand_SetsParticipantId_WhenJoiningRetrospective() {
+        public async Task JoinPokerSessionCommand_SetsParticipantId_WhenJoiningSession() {
             // Given
             var retro = this._session ?? throw new InvalidOperationException("OneTimeSetup not executed");
 

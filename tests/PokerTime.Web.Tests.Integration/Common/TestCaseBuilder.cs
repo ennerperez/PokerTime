@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : TestCaseBuilder.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -103,17 +103,17 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public TestCaseBuilder NewRound(string title) {
             this.EnqueueMediatorAction(
                 () => new InitiateDiscussionStageCommand { UserStoryTitle = title, SessionId = this._sessionId },
-                _ => Task.CompletedTask);
+                () => Task.CompletedTask);
 
             return this.EnqueueMediatorAction(
                 () => new InitiateEstimationStageCommand { SessionId = this._sessionId },
-                _ => Task.CompletedTask);
+                () => Task.CompletedTask);
         }
 
         public TestCaseBuilder CloseEstimationPhase() {
             return this.EnqueueMediatorAction(
                 () => new InitiateEstimationDiscussionStageCommand { SessionId = this._sessionId },
-                _ => Task.CompletedTask);
+                () => Task.CompletedTask);
         }
 
 
@@ -150,7 +150,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
                     return new PlayCardCommand(this._sessionId, userStoryId, requestedSymbol.Id);
                 },
-                _ => Task.CompletedTask);
+                () => Task.CompletedTask);
 
             return this;
         }
@@ -197,7 +197,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             return this;
         }
-        public TestCaseBuilder WithRetrospectiveStage(SessionStage stage) => this.EnqueueRetrospectiveAction(r => r.CurrentStage = stage);
+        public TestCaseBuilder WithSessionStage(SessionStage stage) => this.EnqueueSessionAction(r => r.CurrentStage = stage);
 
         private ParticipantInfo GetParticipatorInfo(string name) {
             if (!this._participators.TryGetValue(name, out ParticipantInfo val)) {
@@ -227,13 +227,50 @@ namespace PokerTime.Web.Tests.Integration.Common {
             this._lastAddedItem = (typeof(T), id);
         }
 
-        private TestCaseBuilder EnqueueRetrospectiveAction(Action<Session> action) {
+        private TestCaseBuilder EnqueueSessionAction(Action<Session> action) {
             this._actions.Enqueue(() => this._scope.SetSession(this._sessionId, action));
 
             return this;
         }
 
-        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => this.EnqueueMediatorAction<TResponse>(null, requestFunc, responseProcessor);
+        private TestCaseBuilder EnqueueMediatorAction(string participantName, Func<IRequest> requestFunc, Func<Task> responseProcessor) {
+            this._actions.Enqueue(async () => {
+                IRequest request = requestFunc();
+
+                if (participantName == null) {
+                    TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with no participant");
+
+                    this._scope.SetNoAuthenticationInfo();
+                }
+                else {
+                    TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with participant {participantName}");
+
+                    ParticipantInfo participantInfo = this.GetParticipatorInfo(participantName);
+                    this._scope.SetAuthenticationInfo(new CurrentParticipantModel(participantInfo.Id, participantInfo.Name, participantInfo.Color.HexString, participantInfo.IsFacilitator));
+                }
+
+                try {
+                    await this._scope.Send(request, CancellationToken.None);
+                    await responseProcessor.Invoke();
+                }
+                catch (Exception ex) {
+                    throw new InvalidOperationException($"Action failed [{request}] with participant {participantName}: {ex.Message}", ex);
+                }
+            });
+
+            return this;
+        }
+        private TestCaseBuilder EnqueueMediatorAction(string participantName, Func<IRequest> requestFunc, Action responseProcessor) =>
+            this.EnqueueMediatorAction(participantName, requestFunc, () => {
+                responseProcessor.Invoke();
+                return Task.CompletedTask;
+            });
+        private TestCaseBuilder EnqueueMediatorAction(Func<IRequest> requestFunc, Func<Task> responseProcessor) => this.EnqueueMediatorAction(null, requestFunc, responseProcessor);
+        private TestCaseBuilder EnqueueMediatorAction(Func<IRequest> requestFunc, Action responseProcessor) =>
+            this.EnqueueMediatorAction(requestFunc, () => {
+                responseProcessor.Invoke();
+                return Task.CompletedTask;
+            });
 
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(string participantName, Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) {
             this._actions.Enqueue(async () => {
@@ -262,13 +299,12 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             return this;
         }
-
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(string participantName, Func<IRequest<TResponse>> requestFunc, Action<TResponse> responseProcessor) =>
             this.EnqueueMediatorAction(participantName, requestFunc, r => {
                 responseProcessor.Invoke(r);
                 return Task.CompletedTask;
             });
-
+        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => this.EnqueueMediatorAction<TResponse>(null, requestFunc, responseProcessor);
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Action<TResponse> responseProcessor) =>
             this.EnqueueMediatorAction(requestFunc, r => {
                 responseProcessor.Invoke(r);

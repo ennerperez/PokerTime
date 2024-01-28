@@ -10,7 +10,7 @@
             </li>
         </ul>
         <div class="poker-progress-container">
-        <ul class="navbar-nav poker-progress @(this.CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : String.Empty)">
+            <ul class="navbar-nav poker-progress @(this.CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : String.Empty)">
                 <PokerSessionProgressItem
                     CurrentStage="@this.CurrentStage"
                     ApplicableTo="@SessionStage.Discussion"
@@ -27,14 +27,14 @@
                     CurrentStage="@this.CurrentStage"
                     ApplicableTo="@SessionStage.Finished"
                     Text="Finished"/>
-        </ul>
+            </ul>
         </div>
     </TopMenu>
 </aside>
 
 @code
 {
-#nullable disable
+
     private PokerSessionLayoutInfo _layoutInfo = new PokerSessionLayoutInfo("Loading...");
 
     private SessionStage CurrentStage => this._layoutInfo.Stage ?? SessionStage.NotStarted;

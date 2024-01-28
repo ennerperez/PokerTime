@@ -46,18 +46,18 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
         [Test]
         [Order((int)SessionStage.NotStarted)]
-        public void Screenshot_CreateRetrospective() {
+        public void Screenshot_CreateSession() {
             // Given
             using var createRetroPage = new CreatePokerSessionPage();
             createRetroPage.InitializeFrom(this.Client1);
             createRetroPage.Navigate(this.App);
 
-            void SetResolution(IWebDriver webDriver) {
-                webDriver.Manage().Window.Size = new Size(1450, 1024);
-            }
-
-            SetResolution(this.Client1.WebDriver);
-            SetResolution(this.Client2.WebDriver);
+            // void SetResolution(IWebDriver webDriver) {
+            //     webDriver.Manage().Window.Size = new Size(1450, 1024);
+            // }
+            //
+            // SetResolution(this.Client1.WebDriver);
+            // SetResolution(this.Client2.WebDriver);
 
             // When
             createRetroPage.SessionTitleInput.SendKeys("Sprint 1: Initial prototype");
@@ -68,6 +68,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             // Then
             CreateDocScreenshot(createRetroPage.WebDriver, "create-session");
 
+            createRetroPage.ScrollDown();
             createRetroPage.Submit();
 
             string url = createRetroPage.GetUrlShown();
@@ -224,15 +225,15 @@ namespace PokerTime.Web.Tests.Integration.Pages {
             string fileName = Path.Combine(docStagingDirectory, name + ".png");
 
             TestContext.WriteLine($"Creating doc screenshot: {fileName}");
-            webDriver.TakeScreenshot().SaveAsFile(fileName, ScreenshotImageFormat.Png);
+            webDriver.TakeScreenshot().SaveAsFile(fileName);
         }
 
-        private void EnsureSessionInStage(SessionStage retrospectiveStage) {
+        private void EnsureSessionInStage(SessionStage sessionStage) {
             using IServiceScope scope = this.App.CreateTestServiceScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
             Assume.That(() => dbContext.Sessions.AsNoTracking().FindBySessionId(this.SessionId, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult(),
-                Has.Property(nameof(Session.CurrentStage)).EqualTo(retrospectiveStage).Retry(),
-                $"Session {this.SessionId} is not in stage {retrospectiveStage} required for this test. Are the tests running in the correct order?");
+                Has.Property(nameof(Session.CurrentStage)).EqualTo(sessionStage).Retry(),
+                $"Session {this.SessionId} is not in stage {sessionStage} required for this test. Are the tests running in the correct order?");
         }
     }
 }

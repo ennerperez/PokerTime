@@ -54,6 +54,17 @@ namespace PokerTime.Web.Tests.Unit.Services {
 
                 return (TResponse)Activator.CreateInstance(typeof(TResponse));
             }
+            public async Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = new CancellationToken())
+                where TRequest : IRequest //=> throw new NotImplementedException();
+            {
+                if (Interlocked.CompareExchange(ref this._ref, 1, 0) != 0) {
+                    throw new InvalidOperationException("Threading issues!");
+                }
+
+                await Task.Delay(10, cancellationToken).ConfigureAwait(false);
+
+                this._ref = 0;
+            }
 
             public Task<object> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 

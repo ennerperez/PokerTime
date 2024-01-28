@@ -1,7 +1,7 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RetrospectiveStageTitle.cs
+//
+//  File:           : SessionStageTitle.cs
 //  Project         : PokerTime.Web
 // ******************************************************************************
 
@@ -11,7 +11,7 @@ namespace PokerTime.Web.Components {
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Rendering;
 
-#nullable disable
+
 
     public sealed class SessionStageText : ComponentBase {
         [Parameter]

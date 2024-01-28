@@ -3,14 +3,14 @@ jobs:
     build:
         parallelism: 4
         docker:
-            - image: circleci/buildpack-deps:buster
+            - image: cimg/base:2022.09
         steps:
             - checkout
 
             - setup_remote_docker
 
             - run:
-                  name: Run docker-compose tests
+                  name: Run docker-compose publish
                   command: |
-                      docker-compose --file docker-compose.test.yml build
-                      docker-compose --file docker-compose.test.yml run sut
+                      docker-compose --file docker-compose.publish.yml build
+                      docker-compose --file docker-compose.publish.yml run sut

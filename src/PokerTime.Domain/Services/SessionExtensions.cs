@@ -1,7 +1,7 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RetrospectiveExtensions.cs
+//
+//  File:           : SessionExtensions.cs
 //  Project         : PokerTime.Domain
 // ******************************************************************************
 

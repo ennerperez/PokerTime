@@ -9,7 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Services;
 
-    public sealed class GetJoinPokerSessionInfoQueryHandler : IRequestHandler<GetJoinPokerSessionInfoQuery, JoinPokerSessionInfo?> {
+    public sealed class GetJoinPokerSessionInfoQueryHandler : IRequestHandler<GetJoinPokerSessionInfoQuery, JoinPokerSessionInfo> {
         private readonly IPokerTimeDbContext _dbContext;
         private readonly ILogger<GetJoinPokerSessionInfoQueryHandler> _logger;
 
@@ -18,10 +18,10 @@
             this._logger = logger;
         }
 
-        public async Task<JoinPokerSessionInfo?> Handle(GetJoinPokerSessionInfoQuery request, CancellationToken cancellationToken) {
+        public async Task<JoinPokerSessionInfo> Handle(GetJoinPokerSessionInfoQuery request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            Session? Session = await this._dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            Session Session = await this._dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
             if (Session == null) {
                 this._logger.LogWarning($"Session with id {request.SessionId} was not found");
 

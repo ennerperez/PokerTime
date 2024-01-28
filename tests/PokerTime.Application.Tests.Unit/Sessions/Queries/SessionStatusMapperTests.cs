@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  ©  Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : SessionStatusMapperTests.cs
 //  Project         : PokerTime.Application.Tests.Unit
 // ******************************************************************************
@@ -39,6 +39,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                     new Participant { Name = "Jane", Color = Color.Aqua },
                 },
                 HashedPassphrase = "abef",
+                FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
             string sessionId = session.UrlId.StringId;

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ScopeActionsExtensions.cs
 //  Project         : PokerTime.Web.Tests.Integration
 // ******************************************************************************
@@ -16,13 +16,14 @@ namespace PokerTime.Web.Tests.Integration.Common {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
+    using System.Linq;
 
     public static class ScopeActionsExtensions {
         public static async Task<string> CreatePokerSession(this IServiceScope scope, string facilitatorPassphrase) {
             scope.SetNoAuthenticationInfo();
 
             var command = new CreatePokerSessionCommand {
-                Title = TestContext.CurrentContext.Test.FullName,
+                Title = TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault(),
                 FacilitatorPassphrase = facilitatorPassphrase,
                 SymbolSetId = (await scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>().SymbolSets.FirstAsync()).Id
             };

@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ValueObject.cs
 //  Project         : PokerTime.Domain
 // ******************************************************************************
@@ -13,7 +13,7 @@ namespace PokerTime.Domain.Common
     // Source: https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/microservice-ddd-cqrs-patterns/implement-value-objects
     public abstract class ValueObject
     {
-        protected static bool EqualOperator(ValueObject? left, ValueObject? right)
+        protected static bool EqualOperator(ValueObject left, ValueObject right)
         {
             if (left is null ^ right is null)
             {
@@ -28,7 +28,7 @@ namespace PokerTime.Domain.Common
 
         protected abstract IEnumerable<object> GetAtomicValues();
 
-        public override bool Equals(object? obj) {
+        public override bool Equals(object obj) {
             if (obj == null || obj.GetType() != this.GetType()) {
                 return false;
             }

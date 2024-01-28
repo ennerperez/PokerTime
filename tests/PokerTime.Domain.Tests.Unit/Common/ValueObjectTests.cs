@@ -1,6 +1,6 @@
 ﻿// ******************************************************************************
 //  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
+//
 //  File:           : ValueObjectTests.cs
 //  Project         : PokerTime.Domain.Tests.Unit
 // ******************************************************************************
@@ -10,6 +10,7 @@ namespace PokerTime.Domain.Tests.Unit.Common
     using System.Collections.Generic;
     using Domain.Common;
     using NUnit.Framework;
+    using NUnit.Framework.Legacy;
 
     [TestFixture]
     public class ValueObjectTests
@@ -42,7 +43,7 @@ namespace PokerTime.Domain.Tests.Unit.Common
             var point1 = new Point(x: 1, y: 2);
             var point2 = new Point(x: 2, y: 1);
 
-            Assert.False(point1.Equals(obj: point2));
+            ClassicAssert.False(point1.Equals(obj: point2));
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace PokerTime.Domain.Tests.Unit.Common
             var point1 = new Point(x: 1, y: 2);
             var point2 = new Point(x: 1, y: 2);
 
-            Assert.True(point1.Equals(obj: point2));
+            ClassicAssert.True(point1.Equals(obj: point2));
         }
     }
 }
