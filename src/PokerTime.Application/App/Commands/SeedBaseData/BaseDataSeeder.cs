@@ -153,18 +153,18 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
 
             // Seed note lanes
             this._pokerTimeDbContext.PredefinedParticipantColors.AddRange(
-                new PredefinedParticipantColor("Driver red", Color.Red),
-                new PredefinedParticipantColor("Analytic blue", Color.Blue),
-                new PredefinedParticipantColor("Amiable green", Color.Green),
-                new PredefinedParticipantColor("Expressive yellow", Color.Yellow),
-                new PredefinedParticipantColor("Juicy orange", Color.DarkOrange),
-                new PredefinedParticipantColor("Participator purple", Color.Purple),
-                new PredefinedParticipantColor("Boring blue-gray", Color.DarkSlateGray),
-                new PredefinedParticipantColor("Adapting aquatic", Color.DodgerBlue),
-                new PredefinedParticipantColor("Fresh lime", Color.Lime),
-                new PredefinedParticipantColor("Tomàto tomató", Color.Tomato),
-                new PredefinedParticipantColor("Goldie the bird", Color.Gold),
-                new PredefinedParticipantColor("Farmer wheat", Color.Wheat)
+                new PredefinedParticipantColor("Red", Color.Red),
+                new PredefinedParticipantColor("Blue", Color.Blue),
+                new PredefinedParticipantColor("Green", Color.Green),
+                //new PredefinedParticipantColor("Yellow", Color.Yellow),
+                new PredefinedParticipantColor("Orange", Color.DarkOrange),
+                new PredefinedParticipantColor("Purple", Color.Purple),
+                new PredefinedParticipantColor("Dark Slate Gray", Color.DarkSlateGray),
+                new PredefinedParticipantColor("Dodger Blue", Color.DodgerBlue),
+                //new PredefinedParticipantColor("Lime", Color.Lime),
+                new PredefinedParticipantColor("Tomato", Color.Tomato)
+                //new PredefinedParticipantColor("Gold", Color.Gold),
+                //new PredefinedParticipantColor("Wheat", Color.Wheat)
             );
         }
     }
