@@ -53,7 +53,7 @@ FROM build-env AS publish
 
 # ... run publish
 COPY . .
-RUN ./build.sh --target=Publish-Ubuntu-x64 --publish-dir=publish --verbosity=verbose --skip-compression=true
+RUN ./build.sh --target=Publish-Ubuntu --publish-dir=publish --verbosity=verbose --skip-compression=true
 
 ### RUNTIME IMAGE
 FROM mcr.microsoft.com/dotnet/runtime-deps:8.0
