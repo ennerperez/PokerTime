@@ -1,6 +1,6 @@
 #addin nuget:?package=Cake.Compression&version=0.3.0
-#addin nuget:?package=SharpZipLib&version=1.4.1
-#addin nuget:?package=Cake.GitVersioning&version=3.5.119
+#addin nuget:?package=SharpZipLib&version=1.4.2
+#addin nuget:?package=Cake.GitVersioning&version=3.6.133
 #addin nuget:?package=Cake.Codecov&version=1.0.1
 #addin nuget:?package=Cake.Coverlet&version=3.0.4
 #tool nuget:?package=Codecov&version=1.13.0

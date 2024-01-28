@@ -7,25 +7,28 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                os: [windows-2022, ubuntu-22.04]
+                os: [windows-latest, ubuntu-latest]
                 include:
-                    - os: windows-2022
+                    - os: windows-latest
                       script_name: .\build.cmd
-                    - os: ubuntu-22.04
+                    - os: ubuntu-latest
                       script_name: ./build.sh
         steps:
             - name: checkout
-              uses: actions/checkout@v1
+              uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+                  fetch-depth: 0
 
             - name: Download and install node.js
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v4
               with:
-                  node-version: '14.x'
+                  node-version: '20.x'
 
-            - name: Install .NET 6.x SDK for build
-              uses: actions/setup-dotnet@v1
+            - name: Install .NET 8.x SDK for build
+              uses: actions/setup-dotnet@v3
               with:
-                  dotnet-version: '6.0.10'
+                  dotnet-version: '8.0.101'
 
             - name: Output important software versions (node)
               run: node --version
@@ -50,7 +53,7 @@ jobs:
               run: ${{ matrix.script_name }} --target=test --use-code-coverage=false --verbosity=verbose
 
             - name: Upload test logs (trx)
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v4
               if: always()
               continue-on-error: true
               with:
@@ -58,7 +61,7 @@ jobs:
                   path: build/testresults
 
             - name: Upload test supplemental files
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v4
               if: always()
               continue-on-error: true
               with:
