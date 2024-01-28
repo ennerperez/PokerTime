@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetEstimationsQuery.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Estimations.Queries {
+﻿namespace PokerTime.Application.Estimations.Queries {
     using MediatR;
 
     public sealed class GetEstimationsQuery : IRequest<GetEstimationsQueryResponse> {
@@ -14,8 +7,8 @@ namespace PokerTime.Application.Estimations.Queries {
         public int UserStoryId { get; }
 
         public GetEstimationsQuery(string sessionId, int userStoryId) {
-            this.SessionId = sessionId;
-            this.UserStoryId = userStoryId;
+            SessionId = sessionId;
+            UserStoryId = userStoryId;
         }
     }
 }

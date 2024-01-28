@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : TestLogger.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Support {
+﻿namespace PokerTime.Application.Tests.Unit.Support {
     using System;
     using Microsoft.Extensions.Logging;
     using NUnit.Framework;

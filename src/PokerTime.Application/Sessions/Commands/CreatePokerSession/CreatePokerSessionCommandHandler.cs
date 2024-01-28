@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CreatePokerSessionCommandHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
+﻿namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,36 +24,36 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
 
 
         public CreatePokerSessionCommandHandler(IPokerTimeDbContext pokerTimeDbContext, IPassphraseService passphraseService, ISystemClock systemClock, IUrlGenerator urlGenerator, ILogger<CreatePokerSessionCommandHandler> logger) {
-            this._pokerTimeDbContext = pokerTimeDbContext;
-            this._passphraseService = passphraseService;
-            this._systemClock = systemClock;
-            this._urlGenerator = urlGenerator;
-            this._logger = logger;
+            _pokerTimeDbContext = pokerTimeDbContext;
+            _passphraseService = passphraseService;
+            _systemClock = systemClock;
+            _urlGenerator = urlGenerator;
+            _logger = logger;
         }
 
         public async Task<CreatePokerSessionCommandResponse> Handle(CreatePokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            SymbolSet symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x.Id == request.SymbolSetId, cancellationToken);
+            var symbolSet = await _pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x.Id == request.SymbolSetId, cancellationToken);
             if (symbolSet == null) {
                 throw new NotFoundException(nameof(SymbolSet), request.SymbolSetId);
             }
 
             string HashOptionalPassphrase(string plainText) {
-                return !String.IsNullOrEmpty(plainText) ? this._passphraseService.CreateHashedPassphrase(plainText) : null;
+                return !string.IsNullOrEmpty(plainText) ? _passphraseService.CreateHashedPassphrase(plainText) : null;
             }
 
             var session = new Session {
-                CreationTimestamp = this._systemClock.CurrentTimeOffset,
+                CreationTimestamp = _systemClock.CurrentTimeOffset,
                 Title = request.Title,
                 HashedPassphrase = HashOptionalPassphrase(request.Passphrase),
                 FacilitatorHashedPassphrase = HashOptionalPassphrase(request.FacilitatorPassphrase) ?? throw new InvalidOperationException("No facilitator passphrase given"),
                 SymbolSet = symbolSet
             };
 
-            this._logger.LogInformation($"Creating new session with id {session.UrlId}");
+            _logger.LogInformation($"Creating new session with id {session.UrlId}");
 
-            string retroLocation = this._urlGenerator.GenerateUrlToPokerSessionLobby(session.UrlId).ToString();
+            var retroLocation = _urlGenerator.GenerateUrlToPokerSessionLobby(session.UrlId).ToString();
 
             var qrCode =  QrCode.EncodeText(retroLocation, QrCode.Ecc.Low);
 
@@ -68,9 +61,9 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
                 session.UrlId, qrCode,
                 retroLocation);
 
-            this._pokerTimeDbContext.Sessions.Add(session);
+            _pokerTimeDbContext.Sessions.Add(session);
 
-            await this._pokerTimeDbContext.SaveChangesAsync(cancellationToken);
+            await _pokerTimeDbContext.SaveChangesAsync(cancellationToken);
 
             return result;
         }

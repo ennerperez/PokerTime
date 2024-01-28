@@ -29,7 +29,7 @@ namespace PokerTime.Web
     {
         public Startup(IConfiguration configuration)
         {
-            this.Configuration = configuration;
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -56,13 +56,13 @@ namespace PokerTime.Web
             services.Decorate<IMediator, ScopeSafeMediatorDecorator>();
 
             // ... Config
-            services.Configure<DatabaseOptions>(this.Configuration.GetSection("database"));
+            services.Configure<DatabaseOptions>(Configuration.GetSection("database"));
             services.AddTransient<IDatabaseOptions>(sp => sp.GetRequiredService<IOptions<DatabaseOptions>>().Value);
 
-            services.Configure<HttpsServerOptions>(this.Configuration.GetSection("server").GetSection("https"));
-            services.Configure<ServerOptions>(this.Configuration.GetSection("server"));
+            services.Configure<HttpsServerOptions>(Configuration.GetSection("server").GetSection("https"));
+            services.Configure<ServerOptions>(Configuration.GetSection("server"));
 
-            services.Configure<SecuritySettings>(this.Configuration.GetSection("Security"));
+            services.Configure<SecuritySettings>(Configuration.GetSection("Security"));
 
             // Framework
             services.AddRazorPages();
@@ -79,7 +79,7 @@ namespace PokerTime.Web
 
             // Log hosting environment
             {
-                ILogger logger = loggerFactory.CreateLogger("Startup");
+                var logger = loggerFactory.CreateLogger("Startup");
                 logger.LogInformation("Using content root: {0}", env.ContentRootPath);
                 logger.LogInformation("Using web root: {0}", env.WebRootPath);
             }

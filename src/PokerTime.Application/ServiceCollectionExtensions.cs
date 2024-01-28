@@ -1,13 +1,5 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ServiceCollectionExtensions.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application {
+﻿namespace PokerTime.Application {
     using System.Reflection;
-    using AutoMapper;
     using Common.Behaviours;
     using Common.Security;
     using MediatR;

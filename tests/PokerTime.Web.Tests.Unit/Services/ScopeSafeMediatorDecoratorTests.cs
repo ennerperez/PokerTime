@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ScopeSafeMediatorDecoratorTests.cs
-//  Project         : PokerTime.Web.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Unit.Services {
+﻿namespace PokerTime.Web.Tests.Unit.Services {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -44,26 +37,26 @@ namespace PokerTime.Web.Tests.Unit.Services {
                 IRequest<TResponse> request,
                 CancellationToken cancellationToken = new CancellationToken()
             ) {
-                if (Interlocked.CompareExchange(ref this._ref, 1, 0) != 0) {
+                if (Interlocked.CompareExchange(ref _ref, 1, 0) != 0) {
                     throw new InvalidOperationException("Threading issues!");
                 }
 
                 await Task.Delay(10, cancellationToken).ConfigureAwait(false);
 
-                this._ref = 0;
+                _ref = 0;
 
                 return (TResponse)Activator.CreateInstance(typeof(TResponse));
             }
             public async Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = new CancellationToken())
                 where TRequest : IRequest //=> throw new NotImplementedException();
             {
-                if (Interlocked.CompareExchange(ref this._ref, 1, 0) != 0) {
+                if (Interlocked.CompareExchange(ref _ref, 1, 0) != 0) {
                     throw new InvalidOperationException("Threading issues!");
                 }
 
                 await Task.Delay(10, cancellationToken).ConfigureAwait(false);
 
-                this._ref = 0;
+                _ref = 0;
             }
 
             public Task<object> Send(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
@@ -76,12 +69,11 @@ namespace PokerTime.Web.Tests.Unit.Services {
 
             public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
-            public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => throw new System.NotImplementedException();
+            public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
-            public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = new CancellationToken()) where TNotification : INotification => throw new System.NotImplementedException();
+            public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = new CancellationToken()) where TNotification : INotification => throw new NotImplementedException();
         }
 
-        private sealed class FakeRequest : IRequest {
-        }
+        private sealed class FakeRequest : IRequest;
     }
 }

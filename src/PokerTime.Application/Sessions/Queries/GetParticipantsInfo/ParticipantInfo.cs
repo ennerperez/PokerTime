@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ParticipantInfo.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
+﻿namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using AutoMapper;
@@ -29,16 +22,16 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
         public bool Equals(ParticipantInfo other) {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return this.Id == other.Id;
+            return Id == other.Id;
         }
 
         public override bool Equals(object obj) {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return this.Equals((ParticipantInfo)obj);
+            if (obj.GetType() != GetType()) return false;
+            return Equals((ParticipantInfo)obj);
         }
 
-        public override int GetHashCode() => this.Id.GetHashCode();
+        public override int GetHashCode() => Id.GetHashCode();
     }
 }

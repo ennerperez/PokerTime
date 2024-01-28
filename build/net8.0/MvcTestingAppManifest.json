@@ -1,0 +1,8 @@
+{
+  "PokerTime.Application, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Application",
+  "PokerTime.Common, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Common",
+  "PokerTime.Domain, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Domain",
+  "PokerTime.Infrastructure, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Infrastructure",
+  "PokerTime.Persistence, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Persistence",
+  "PokerTime.Web, Version=0.0.0.20726, Culture=neutral, PublicKeyToken=null": "D:\\Sources\\Repos\\PokerTime\\src\\PokerTime.Web"
+}

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : QueryTestBase.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Support {
+﻿namespace PokerTime.Application.Tests.Unit.Support {
     using System;
     using Application.Common.Mapping;
     using AutoMapper;
@@ -14,19 +7,19 @@ namespace PokerTime.Application.Tests.Unit.Support {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Not necessary for test")]
     public class QueryTestBase : IDisposable {
         public QueryTestBase() {
-            this.Context = ReturnDbContextFactory.Create();
+            Context = ReturnDbContextFactory.Create();
 
             var configurationProvider = new MapperConfiguration(configure: cfg => {
                 cfg.AddProfile<MappingProfile>();
             });
 
-            this.Mapper = configurationProvider.CreateMapper();
+            Mapper = configurationProvider.CreateMapper();
         }
 
         public PokerTimeDbContext Context { get; }
         public IMapper Mapper { get; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Not necessary for test")]
-        public void Dispose() => ReturnDbContextFactory.Destroy(context: this.Context);
+        public void Dispose() => ReturnDbContextFactory.Destroy(context: Context);
     }
 }

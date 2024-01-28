@@ -18,21 +18,21 @@
         private readonly IMapper _mapper;
 
         public GetAvailablePredefinedParticipantColorsQueryHandler(IPokerTimeDbContext dbContext, IMapper mapper) {
-            this._dbContext = dbContext;
-            this._mapper = mapper;
+            _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<IList<AvailableParticipantColorModel>> Handle(GetAvailablePredefinedParticipantColorsQuery query, CancellationToken cancellationToken) {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
-            Session session = await this._dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.SessionId, cancellationToken);
+            var session = await _dbContext.Sessions.Include(x => x.Participants).FindBySessionId(query.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), query.SessionId);
             }
 
             // This looks weird, but is necessary to work around "System.ArgumentException : must be reducible node" EF bug
             var q =
-                from predefinedColor in this._dbContext.PredefinedParticipantColors.AsNoTracking().AsEnumerable()
+                from predefinedColor in _dbContext.PredefinedParticipantColors.AsNoTracking().AsEnumerable()
                 let innerColor = predefinedColor.Color
                 where !(
                     from p in session.Participants
@@ -41,7 +41,7 @@
                     select pColor).Any()
                 select predefinedColor;
 
-            return q.AsQueryable().ProjectTo<AvailableParticipantColorModel>(this._mapper.ConfigurationProvider).ToList();
+            return q.AsQueryable().ProjectTo<AvailableParticipantColorModel>(_mapper.ConfigurationProvider).ToList();
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetEstimationsQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
     using System.Drawing;
     using System.Linq;
     using System.Threading;
@@ -23,7 +16,7 @@ namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
             // Given
             const string sessionId = "surely-not-found";
             var query = new GetEstimationsQuery(sessionId, 3);
-            var handler = new GetEstimationsQueryHandler(this.Context, this.Mapper);
+            var handler = new GetEstimationsQueryHandler(Context, Mapper);
 
             // When
             TestDelegate action = () => handler.Handle(query, CancellationToken.None).GetAwaiter().GetResult();
@@ -46,12 +39,12 @@ namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
                 FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
-            string sessionId = session.UrlId.StringId;
-            this.Context.Sessions.Add(session);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            var sessionId = session.UrlId.StringId;
+            Context.Sessions.Add(session);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             var query = new GetEstimationsQuery(sessionId, -1);
-            var handler = new GetEstimationsQueryHandler(this.Context, this.Mapper);
+            var handler = new GetEstimationsQueryHandler(Context, Mapper);
 
             // When
             TestDelegate action = () => handler.Handle(query, CancellationToken.None).GetAwaiter().GetResult();
@@ -74,37 +67,37 @@ namespace PokerTime.Application.Tests.Unit.Estimations.Queries {
                 FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
-            string sessionId = session.UrlId.StringId;
-            this.Context.Sessions.Add(session);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            var sessionId = session.UrlId.StringId;
+            Context.Sessions.Add(session);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
-            this.Context.UserStories.Add(new UserStory {
+            Context.UserStories.Add(new UserStory {
                 Title = "First",
                 Estimations =
                 {
-                    new Estimation {Participant = session.Participants.First(), Symbol = this.Context.Symbols.First()},
-                    new Estimation {Participant = session.Participants.Last(), Symbol = this.Context.Symbols.Skip(1).First()}
+                    new Estimation {Participant = session.Participants.First(), Symbol = Context.Symbols.First()},
+                    new Estimation {Participant = session.Participants.Last(), Symbol = Context.Symbols.Skip(1).First()}
                 },
                 Session = session
             });
 
-            UserStory lastUserStory = this.Context.UserStories.Add(new UserStory {
+            var lastUserStory = Context.UserStories.Add(new UserStory {
                 Title = "First",
                 Estimations =
                 {
                     new Estimation
-                        {Participant = session.Participants.First(), Symbol = this.Context.Symbols.Skip(1).First()},
-                    new Estimation {Participant = session.Participants.Last(), Symbol = this.Context.Symbols.First()}
+                        {Participant = session.Participants.First(), Symbol = Context.Symbols.Skip(1).First()},
+                    new Estimation {Participant = session.Participants.Last(), Symbol = Context.Symbols.First()}
                 },
                 Session = session
             }).Entity;
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             var query = new GetEstimationsQuery(sessionId, lastUserStory.Id);
-            var handler = new GetEstimationsQueryHandler(this.Context, this.Mapper);
+            var handler = new GetEstimationsQueryHandler(Context, Mapper);
 
             // When
-            GetEstimationsQueryResponse result = await handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(query, CancellationToken.None);
 
             // Then
             Assert.That(result, Is.Not.Null);

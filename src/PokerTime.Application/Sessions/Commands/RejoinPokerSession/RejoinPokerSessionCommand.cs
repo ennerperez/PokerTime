@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RejoinPokerSessionCommand.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.RejoinPokerSession {
+﻿namespace PokerTime.Application.Sessions.Commands.RejoinPokerSession {
     using MediatR;
 
     public sealed class RejoinPokerSessionCommand : IRequest {
@@ -14,8 +7,8 @@ namespace PokerTime.Application.Sessions.Commands.RejoinPokerSession {
         public int ParticipantId { get; }
 
         public RejoinPokerSessionCommand(string sessionId, int participantId) {
-            this.SessionId = sessionId;
-            this.ParticipantId = participantId;
+            SessionId = sessionId;
+            ParticipantId = participantId;
         }
     }
 }

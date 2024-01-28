@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SymbolModel.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Models {
+﻿namespace PokerTime.Application.Common.Models {
     using System;
     using AutoMapper;
     using Domain.Entities;

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : Program.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web
+﻿namespace PokerTime.Web
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -44,11 +37,11 @@ namespace PokerTime.Web
             // Initialize Logger
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(config).CreateLogger();
 
-            IWebHost host = CreateWebHostBuilder(args: args).Build();
+            var host = CreateWebHostBuilder(args: args).Build();
 
-            using (IServiceScope scope = host.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
-                IServiceProvider services = scope.ServiceProvider;
+                var services = scope.ServiceProvider;
 
                 try
                 {
@@ -92,8 +85,8 @@ namespace PokerTime.Web
                 }).
                 ConfigureLogging((wc, logging) =>
                 {
-                    IWebHostEnvironment env = wc.HostingEnvironment;
-                    IConfiguration config = wc.Configuration;
+                    var env = wc.HostingEnvironment;
+                    var config = wc.Configuration;
 
                     Console.WriteLine($"Current environment: {env.EnvironmentName}");
 
@@ -107,10 +100,10 @@ namespace PokerTime.Web
                     }
                     else
                     {
-                        IConfigurationSection fileSection = config.GetSection("Logging").GetSection("File");
-                        string fileName = fileSection?.GetValue<string>("Path");
+                        var fileSection = config.GetSection("Logging").GetSection("File");
+                        var fileName = fileSection?.GetValue<string>("Path");
 
-                        if (!String.IsNullOrEmpty(fileName))
+                        if (!string.IsNullOrEmpty(fileName))
                         {
                             try
                             {

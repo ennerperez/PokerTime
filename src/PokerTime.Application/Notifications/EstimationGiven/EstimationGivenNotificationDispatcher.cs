@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : EstimationGivenNotificationDispatcher.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications.EstimationGiven {
+﻿namespace PokerTime.Application.Notifications.EstimationGiven {
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
 

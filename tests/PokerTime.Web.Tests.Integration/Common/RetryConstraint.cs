@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RetryConstraint.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Runtime.InteropServices;
     using System.Threading;
@@ -53,11 +46,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
         [StructLayout(layoutKind: LayoutKind.Auto)]
         private struct RetrySettings {
             public RetrySettings(int retryCount, int timeGap) {
-                this.RetryCount = retryCount;
-                this.TimeGap = timeGap;
+                RetryCount = retryCount;
+                TimeGap = timeGap;
             }
 
-            public override string ToString() => String.Format(Culture.Invariant, "Retry {0} times waiting {1} ms", this.RetryCount, this.TimeGap);
+            public override string ToString() => string.Format(Culture.Invariant, "Retry {0} times waiting {1} ms", RetryCount, TimeGap);
 
             public readonly int TimeGap;
 
@@ -73,13 +66,13 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             /// <inheritdoc />
             public RetryableResolveConstraintImpl(IResolveConstraint wrapped, RetrySettings retrySettings) {
-                this._wrapped = wrapped;
-                this._retrySettings = retrySettings;
+                _wrapped = wrapped;
+                _retrySettings = retrySettings;
             }
 
             /// <inheritdoc />
             public IConstraint Resolve() =>
-                new RetryableWithResolveConstraintImpl(this._wrapped.Resolve(), retrySettings: this._retrySettings);
+                new RetryableWithResolveConstraintImpl(_wrapped.Resolve(), retrySettings: _retrySettings);
         }
 
 
@@ -91,30 +84,30 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             /// <inheritdoc />
             public RetryableWithResolveConstraintImpl(IConstraint wrapped, RetrySettings retrySettings) {
-                this._wrapped = wrapped;
-                this._retrySettings = retrySettings;
+                _wrapped = wrapped;
+                _retrySettings = retrySettings;
             }
 
 
             public IConstraint Resolve() =>
-                new RetryableWithResolveConstraintImpl(this._wrapped.Resolve(), retrySettings: this._retrySettings);
+                new RetryableWithResolveConstraintImpl(_wrapped.Resolve(), retrySettings: _retrySettings);
 
             /// <inheritdoc />
             public ConstraintResult ApplyTo<TActual>(TActual actual) =>
-                this.ApplyToRetry(resultFactory: () => this._wrapped.ApplyTo(actual: actual));
+                ApplyToRetry(resultFactory: () => _wrapped.ApplyTo(actual: actual));
 
             /// <inheritdoc />
             public ConstraintResult ApplyTo<TActual>(ActualValueDelegate<TActual> del) =>
-                this.ApplyToRetry(resultFactory: () => this._wrapped.ApplyTo(del: del));
+                ApplyToRetry(resultFactory: () => _wrapped.ApplyTo(del: del));
 
             /// <inheritdoc />
             public ConstraintResult ApplyTo<TActual>(ref TActual actual) {
-                TActual copy = actual;
+                var copy = actual;
                 ConstraintResult result;
                 try {
-                    result = this.ApplyToRetry(resultFactory: delegate {
-                        TActual copy2 = copy;
-                        ConstraintResult result2 = this._wrapped.ApplyTo(actual: ref copy2);
+                    result = ApplyToRetry(resultFactory: delegate {
+                        var copy2 = copy;
+                        var result2 = _wrapped.ApplyTo(actual: ref copy2);
                         copy = copy2;
                         return result2;
                     });
@@ -128,26 +121,26 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             /// <inheritdoc />
 
-            public string DisplayName => $"{this._wrapped.DisplayName} ({this._retrySettings})";
+            public string DisplayName => $"{_wrapped.DisplayName} ({_retrySettings})";
 
             /// <inheritdoc />
 
-            public string Description => $"{this._wrapped.Description} ({this._retrySettings})";
+            public string Description => $"{_wrapped.Description} ({_retrySettings})";
 
             /// <inheritdoc />
 
-            public object[] Arguments => this._wrapped.Arguments;
+            public object[] Arguments => _wrapped.Arguments;
 
             /// <inheritdoc />
             public ConstraintBuilder Builder {
-                get => this._wrapped.Builder;
-                set => this._wrapped.Builder = value;
+                get => _wrapped.Builder;
+                set => _wrapped.Builder = value;
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Constraint testing")]
             private ConstraintResult ApplyToRetry(Func<ConstraintResult> resultFactory) {
                 var result = new ConstraintResult(this, this, ConstraintStatus.Failure);
-                for (int counter = 0; counter < this._retrySettings.RetryCount; counter++) {
+                for (var counter = 0; counter < _retrySettings.RetryCount; counter++) {
                     try {
                         result = resultFactory();
                         if (result.IsSuccess) {
@@ -161,7 +154,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                         TestContext.WriteLine($"Constraint exception: {ex} - Retrying");
                     }
 
-                    Thread.Sleep(this._retrySettings.TimeGap);
+                    Thread.Sleep(_retrySettings.TimeGap);
                 }
 
                 return result;

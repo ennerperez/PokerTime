@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetParticipantsInfoQueryHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
+﻿namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
     using System;
     using System.Linq;
     using System.Threading;
@@ -21,8 +14,8 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
         private readonly IMapper _mapper;
 
         public GetParticipantsInfoQueryHandler(IPokerTimeDbContext pokerTimeDbContext, IMapper mapper) {
-            this._pokerTimeDbContext = pokerTimeDbContext;
-            this._mapper = mapper;
+            _pokerTimeDbContext = pokerTimeDbContext;
+            _mapper = mapper;
         }
 
         public async Task<ParticipantsInfoList> Handle(GetParticipantsInfoQuery request, CancellationToken cancellationToken) {
@@ -30,10 +23,10 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipantsInfo {
 
             var returnValue = new ParticipantsInfoList();
             returnValue.Participants.AddRange(
-                await this._pokerTimeDbContext.Sessions
+                await _pokerTimeDbContext.Sessions
                     .Where(r => r.UrlId.StringId == request.SessionId)
                     .SelectMany(r => r.Participants)
-                    .ProjectTo<ParticipantInfo>(this._mapper.ConfigurationProvider)
+                    .ProjectTo<ParticipantInfo>(_mapper.ConfigurationProvider)
                     .OrderBy(x => x.Name)
                     .ToListAsync(cancellationToken)
             );

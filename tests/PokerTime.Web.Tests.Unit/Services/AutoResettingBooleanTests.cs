@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : AutoResettingBooleanTests.cs
-//  Project         : PokerTime.Web.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Unit.Services {
+﻿namespace PokerTime.Web.Tests.Unit.Services {
     using NUnit.Framework;
     using Web.Services;
 
@@ -18,7 +11,7 @@ namespace PokerTime.Web.Tests.Unit.Services {
             var resettingBoolean = new AutoResettingBoolean(initialValue);
 
             // When / then
-            for (int i = 0; i < 10; i++) {
+            for (var i = 0; i < 10; i++) {
                 Assert.That(resettingBoolean.GetValue, Is.EqualTo(initialValue));
             }
         }
@@ -31,8 +24,8 @@ namespace PokerTime.Web.Tests.Unit.Services {
 
             // When
             resettingBoolean.Set();
-            bool first = resettingBoolean.GetValue();
-            bool second = resettingBoolean.GetValue();
+            var first = resettingBoolean.GetValue();
+            var second = resettingBoolean.GetValue();
 
             // Then
             Assert.That(first, Is.False);

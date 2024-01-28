@@ -5,7 +5,7 @@
 @using PokerTime.Application.Estimations.Queries
 @using PokerTime.Application.Sessions.Queries.GetSessionStatus
 
-@if (this.ShowErrorMessage)
+@if (ShowErrorMessage)
 {
     <ErrorMessage />
 }
@@ -17,13 +17,13 @@
         <th>Estimations</th>
     </tr>
     </thead>
-        @foreach (UserStoryEstimation userStoryEstimation in this.Estimations)
+        @foreach (var userStoryEstimation in Estimations)
         {
             <tr>
                 <td>@userStoryEstimation.Title</td>
                 
                 <td class="session-overview-table__estimation-card-list">
-                    @foreach (EstimationModel estimationCard in userStoryEstimation.Estimations)
+                    @foreach (var estimationCard in userStoryEstimation.Estimations)
                     {
                         <EstimatedCard Estimation="@estimationCard" IsSmall="true"/>
                     }
@@ -31,7 +31,7 @@
             </tr>
         }
     
-        @if (this.Estimations.Count == 0)
+        @if (Estimations.Count == 0)
         {
             <tr>
                 <td colspan="2">You have estimated no user stories in this session.</td>
@@ -53,12 +53,12 @@
     protected override async Task OnInitializedAsync()
     {
         try {
-            GetEstimationsOverviewQueryResponse response = await this.Mediator.Send(new GetEstimationsOverviewQuery(this.SessionStatus.SessionId));
-            this.Estimations = response.UserStoryEstimations;
+            var response = await Mediator.Send(new GetEstimationsOverviewQuery(SessionStatus.SessionId));
+            Estimations = response.UserStoryEstimations;
         }
         catch (Exception ex) {
-            this.ShowErrorMessage = true;
-            this.Logger.LogError(ex, "Unable to load estimations overview: " + ex.Message);
+            ShowErrorMessage = true;
+            Logger.LogError(ex, "Unable to load estimations overview: " + ex.Message);
         }
     }
 }

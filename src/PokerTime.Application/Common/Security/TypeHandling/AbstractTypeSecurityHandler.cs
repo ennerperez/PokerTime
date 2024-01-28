@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : AbstractTypeSecurityHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Security.TypeHandling {
+﻿namespace PokerTime.Application.Common.Security.TypeHandling {
     using System;
     using Domain.Entities;
     using Models;
@@ -20,10 +13,10 @@ namespace PokerTime.Application.Common.Security.TypeHandling {
 
             switch (operation) {
                 case SecurityOperation.AddOrUpdate:
-                    this.HandleAddOrUpdate(session, entity, currentParticipant);
+                    HandleAddOrUpdate(session, entity, currentParticipant);
                     break;
                 case SecurityOperation.Delete:
-                    this.HandleDelete(session, entity, currentParticipant);
+                    HandleDelete(session, entity, currentParticipant);
                     break;
                 default:
                     throw new NotImplementedException(operation.ToString());

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ScopeSafeMediatorDecorator.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Services {
+﻿namespace PokerTime.Web.Services {
     using System;
     using System.Collections.Generic;
     using System.Threading;
@@ -20,9 +13,9 @@ namespace PokerTime.Web.Services {
         private readonly ILogger<ScopeSafeMediatorDecorator> _logger;
 
         public ScopeSafeMediatorDecorator(IMediator mediator, ILogger<ScopeSafeMediatorDecorator> logger) {
-            this._mediator = mediator;
-            this._logger = logger;
-            this._lock = new SemaphoreSlim(1, 1);
+            _mediator = mediator;
+            _logger = logger;
+            _lock = new SemaphoreSlim(1, 1);
         }
 
         public Task<TResponse> Send<TResponse>(
@@ -30,39 +23,39 @@ namespace PokerTime.Web.Services {
             CancellationToken cancellationToken = new CancellationToken()
         ) {
             if (request is ILockFreeRequest) {
-                return this._mediator.Send(request, cancellationToken);
+                return _mediator.Send(request, cancellationToken);
             }
 
-            return this.SendWithRequestLock(request: request, cancellationToken: cancellationToken);
+            return SendWithRequestLock(request: request, cancellationToken: cancellationToken);
         }
 
         private async Task<TResponse> SendWithRequestLock<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken) {
             try {
-                await this._lock.WaitAsync(cancellationToken).ConfigureAwait(false);
+                await _lock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
-                return await this._mediator.Send(request, cancellationToken).ConfigureAwait(false);
+                return await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
             }
             finally {
                 try {
-                    this._lock.Release();
+                    _lock.Release();
                 }
                 catch (ObjectDisposedException ex) {
-                    this._logger.LogWarning(ex, "Semaphore was already disposed - this may happen after a crash.");
+                    _logger.LogWarning(ex, "Semaphore was already disposed - this may happen after a crash.");
                 }
             }
         }
         private async Task SendWithRequestLock(IRequest request, CancellationToken cancellationToken) {
             try {
-                await this._lock.WaitAsync(cancellationToken).ConfigureAwait(false);
+                await _lock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
-                await this._mediator.Send(request, cancellationToken).ConfigureAwait(false);
+                await _mediator.Send(request, cancellationToken).ConfigureAwait(false);
             }
             finally {
                 try {
-                    this._lock.Release();
+                    _lock.Release();
                 }
                 catch (ObjectDisposedException ex) {
-                    this._logger.LogWarning(ex, "Semaphore was already disposed - this may happen after a crash.");
+                    _logger.LogWarning(ex, "Semaphore was already disposed - this may happen after a crash.");
                 }
             }
         }
@@ -70,10 +63,10 @@ namespace PokerTime.Web.Services {
         public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = new CancellationToken()) where TRequest : IRequest // => throw new NotImplementedException();
         {
             if (request is ILockFreeRequest) {
-                return this._mediator.Send(request, cancellationToken);
+                return _mediator.Send(request, cancellationToken);
             }
 
-            return this.SendWithRequestLock(request: request, cancellationToken: cancellationToken);
+            return SendWithRequestLock(request: request, cancellationToken: cancellationToken);
         }
 
         public IAsyncEnumerable<TResponse> CreateStream<TResponse>(
@@ -84,10 +77,10 @@ namespace PokerTime.Web.Services {
 
         public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = new CancellationToken()) => throw new NotImplementedException();
 
-        public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => this._mediator.Publish(notification, cancellationToken);
+        public Task Publish(object notification, CancellationToken cancellationToken = new CancellationToken()) => _mediator.Publish(notification, cancellationToken);
 
-        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = new CancellationToken()) where TNotification : INotification => this._mediator.Publish(notification, cancellationToken);
+        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = new CancellationToken()) where TNotification : INotification => _mediator.Publish(notification, cancellationToken);
 
-        public void Dispose() => this._lock?.Dispose();
+        public void Dispose() => _lock?.Dispose();
     }
 }

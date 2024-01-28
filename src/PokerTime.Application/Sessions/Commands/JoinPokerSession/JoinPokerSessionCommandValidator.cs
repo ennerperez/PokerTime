@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : JoinPokerSessionCommandValidator.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
+﻿namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
@@ -24,40 +17,40 @@ namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
         private readonly IPassphraseService _passphraseService;
 
         public JoinPokerSessionCommandValidator(IPokerTimeDbContextFactory pokerTimeDbContext, IPassphraseService passphraseService) {
-            this._pokerTimeDbContext = pokerTimeDbContext;
-            this._passphraseService = passphraseService;
+            _pokerTimeDbContext = pokerTimeDbContext;
+            _passphraseService = passphraseService;
 
-            this.RuleFor(e => e.Name).NotEmpty().MaximumLength(256);
-            this.RuleFor(e => e.Color).NotEmpty()
+            RuleFor(e => e.Name).NotEmpty().MaximumLength(256);
+            RuleFor(e => e.Color).NotEmpty()
                 .WithMessage("Please select a color")
                 .Matches("^#?([A-F0-9]{2}){3}$", RegexOptions.IgnoreCase)
                 .WithMessage("Please select a color");
 
-            this.RuleFor(e => e.Passphrase)
+            RuleFor(e => e.Passphrase)
                 .NotEmpty()
                 .When(x => x.JoiningAsFacilitator);
 
             // Passphrase validation
-            this.RuleFor(e => e.Passphrase).
-                Must((obj, passphrase) => this.MustBeAValidPassphrase(obj.SessionId, obj.JoiningAsFacilitator, obj.Passphrase))
+            RuleFor(e => e.Passphrase).
+                Must((obj, passphrase) => MustBeAValidPassphrase(obj.SessionId, obj.JoiningAsFacilitator, obj.Passphrase))
                 .WithMessage("This passphrase is not valid. Please try again.");
         }
 
         private bool MustBeAValidPassphrase(string sessionId, in bool isFacilitatorRole, string passphrase) {
-            using IPokerTimeDbContext dbContext = this._pokerTimeDbContext.CreateForEditContext();
+            using var dbContext = _pokerTimeDbContext.CreateForEditContext();
 
-            Expression<Func<Session, string>> property = isFacilitatorRole ? GetFacilitatorHash : GetParticipantHash;
-            string hash = dbContext.Sessions.Where(x => x.UrlId.StringId == sessionId).Select(property).FirstOrDefault();
+            var property = isFacilitatorRole ? GetFacilitatorHash : GetParticipantHash;
+            var hash = dbContext.Sessions.Where(x => x.UrlId.StringId == sessionId).Select(property).FirstOrDefault();
 
             if (hash == null) {
                 return true;
             }
 
-            if (String.IsNullOrEmpty(passphrase)) {
+            if (string.IsNullOrEmpty(passphrase)) {
                 return false;
             }
 
-            return this._passphraseService.ValidatePassphrase(passphrase, hash);
+            return _passphraseService.ValidatePassphrase(passphrase, hash);
         }
     }
 }

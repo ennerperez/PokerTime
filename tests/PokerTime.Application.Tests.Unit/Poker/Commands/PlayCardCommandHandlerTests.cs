@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PlayCardCommandHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Poker.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.Poker.Commands {
     using System;
     using System.Drawing;
     using System.Linq;
@@ -48,21 +41,21 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
                 SymbolSet = symbolSet
             };
 
-            this.Context.Sessions.Add(session);
+            Context.Sessions.Add(session);
 
-            this.Context.Symbols.Add(new Symbol {
+            Context.Symbols.Add(new Symbol {
                 Type = SymbolType.Number,
                 ValueAsNumber = 1,
                 SymbolSet = symbolSet
             });
 
-            this.Context.Symbols.Add(new Symbol {
+            Context.Symbols.Add(new Symbol {
                 Type = SymbolType.Number,
                 ValueAsNumber = 2,
                 SymbolSet = symbolSet
             });
 
-            this.Context.UserStories.Add(new UserStory {
+            Context.UserStories.Add(new UserStory {
                 Session = session
             });
 
@@ -70,19 +63,19 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
                 Name = "Henk",
             };
 
-            this.Context.Participants.Add(participant);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            Context.Participants.Add(participant);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
-            this._participantId = participant.Id;
-            this._session = session;
+            _participantId = participant.Id;
+            _session = session;
         }
 
         [Test]
         public async Task PlayCardCommandHandler_ThrowsException_WhenSessionNotFound() {
             // Given
             var command = new PlayCardCommand("not found",
-                (await this.Context.UserStories.FirstAsync()).Id, (await this.Context.Symbols.FirstAsync()).Id);
-            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), this.Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
+                (await Context.UserStories.FirstAsync()).Id, (await Context.Symbols.FirstAsync()).Id);
+            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
 
             // When
             TestDelegate action = () => handler.Handle(command, CancellationToken.None).GetAwaiter().GetResult();
@@ -94,9 +87,9 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
         [Test]
         public async Task PlayCardCommandHandler_ThrowsException_WhenUserStoryNotFound() {
             // Given
-            var command = new PlayCardCommand(this._session.UrlId.StringId,
-                543, (await this.Context.Symbols.FirstAsync()).Id);
-            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), this.Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
+            var command = new PlayCardCommand(_session.UrlId.StringId,
+                543, (await Context.Symbols.FirstAsync()).Id);
+            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
 
             // When
             TestDelegate action = () => handler.Handle(command, CancellationToken.None).GetAwaiter().GetResult();
@@ -108,8 +101,8 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
         [Test]
         public async Task PlayCardCommandHandler_ThrowsException_WhenSymbolNotFound() {
             // Given
-            var command = new PlayCardCommand(this._session.UrlId.StringId, (await this.Context.UserStories.FirstAsync()).Id, -1);
-            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), this.Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
+            var command = new PlayCardCommand(_session.UrlId.StringId, (await Context.UserStories.FirstAsync()).Id, -1);
+            var handler = new PlayCardCommandHandler(Substitute.For<IMediator>(), Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMapper>());
 
             // When
             TestDelegate action = () => handler.Handle(command, CancellationToken.None).GetAwaiter().GetResult();
@@ -126,25 +119,25 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
 
             currentParticipantService.GetParticipant().
                 Returns(new ValueTask<CurrentParticipantModel>(
-                    new CurrentParticipantModel(this._participantId, null, null, false)
+                    new CurrentParticipantModel(_participantId, null, null, false)
                 ));
 
-            Symbol symbol = this.Context.Symbols.Add(new Symbol {
+            var symbol = Context.Symbols.Add(new Symbol {
                 Type = SymbolType.Number,
                 ValueAsNumber = 1,
                 SymbolSet = new SymbolSet { Name = "wrong " }
             }).Entity;
 
-            await this.Context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
 
             var command = new PlayCardCommand(
-                this._session.UrlId.StringId,
-                (await this.Context.UserStories.FirstAsync()).Id,
+                _session.UrlId.StringId,
+                (await Context.UserStories.FirstAsync()).Id,
                 symbol.Id
             );
 
             var handler = new PlayCardCommandHandler(mediator,
-                this.Context,
+                Context,
                 currentParticipantService,
                 Substitute.For<IMapper>());
 
@@ -163,16 +156,16 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
 
             currentParticipantService.GetParticipant().
                 Returns(new ValueTask<CurrentParticipantModel>(
-                    new CurrentParticipantModel(this._participantId, null, null, false)
+                    new CurrentParticipantModel(_participantId, null, null, false)
                 ));
 
             var command = new PlayCardCommand(
-                this._session.UrlId.StringId,
-                (await this.Context.UserStories.FirstAsync()).Id,
-                (await this.Context.Symbols.Where(x => x.SymbolSetId == this._session.SymbolSetId).FirstAsync()).Id
+                _session.UrlId.StringId,
+                (await Context.UserStories.FirstAsync()).Id,
+                (await Context.Symbols.Where(x => x.SymbolSetId == _session.SymbolSetId).FirstAsync()).Id
             );
             var handler = new PlayCardCommandHandler(mediator,
-                this.Context,
+                Context,
                 currentParticipantService,
                 Substitute.For<IMapper>());
 
@@ -183,7 +176,7 @@ namespace PokerTime.Application.Tests.Unit.Poker.Commands {
             await currentParticipantService.ReceivedWithAnyArgs(Quantity.Exactly(1))
                 .GetParticipant();
 
-            UserStory checkUserStory = await this.Context.UserStories.
+            var checkUserStory = await Context.UserStories.
                 Include(x => x.Estimations).
                 LastOrDefaultAsync();
 

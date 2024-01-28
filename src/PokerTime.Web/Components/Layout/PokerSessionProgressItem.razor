@@ -1,7 +1,7 @@
 @using PokerTime.Domain.Entities
 
-<li class="nav-item poker-progress__item @this.CssClass">
-    <span class="nav-link">@this.Text</span>
+<li class="nav-item poker-progress__item @CssClass">
+    <span class="nav-link">@Text</span>
 </li>
 
 @code {
@@ -15,19 +15,19 @@
     [Parameter]
     public string Text { get; set; }
 
-    private bool IsPrevious => this.ApplicableTo < this.CurrentStage;
-    private bool IsCurrent => this.CurrentStage == this.ApplicableTo;
+    private bool IsPrevious => ApplicableTo < CurrentStage;
+    private bool IsCurrent => CurrentStage == ApplicableTo;
 
     private string CssClass
     {
         get
         {
-            if (this.IsCurrent)
+            if (IsCurrent)
             {
                 return "poker-progress__item--is-current active";
             }
 
-            if (this.IsPrevious)
+            if (IsPrevious)
             {
                 return "poker-progress__item--is-previous";
             }

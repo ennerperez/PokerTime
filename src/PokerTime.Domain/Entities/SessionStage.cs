@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionStage.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     public enum SessionStage {
         /// <summary>
         /// The session is not started yet and waiting for a facilitator to appear

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ApplicationBuilderExtensions.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Middleware.Https {
+﻿namespace PokerTime.Web.Middleware.Https {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Configuration;

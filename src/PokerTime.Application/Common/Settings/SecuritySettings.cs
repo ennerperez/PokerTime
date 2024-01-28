@@ -1,12 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SecuritySettings.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Settings {
-    using System;
+﻿namespace PokerTime.Application.Common.Settings {
 
     public sealed class SecuritySettings {
         /// <summary>
@@ -14,7 +6,7 @@ namespace PokerTime.Application.Common.Settings {
         /// </summary>
         public string LobbyCreationPassphrase { get; set; }
 
-        public bool LobbyCreationNeedsPassphrase => !String.IsNullOrEmpty(this.LobbyCreationPassphrase);
+        public bool LobbyCreationNeedsPassphrase => !string.IsNullOrEmpty(LobbyCreationPassphrase);
 
         /// <summary>
         /// Enable detection of X-HTTP-Forwarded-For HTTP headers

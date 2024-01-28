@@ -1,13 +1,5 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ReturnAppFactory.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
-    using System.Drawing;
     using System.Linq;
     using Domain.Abstractions;
     using Microsoft.Data.Sqlite;
@@ -26,19 +18,19 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private WebDriverPool _webDriverPool;
 
         public PokerTimeAppFactory() {
-            this._webDriverPool = new WebDriverPool(this.CreateWebDriver);
+            _webDriverPool = new WebDriverPool(CreateWebDriver);
         }
 
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
 
-            this._webDriverPool?.Dispose();
-            this._webDriverPool = null;
+            _webDriverPool?.Dispose();
+            _webDriverPool = null;
         }
 
-        public WebDriverContainer GetWebDriver() => new WebDriverContainer(this._webDriverPool.Get(), this);
+        public WebDriverContainer GetWebDriver() => new WebDriverContainer(_webDriverPool.Get(), this);
 
-        internal void Return(IWebDriver webDriver) => this._webDriverPool.Return(webDriver);
+        internal void Return(IWebDriver webDriver) => _webDriverPool.Return(webDriver);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "API consistency / design")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "IWebDriver is disposed by child")]
@@ -52,7 +44,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             };
 
 
-            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("MOZ_HEADLESS"))) {
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MOZ_HEADLESS"))) {
                 const int windowWidth = 1600, windowHeight = 900;
                 TestContext.WriteLine("Going to run Chrome headless");
                 webDriverOptions.AddArgument("headless");
@@ -80,12 +72,12 @@ namespace PokerTime.Web.Tests.Integration.Common {
             // }
 
             // Overridable timeout for tests for known CI failures
-            if (!Int32.TryParse(Environment.GetEnvironmentVariable("RETURN_TEST_WAIT_TIME"), out int waitTime)) {
+            if (!int.TryParse(Environment.GetEnvironmentVariable("RETURN_TEST_WAIT_TIME"), out var waitTime)) {
                 waitTime = 10;
             }
 
             TestContext.WriteLine($"Configuration of WebDriver using wait time: {waitTime}s");
-            ITimeouts timeouts = webDriver.Manage().Timeouts();
+            var timeouts = webDriver.Manage().Timeouts();
             timeouts.ImplicitWait = TimeSpan.FromSeconds(waitTime);
             timeouts.PageLoad = TimeSpan.FromSeconds(waitTime);
 
@@ -131,24 +123,24 @@ namespace PokerTime.Web.Tests.Integration.Common {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "IPageObject is disposable itself")]
         public TPageObject CreatePageObject<TPageObject>() where TPageObject : IPageObject, new() {
             var pageObject = Activator.CreateInstance<TPageObject>();
-            pageObject.SetWebDriver(this.GetWebDriver());
+            pageObject.SetWebDriver(GetWebDriver());
             return pageObject;
         }
 
         public int GetId<TEntity>(Func<DbSet<TEntity>, int> query) where TEntity : class {
-            using IServiceScope scope = this.CreateTestServiceScope();
+            using var scope = CreateTestServiceScope();
 
             var returnDbContext = scope.ServiceProvider.GetRequiredService<PokerTimeDbContext>();
-            DbSet<TEntity> dbSet = returnDbContext.Set<TEntity>();
+            var dbSet = returnDbContext.Set<TEntity>();
 
             return query.Invoke(dbSet);
         }
 
-        public int GetLastAddedId<TEntity>() where TEntity : class, IIdPrimaryKey => this.GetId<TEntity>(dbSet => dbSet.OrderByDescending(x => x.Id).Select(x => x.Id).First());
+        public int GetLastAddedId<TEntity>() where TEntity : class, IIdPrimaryKey => GetId<TEntity>(dbSet => dbSet.OrderByDescending(x => x.Id).Select(x => x.Id).First());
 
-        public Uri CreateUri(string path) => new Uri(this.Server.BaseAddress, path);
+        public Uri CreateUri(string path) => new Uri(Server.BaseAddress, path);
 
-        public IServiceScope CreateTestServiceScope() => this.Services.CreateScope();
+        public IServiceScope CreateTestServiceScope() => Services.CreateScope();
 
         protected override string ConnectionString { get; } = (new SqliteConnectionStringBuilder {
             BrowsableConnectionString = true,

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : NotificationDispatcherTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Notifications {
+﻿namespace PokerTime.Application.Tests.Unit.Notifications {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -77,7 +70,7 @@ namespace PokerTime.Application.Tests.Unit.Notifications {
         }
     }
 
-    public sealed class TestNotification : INotification { }
+    public sealed class TestNotification : INotification;
 
     public interface ITestNotificationSubscriber : ISubscriber {
         Task Callback(TestNotification notification);

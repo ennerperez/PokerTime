@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : UserStory.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     using System.Collections.Generic;
 
     /// <summary>
@@ -20,7 +13,7 @@ namespace PokerTime.Domain.Entities {
         public Session Session { get; set; }
         public int SessionId { get; set; }
 
-        public ICollection<Estimation> Estimations => this._estimations ??= new List<Estimation>();
+        public ICollection<Estimation> Estimations => _estimations ??= new List<Estimation>();
 
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ExecuteMediatorCommand.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Security.Claims;
     using System.Threading;
@@ -47,7 +40,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             ) {
             TestContext.WriteLine($"[{nameof(TestServiceScopeUtilities)}] Sending Mediator request [{request}]");
 
-            IServiceProvider sp = serviceScope.ServiceProvider;
+            var sp = serviceScope.ServiceProvider;
             return sp.Send(request, cancellationToken);
         }
 
@@ -58,7 +51,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         ) {
             TestContext.WriteLine($"[{nameof(TestServiceScopeUtilities)}] Sending Mediator request [{request}]");
 
-            IServiceProvider sp = serviceScope.ServiceProvider;
+            var sp = serviceScope.ServiceProvider;
             return sp.Send(request, cancellationToken);
         }
 

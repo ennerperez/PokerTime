@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetParticipantQuery.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetParticipant {
+﻿namespace PokerTime.Application.Sessions.Queries.GetParticipant {
     using GetParticipantsInfo;
     using MediatR;
 
@@ -14,8 +7,8 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipant {
         public string SessionId { get; }
 
         public GetParticipantQuery(string name, string sessionId) {
-            this.Name = name;
-            this.SessionId = sessionId;
+            Name = name;
+            SessionId = sessionId;
         }
     }
 }

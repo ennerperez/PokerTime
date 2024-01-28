@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ValidationException.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common {
+﻿namespace PokerTime.Application.Common {
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,14 +17,14 @@ namespace PokerTime.Application.Common {
 
         public ValidationException(List<ValidationFailure> failures)
             : this() {
-            IEnumerable<string> propertyNames = failures.Select(selector: e => e.PropertyName).Distinct();
+            var propertyNames = failures.Select(selector: e => e.PropertyName).Distinct();
 
-            foreach (string propertyName in propertyNames) {
-                string[] propertyFailures = failures.Where(predicate: e => e.PropertyName == propertyName).
+            foreach (var propertyName in propertyNames) {
+                var propertyFailures = failures.Where(predicate: e => e.PropertyName == propertyName).
                     Select(selector: e => e.ErrorMessage).
                     ToArray();
 
-                this.Failures.Add(key: propertyName, value: propertyFailures);
+                Failures.Add(key: propertyName, value: propertyFailures);
             }
         }
 

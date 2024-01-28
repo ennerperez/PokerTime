@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PokerTime.Web.Services {
     using Configuration;
@@ -23,20 +21,20 @@ namespace PokerTime.Web.Services {
         public SiteUrlDetectionService(IOptions<ServerOptions> serverOptions, ILogger<SiteUrlDetectionService> logger) {
             if (serverOptions == null) throw new ArgumentNullException(nameof(serverOptions));
 
-            this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this._siteUrl = serverOptions.Value?.BaseUrl;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _siteUrl = serverOptions.Value?.BaseUrl;
 
-            if (String.IsNullOrEmpty(this._siteUrl)) {
-                this._siteUrl = null;
+            if (string.IsNullOrEmpty(_siteUrl)) {
+                _siteUrl = null;
             }
             else {
                 try {
-                    this._siteUrl = new Uri(this._siteUrl, UriKind.Absolute).GetLeftPart(UriPartial.Authority);
+                    _siteUrl = new Uri(_siteUrl, UriKind.Absolute).GetLeftPart(UriPartial.Authority);
 
-                    this._logger.LogInformation("Normalized base URL: {0}", this._siteUrl);
+                    _logger.LogInformation("Normalized base URL: {0}", _siteUrl);
                 }
                 catch (Exception ex) {
-                    this._logger.LogError(ex, "Unable to normalize base url");
+                    _logger.LogError(ex, "Unable to normalize base url");
                 }
             }
         }
@@ -45,17 +43,17 @@ namespace PokerTime.Web.Services {
         public void Update(HttpContext httpContext) {
             if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
 
-            if (this._siteUrl == null) {
-                this._logger.LogWarning("You have not set an explicit base URL of the application via the [Server:BaseUrl] option. The base URL is now automatically detected. This detection is possibly insecure, and can lead to incorrect results.");
+            if (_siteUrl == null) {
+                _logger.LogWarning("You have not set an explicit base URL of the application via the [Server:BaseUrl] option. The base URL is now automatically detected. This detection is possibly insecure, and can lead to incorrect results.");
 
-                HttpRequest request = httpContext.Request;
-                this._siteUrl = request.GetUri().GetLeftPart(UriPartial.Authority);
+                var request = httpContext.Request;
+                _siteUrl = request.GetUri().GetLeftPart(UriPartial.Authority);
 
-                this._logger.LogInformation("Detected base URL: {0}", this._siteUrl);
+                _logger.LogInformation("Detected base URL: {0}", _siteUrl);
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1055:Uri return values should not be strings", Justification = "Merged into uri")]
-        public string GetSiteUrl() => this._siteUrl ?? throw new InvalidOperationException("Base url not determined yet");
+        public string GetSiteUrl() => _siteUrl ?? throw new InvalidOperationException("Base url not determined yet");
     }
 }

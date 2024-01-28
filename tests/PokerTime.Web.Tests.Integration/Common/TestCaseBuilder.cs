@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : TestCaseBuilder.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
@@ -38,28 +31,28 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private (Type Type, int Id) _lastAddedItem;
 
         public TestCaseBuilder(IServiceScope scope, string sessionId) {
-            this._scope = scope;
-            this._sessionId = sessionId;
-            this._actions = new Queue<Func<Task>>();
-            this._participators = new Dictionary<string, ParticipantInfo>(StringComparer.InvariantCultureIgnoreCase);
-            this._entityIds = new FriendlyIdEntityDictionary();
+            _scope = scope;
+            _sessionId = sessionId;
+            _actions = new Queue<Func<Task>>();
+            _participators = new Dictionary<string, ParticipantInfo>(StringComparer.InvariantCultureIgnoreCase);
+            _entityIds = new FriendlyIdEntityDictionary();
         }
 
         public TestCaseBuilder HasExistingParticipant(string participantName) {
-            this._actions.Enqueue(async () => {
+            _actions.Enqueue(async () => {
                 TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] attempting to record presence of existing participant [{participantName}]");
 
-                var dbContext = this._scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
-                Participant participant = await dbContext.Participants.FirstAsync(x => x.Name == participantName && x.Session.UrlId.StringId == this._sessionId);
+                var dbContext = _scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
+                var participant = await dbContext.Participants.FirstAsync(x => x.Name == participantName && x.Session.UrlId.StringId == _sessionId);
 
-                this._participators.Add(participant.Name, new ParticipantInfo {
+                _participators.Add(participant.Name, new ParticipantInfo {
                     Id = participant.Id,
                     Name = participant.Name,
                     Color = new ColorModel(), // Doesn't matter
                     IsFacilitator = participant.IsFacilitator
                 });
 
-                this.RecordAddedId<Participant>(participant.Id);
+                RecordAddedId<Participant>(participant.Id);
 
                 TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] recorded presence of existing participant [{participantName}] with ID #{participant.Id}");
             });
@@ -72,83 +65,83 @@ namespace PokerTime.Web.Tests.Integration.Common {
             }
 
             AvailableParticipantColorModel availableParticipantColor = null;
-            this._actions.Enqueue(async () => {
-                this._scope.SetNoAuthenticationInfo();
+            _actions.Enqueue(async () => {
+                _scope.SetNoAuthenticationInfo();
                 var yellowColor = new ColorModel {
                     R = Color.Yellow.R,
                     G = Color.Yellow.G,
                     B = Color.Yellow.B,
                 };
 
-                IList<AvailableParticipantColorModel> response = await this._scope.Send(new GetAvailablePredefinedParticipantColorsQuery(this._sessionId));
+                var response = await _scope.Send(new GetAvailablePredefinedParticipantColorsQuery(_sessionId));
                 availableParticipantColor = response.FirstOrDefault(x => !x.HasSameColors(yellowColor)); // Yellow is a bad color for testing
             });
 
-            return this.EnqueueMediatorAction(() => new JoinPokerSessionCommand {
+            return EnqueueMediatorAction(() => new JoinPokerSessionCommand {
                 Name = name,
                 Color = availableParticipantColor?.HexString ?? (RandomByte() + RandomByte() + RandomByte()),
                 JoiningAsFacilitator = isFacilitator,
                 Passphrase = passphrase,
-                SessionId = this._sessionId
+                SessionId = _sessionId
             }, p => {
-                if (this._participators.ContainsKey(p.Name)) {
+                if (_participators.ContainsKey(p.Name)) {
                     Assert.Inconclusive($"Trying to register existing participant: {p.Name}");
                 }
 
-                this.RecordAddedId<ParticipantInfo>(p.Id);
-                this._participators.Add(p.Name, p);
+                RecordAddedId<ParticipantInfo>(p.Id);
+                _participators.Add(p.Name, p);
             });
         }
 
         public TestCaseBuilder NewRound(string title) {
-            this.EnqueueMediatorAction(
-                () => new InitiateDiscussionStageCommand { UserStoryTitle = title, SessionId = this._sessionId },
+            EnqueueMediatorAction(
+                () => new InitiateDiscussionStageCommand { UserStoryTitle = title, SessionId = _sessionId },
                 () => Task.CompletedTask);
 
-            return this.EnqueueMediatorAction(
-                () => new InitiateEstimationStageCommand { SessionId = this._sessionId },
+            return EnqueueMediatorAction(
+                () => new InitiateEstimationStageCommand { SessionId = _sessionId },
                 () => Task.CompletedTask);
         }
 
         public TestCaseBuilder CloseEstimationPhase() {
-            return this.EnqueueMediatorAction(
-                () => new InitiateEstimationDiscussionStageCommand { SessionId = this._sessionId },
+            return EnqueueMediatorAction(
+                () => new InitiateEstimationDiscussionStageCommand { SessionId = _sessionId },
                 () => Task.CompletedTask);
         }
 
 
         public TestCaseBuilder PlayCard(string participantName, string stringValue) {
             ICollection<SymbolModel> symbols = null;
-            this.EnqueueMediatorAction(participantName, () => {
-                IPokerTimeDbContext dbContext =
-                    this._scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
+            EnqueueMediatorAction(participantName, () => {
+                var dbContext =
+                    _scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
 
-                Session session = dbContext.Sessions.First(x => x.UrlId.StringId == this._sessionId);
+                var session = dbContext.Sessions.First(x => x.UrlId.StringId == _sessionId);
 
                 return new GetSymbolsQuery(session.SymbolSetId);
             }, r => symbols = r.Symbols);
 
-            this.EnqueueMediatorAction(participantName,
+            EnqueueMediatorAction(participantName,
                 () => {
                     if (symbols == null) {
                         throw new InvalidOperationException("Symbols query didn't return a response");
                     }
 
-                    SymbolModel requestedSymbol = symbols.FirstOrDefault(x => x.AsString == stringValue);
+                    var requestedSymbol = symbols.FirstOrDefault(x => x.AsString == stringValue);
                     if (requestedSymbol == null) {
                         throw new InvalidOperationException(
-                            $"Unable to find symbol '{stringValue}' in list of symbols: {String.Join("|", symbols.Select(x => x.AsString))}");
+                            $"Unable to find symbol '{stringValue}' in list of symbols: {string.Join("|", symbols.Select(x => x.AsString))}");
                     }
 
-                    IPokerTimeDbContext dbContext =
-                        this._scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
-                    int userStoryId = dbContext.UserStories.
-                        Where(x => x.Session.UrlId.StringId == this._sessionId).
+                    var dbContext =
+                        _scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
+                    var userStoryId = dbContext.UserStories.
+                        Where(x => x.Session.UrlId.StringId == _sessionId).
                         OrderByDescending(x => x.Id).
                         Select(x => x.Id).
                         FirstOrDefault();
 
-                    return new PlayCardCommand(this._sessionId, userStoryId, requestedSymbol.Id);
+                    return new PlayCardCommand(_sessionId, userStoryId, requestedSymbol.Id);
                 },
                 () => Task.CompletedTask);
 
@@ -156,13 +149,13 @@ namespace PokerTime.Web.Tests.Integration.Common {
         }
 
         public TestCaseBuilder OutputId(Action<int> callback) {
-            this._actions.Enqueue(() => {
-                if (this._lastAddedItem == default) {
+            _actions.Enqueue(() => {
+                if (_lastAddedItem == default) {
                     throw new InvalidOperationException("A call to OutputId should follow a call to an entity creating action");
                 }
 
-                TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Outputting last added item {this._lastAddedItem.Type} with ID #{this._lastAddedItem.Id} to callback ({callback.GetMethodInfo().Name})");
-                callback.Invoke(this._lastAddedItem.Id);
+                TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Outputting last added item {_lastAddedItem.Type} with ID #{_lastAddedItem.Id} to callback ({callback.GetMethodInfo().Name})");
+                callback.Invoke(_lastAddedItem.Id);
 
                 return Task.CompletedTask;
             });
@@ -171,7 +164,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         }
 
         public TestCaseBuilder Callback(Action<TestCaseBuilder> callback) {
-            this._actions.Enqueue(() => {
+            _actions.Enqueue(() => {
                 callback(this);
                 return Task.CompletedTask;
             });
@@ -185,22 +178,22 @@ namespace PokerTime.Web.Tests.Integration.Common {
         /// <param name="friendlyId"></param>
         /// <returns></returns>
         public TestCaseBuilder WithId(string friendlyId) {
-            this._actions.Enqueue(() => {
-                if (this._lastAddedItem == default) {
+            _actions.Enqueue(() => {
+                if (_lastAddedItem == default) {
                     throw new InvalidOperationException("A call to WithId should follow a call to an entity creating action");
                 }
 
-                this._entityIds.Set(friendlyId, this._lastAddedItem.Type, this._lastAddedItem.Id);
+                _entityIds.Set(friendlyId, _lastAddedItem.Type, _lastAddedItem.Id);
 
                 return Task.CompletedTask;
             });
 
             return this;
         }
-        public TestCaseBuilder WithSessionStage(SessionStage stage) => this.EnqueueSessionAction(r => r.CurrentStage = stage);
+        public TestCaseBuilder WithSessionStage(SessionStage stage) => EnqueueSessionAction(r => r.CurrentStage = stage);
 
         private ParticipantInfo GetParticipatorInfo(string name) {
-            if (!this._participators.TryGetValue(name, out ParticipantInfo val)) {
+            if (!_participators.TryGetValue(name, out var val)) {
                 Assert.Inconclusive($"Test case error: participantName {name} not found");
                 return null;
             }
@@ -209,8 +202,8 @@ namespace PokerTime.Web.Tests.Integration.Common {
         }
 
         public async Task Build() {
-            int actionNumber = 1;
-            while (this._actions.TryDequeue(out Func<Task> action)) {
+            var actionNumber = 1;
+            while (_actions.TryDequeue(out var action)) {
                 try {
                     await action();
                 }
@@ -224,33 +217,33 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
         private void RecordAddedId<T>(int id) {
             TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Recording last added item: [{typeof(T)}] with ID #{id}");
-            this._lastAddedItem = (typeof(T), id);
+            _lastAddedItem = (typeof(T), id);
         }
 
         private TestCaseBuilder EnqueueSessionAction(Action<Session> action) {
-            this._actions.Enqueue(() => this._scope.SetSession(this._sessionId, action));
+            _actions.Enqueue(() => _scope.SetSession(_sessionId, action));
 
             return this;
         }
 
         private TestCaseBuilder EnqueueMediatorAction(string participantName, Func<IRequest> requestFunc, Func<Task> responseProcessor) {
-            this._actions.Enqueue(async () => {
-                IRequest request = requestFunc();
+            _actions.Enqueue(async () => {
+                var request = requestFunc();
 
                 if (participantName == null) {
                     TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with no participant");
 
-                    this._scope.SetNoAuthenticationInfo();
+                    _scope.SetNoAuthenticationInfo();
                 }
                 else {
                     TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with participant {participantName}");
 
-                    ParticipantInfo participantInfo = this.GetParticipatorInfo(participantName);
-                    this._scope.SetAuthenticationInfo(new CurrentParticipantModel(participantInfo.Id, participantInfo.Name, participantInfo.Color.HexString, participantInfo.IsFacilitator));
+                    var participantInfo = GetParticipatorInfo(participantName);
+                    _scope.SetAuthenticationInfo(new CurrentParticipantModel(participantInfo.Id, participantInfo.Name, participantInfo.Color.HexString, participantInfo.IsFacilitator));
                 }
 
                 try {
-                    await this._scope.Send(request, CancellationToken.None);
+                    await _scope.Send(request, CancellationToken.None);
                     await responseProcessor.Invoke();
                 }
                 catch (Exception ex) {
@@ -261,35 +254,35 @@ namespace PokerTime.Web.Tests.Integration.Common {
             return this;
         }
         private TestCaseBuilder EnqueueMediatorAction(string participantName, Func<IRequest> requestFunc, Action responseProcessor) =>
-            this.EnqueueMediatorAction(participantName, requestFunc, () => {
+            EnqueueMediatorAction(participantName, requestFunc, () => {
                 responseProcessor.Invoke();
                 return Task.CompletedTask;
             });
-        private TestCaseBuilder EnqueueMediatorAction(Func<IRequest> requestFunc, Func<Task> responseProcessor) => this.EnqueueMediatorAction(null, requestFunc, responseProcessor);
+        private TestCaseBuilder EnqueueMediatorAction(Func<IRequest> requestFunc, Func<Task> responseProcessor) => EnqueueMediatorAction(null, requestFunc, responseProcessor);
         private TestCaseBuilder EnqueueMediatorAction(Func<IRequest> requestFunc, Action responseProcessor) =>
-            this.EnqueueMediatorAction(requestFunc, () => {
+            EnqueueMediatorAction(requestFunc, () => {
                 responseProcessor.Invoke();
                 return Task.CompletedTask;
             });
 
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(string participantName, Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) {
-            this._actions.Enqueue(async () => {
-                IRequest<TResponse> request = requestFunc();
+            _actions.Enqueue(async () => {
+                var request = requestFunc();
 
                 if (participantName == null) {
                     TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with no participant");
 
-                    this._scope.SetNoAuthenticationInfo();
+                    _scope.SetNoAuthenticationInfo();
                 }
                 else {
                     TestContext.WriteLine($"[{nameof(TestCaseBuilder)}] Executing request [{request}] with participant {participantName}");
 
-                    ParticipantInfo participantInfo = this.GetParticipatorInfo(participantName);
-                    this._scope.SetAuthenticationInfo(new CurrentParticipantModel(participantInfo.Id, participantInfo.Name, participantInfo.Color.HexString, participantInfo.IsFacilitator));
+                    var participantInfo = GetParticipatorInfo(participantName);
+                    _scope.SetAuthenticationInfo(new CurrentParticipantModel(participantInfo.Id, participantInfo.Name, participantInfo.Color.HexString, participantInfo.IsFacilitator));
                 }
 
                 try {
-                    TResponse response = await this._scope.Send(request, CancellationToken.None);
+                    var response = await _scope.Send(request, CancellationToken.None);
                     await responseProcessor.Invoke(response);
                 }
                 catch (Exception ex) {
@@ -300,13 +293,13 @@ namespace PokerTime.Web.Tests.Integration.Common {
             return this;
         }
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(string participantName, Func<IRequest<TResponse>> requestFunc, Action<TResponse> responseProcessor) =>
-            this.EnqueueMediatorAction(participantName, requestFunc, r => {
+            EnqueueMediatorAction(participantName, requestFunc, r => {
                 responseProcessor.Invoke(r);
                 return Task.CompletedTask;
             });
-        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => this.EnqueueMediatorAction<TResponse>(null, requestFunc, responseProcessor);
+        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => EnqueueMediatorAction<TResponse>(null, requestFunc, responseProcessor);
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Action<TResponse> responseProcessor) =>
-            this.EnqueueMediatorAction(requestFunc, r => {
+            EnqueueMediatorAction(requestFunc, r => {
                 responseProcessor.Invoke(r);
                 return Task.CompletedTask;
             });
@@ -315,11 +308,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
             private readonly Dictionary<string, (Type Type, int Id)> _dataStore;
 
             public FriendlyIdEntityDictionary() {
-                this._dataStore = new Dictionary<string, (Type, int)>(StringComparer.Ordinal);
+                _dataStore = new Dictionary<string, (Type, int)>(StringComparer.Ordinal);
             }
 
             public int Get(string friendlyId, Type type) {
-                if (!this._dataStore.TryGetValue(friendlyId, out (Type Type, int Id) item)) {
+                if (!_dataStore.TryGetValue(friendlyId, out var item)) {
                     throw new ArgumentException($"Entity {type} with id '{friendlyId}' is not found");
                 }
 
@@ -328,7 +321,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
             public void Set(string friendlyId, Type type, int itemId) {
                 try {
-                    this._dataStore[friendlyId] = (type, itemId);
+                    _dataStore[friendlyId] = (type, itemId);
                 }
                 catch (ArgumentException) {
                     throw new ArgumentException($"Entity {type} with id '{friendlyId}' is already exists");

@@ -10,15 +10,15 @@
         private readonly ICurrentParticipantService _currentUserService;
 
         public RequestLogger(ILogger<TRequest> logger, ICurrentParticipantService currentUserService) {
-            this._logger = logger;
-            this._currentUserService = currentUserService;
+            _logger = logger;
+            _currentUserService = currentUserService;
         }
 
         public async Task Process(TRequest request, CancellationToken cancellationToken) {
-            string name = typeof(TRequest).Name;
+            var name = typeof(TRequest).Name;
 
-            this._logger.LogInformation("PokerTime.App Request: {Name} {@UserId} {@Request}",
-                name, (await this._currentUserService.GetParticipant().ConfigureAwait(false)).Id, request);
+            _logger.LogInformation("PokerTime.App Request: {Name} {@UserId} {@Request}",
+                name, (await _currentUserService.GetParticipant().ConfigureAwait(false)).Id, request);
         }
     }
 }

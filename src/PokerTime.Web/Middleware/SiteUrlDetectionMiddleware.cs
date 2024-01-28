@@ -8,14 +8,14 @@
         private readonly RequestDelegate _next;
 
         public SiteUrlDetectionMiddleware(ISiteUrlDetectionService siteUrlDetectionService, RequestDelegate next) {
-            this._siteUrlDetectionService = siteUrlDetectionService;
-            this._next = next;
+            _siteUrlDetectionService = siteUrlDetectionService;
+            _next = next;
         }
 
         public Task Invoke(HttpContext context) {
-            this._siteUrlDetectionService.Update(context);
+            _siteUrlDetectionService.Update(context);
 
-            return this._next.Invoke(context);
+            return _next.Invoke(context);
         }
     }
 }

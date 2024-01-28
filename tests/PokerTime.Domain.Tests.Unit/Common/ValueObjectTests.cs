@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ValueObjectTests.cs
-//  Project         : PokerTime.Domain.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Domain.Tests.Unit.Common
+﻿namespace PokerTime.Domain.Tests.Unit.Common
 {
     using System.Collections.Generic;
     using Domain.Common;
@@ -23,8 +16,8 @@ namespace PokerTime.Domain.Tests.Unit.Common
 
             public Point(int x, int y)
             {
-                this.X = x;
-                this.Y = y;
+                X = x;
+                Y = y;
             }
 
             public int X { get; }
@@ -32,8 +25,8 @@ namespace PokerTime.Domain.Tests.Unit.Common
 
             protected override IEnumerable<object> GetAtomicValues()
             {
-                yield return this.X;
-                yield return this.Y;
+                yield return X;
+                yield return Y;
             }
         }
 

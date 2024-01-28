@@ -1,0 +1,14 @@
+services:
+  instance:
+    container_name: PokerTime.Web
+    build:
+      context: .
+      dockerfile: src/PokerTime.Web/Dockerfile
+    working_dir: /app
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 80:5000/tcp
+      - 443:5001/tcp

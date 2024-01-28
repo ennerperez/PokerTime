@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetSymbolSetsQueryResponse.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SymbolSets.Queries {
+﻿namespace PokerTime.Application.SymbolSets.Queries {
     using System;
     using Common.Models;
 
@@ -14,7 +7,7 @@ namespace PokerTime.Application.SymbolSets.Queries {
         public SymbolSetModel[] SymbolSets { get; }
 
         public GetSymbolSetsQueryResponse(SymbolSetModel[] symbolSets) {
-            this.SymbolSets = symbolSets ?? throw new ArgumentNullException(nameof(symbolSets));
+            SymbolSets = symbolSets ?? throw new ArgumentNullException(nameof(symbolSets));
         }
     }
 }

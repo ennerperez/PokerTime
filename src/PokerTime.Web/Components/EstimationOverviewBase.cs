@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : EstimationOverviewBase.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Components {
+﻿namespace PokerTime.Web.Components {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -39,12 +32,12 @@ namespace PokerTime.Web.Components {
 
         protected IEnumerable<string> ParticipantsWithoutEstimation {
             get {
-                if (this.ParticipantList == null) {
+                if (ParticipantList == null) {
                     yield break;
                 }
 
-                foreach (ParticipantInfo participant in this.ParticipantList.Participants) {
-                    if (!this.Estimations.ContainsKey(participant.Id)) {
+                foreach (var participant in ParticipantList.Participants) {
+                    if (!Estimations.ContainsKey(participant.Id)) {
                         yield return participant.Name;
                     }
                 }
@@ -58,14 +51,14 @@ namespace PokerTime.Web.Components {
 
         public Task OnEstimationGiven(EstimationGivenNotification notification) {
             if (notification == null) throw new ArgumentNullException(nameof(notification));
-            if (notification.SessionId != this.SessionStatus.SessionId) {
+            if (notification.SessionId != SessionStatus.SessionId) {
                 return Task.CompletedTask;
             }
 
-            this.InvokeAsync(() => {
-                this.Estimations[notification.Estimation.ParticipantId] = notification.Estimation;
+            InvokeAsync(() => {
+                Estimations[notification.Estimation.ParticipantId] = notification.Estimation;
 
-                this.StateHasChanged();
+                StateHasChanged();
             });
 
             return Task.CompletedTask;
@@ -74,34 +67,34 @@ namespace PokerTime.Web.Components {
         protected override void OnInitialized() {
             base.OnInitialized();
 
-            this.EstimationGivenSubscriber.Subscribe(this);
-            this.SessionJoinedSubscriber.Subscribe(this);
+            EstimationGivenSubscriber.Subscribe(this);
+            SessionJoinedSubscriber.Subscribe(this);
         }
 
         protected override async Task OnInitializedAsync() {
-            this.ParticipantList = await this.Mediator.Send(new GetParticipantsInfoQuery(this.SessionStatus.SessionId));
-            Debug.Assert(this.ParticipantList != null);
+            ParticipantList = await Mediator.Send(new GetParticipantsInfoQuery(SessionStatus.SessionId));
+            Debug.Assert(ParticipantList != null);
         }
 
         protected override Task OnParametersSetAsync() {
-            if (this.SessionStatus.UserStory?.Id == this._userStoryId) {
+            if (SessionStatus.UserStory?.Id == _userStoryId) {
                 return base.OnParametersSetAsync();
             }
 
-            if (this.SessionStatus.UserStory == null) {
-                this._userStoryId = 0;
+            if (SessionStatus.UserStory == null) {
+                _userStoryId = 0;
                 return base.OnParametersSetAsync();
             }
 
-            int userStoryId = this.SessionStatus.UserStory.Id;
+            var userStoryId = SessionStatus.UserStory.Id;
             async Task LoadCore() {
                 await base.OnParametersSetAsync();
 
-                GetEstimationsQueryResponse estimationsResponse = await this.Mediator.Send(
-                    new GetEstimationsQuery(this.SessionStatus.SessionId, userStoryId));
+                var estimationsResponse = await Mediator.Send(
+                    new GetEstimationsQuery(SessionStatus.SessionId, userStoryId));
 
-                this.Estimations = estimationsResponse.Estimations.ToDictionary(x => x.ParticipantId, x => x);
-                this._userStoryId = userStoryId;
+                Estimations = estimationsResponse.Estimations.ToDictionary(x => x.ParticipantId, x => x);
+                _userStoryId = userStoryId;
             }
 
             return LoadCore();
@@ -110,29 +103,29 @@ namespace PokerTime.Web.Components {
         public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs) {
             if (eventArgs == null) throw new ArgumentNullException(nameof(eventArgs));
 
-            if (eventArgs.SessionId != this.SessionStatus?.SessionId) {
+            if (eventArgs.SessionId != SessionStatus?.SessionId) {
                 return Task.CompletedTask;
             }
 
-            ParticipantInfo participantInfo = eventArgs.Argument;
+            var participantInfo = eventArgs.Argument;
 
-            return this.InvokeAsync(() => {
-                this.ParticipantList.Participants.Add(participantInfo);
-                this.ParticipantList.Participants.Sort((a, b) => StringComparer.CurrentCulture.Compare(a.Name, b.Name));
+            return InvokeAsync(() => {
+                ParticipantList.Participants.Add(participantInfo);
+                ParticipantList.Participants.Sort((a, b) => StringComparer.CurrentCulture.Compare(a.Name, b.Name));
 
-                this.StateHasChanged();
+                StateHasChanged();
             });
         }
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
-                this.EstimationGivenSubscriber?.Unsubscribe(this);
-                this.SessionJoinedSubscriber?.Unsubscribe(this);
+                EstimationGivenSubscriber?.Unsubscribe(this);
+                SessionJoinedSubscriber?.Unsubscribe(this);
             }
         }
 
         public void Dispose() {
-            this.Dispose(true);
+            Dispose(true);
 
             GC.SuppressFinalize(this);
         }

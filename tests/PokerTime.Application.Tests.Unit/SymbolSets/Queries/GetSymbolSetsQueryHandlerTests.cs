@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetSymbolSetsQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.SymbolSets.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.SymbolSets.Queries {
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -19,10 +12,10 @@ namespace PokerTime.Application.Tests.Unit.SymbolSets.Queries {
         [Test]
         public async Task GetSymbolSetsQueryHandler_Handle_ReturnsMappedSymbols() {
             // Given
-            var handler = new GetSymbolSetsQueryHandler(this.Context, this.Mapper);
+            var handler = new GetSymbolSetsQueryHandler(Context, Mapper);
             var query = new GetSymbolSetsQuery();
 
-            this.Context.SymbolSets.Add(new SymbolSet {
+            Context.SymbolSets.Add(new SymbolSet {
                 Name = "ABC",
                 Symbols =
                 {
@@ -31,7 +24,7 @@ namespace PokerTime.Application.Tests.Unit.SymbolSets.Queries {
                 }
             });
 
-            this.Context.SymbolSets.Add(new SymbolSet {
+            Context.SymbolSets.Add(new SymbolSet {
                 Name = "DEF",
                 Symbols =
                 {
@@ -40,10 +33,10 @@ namespace PokerTime.Application.Tests.Unit.SymbolSets.Queries {
                 }
             });
 
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             // When
-            GetSymbolSetsQueryResponse response = await handler.Handle(query, CancellationToken.None);
+            var response = await handler.Handle(query, CancellationToken.None);
 
             // Then
             // Note that two are seeded by default in the test database context as well

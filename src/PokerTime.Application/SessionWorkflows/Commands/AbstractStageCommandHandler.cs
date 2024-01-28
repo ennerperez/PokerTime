@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : AbstractStageCommandHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SessionWorkflows.Commands {
+﻿namespace PokerTime.Application.SessionWorkflows.Commands {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -25,30 +18,30 @@ namespace PokerTime.Application.SessionWorkflows.Commands {
 
 
         protected AbstractStageCommandHandler(IPokerTimeDbContextFactory pokerTimeDbContext, ISessionStatusUpdateDispatcher sessionStatusUpdateDispatcher) {
-            this._dbContextFactory = pokerTimeDbContext;
-            this._sessionStatusUpdateDispatcher = sessionStatusUpdateDispatcher;
+            _dbContextFactory = pokerTimeDbContext;
+            _sessionStatusUpdateDispatcher = sessionStatusUpdateDispatcher;
         }
 
         public async Task Handle(TRequest request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             try {
-                this.DbContext = this._dbContextFactory.CreateForEditContext();
-                Session session = await this.DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+                DbContext = _dbContextFactory.CreateForEditContext();
+                var session = await DbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
                 if (session == null) {
                     throw new NotFoundException();
                 }
 
-                await this.HandleCore(request, session, cancellationToken);
+                await HandleCore(request, session, cancellationToken);
             }
             finally {
-                this.DbContext?.Dispose();
+                DbContext?.Dispose();
             }
         }
 
         protected abstract Task<Unit> HandleCore(TRequest request, Session session, CancellationToken cancellationToken);
 
-        protected Task DispatchUpdate(Session session, CancellationToken cancellationToken) => this._sessionStatusUpdateDispatcher.DispatchUpdate(session, cancellationToken);
+        protected Task DispatchUpdate(Session session, CancellationToken cancellationToken) => _sessionStatusUpdateDispatcher.DispatchUpdate(session, cancellationToken);
     }
 }

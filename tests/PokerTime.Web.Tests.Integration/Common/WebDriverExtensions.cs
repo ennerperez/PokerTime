@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : WebDriverExtensions.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Collections.ObjectModel;
     using System.IO;
@@ -20,28 +13,28 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public static IWebElement FindElementByTestElementId(this IWebDriver webDriver, string testElementId) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
-            By selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
+            var selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
             return webDriver.FindVisibleElement(selector);
         }
 
         public static IWebElement FindElementByTestElementId(this ISearchContext webDriver, string testElementId) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
-            By selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
+            var selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
             return webDriver.FindElement(selector);
         }
 
         public static IWebElement FindElementByTestElementId(this ISearchContext webDriver, string testElementId, int id) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
-            By selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"][data-id=\"{id}\"]");
+            var selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"][data-id=\"{id}\"]");
             return webDriver.FindElement(selector);
         }
 
         public static ReadOnlyCollection<IWebElement> FindElementsByTestElementId(this ISearchContext webDriver, string testElementId) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
-            By selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
+            var selector = By.CssSelector($"[data-test-element-id=\"{testElementId}\"]");
             return webDriver.FindElements(selector);
         }
 
@@ -49,7 +42,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
             return webDriver.Retry(wd => {
-                IWebElement el = wd.FindElement(selector);
+                var el = wd.FindElement(selector);
                 return el != null && el.Displayed ? el : null;
             });
         }
@@ -58,7 +51,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
             return webDriver.Retry(wd => {
-                IWebElement el = wd.FindElement(selector);
+                var el = wd.FindElement(selector);
                 return el != null && !el.Displayed ? el : null;
             });
         }
@@ -100,8 +93,8 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public static void TryCreateScreenshot(this IWebDriver webDriver, string extraName = null) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
 
-            string screenshotName = TestContext.CurrentContext.Test.MethodName + "-" + (++ScreenshotCounter) + (extraName != null ? "-" + extraName : "") + ".png";
-            string screenshotPath = Path.Join(Paths.TestArtifactDir, screenshotName);
+            var screenshotName = TestContext.CurrentContext.Test.MethodName + "-" + (++ScreenshotCounter) + (extraName != null ? "-" + extraName : "") + ".png";
+            var screenshotPath = Path.Join(Paths.TestArtifactDir, screenshotName);
 
             try {
                 TestContext.WriteLine($"Creating screenshot: {screenshotPath}");
@@ -124,12 +117,12 @@ namespace PokerTime.Web.Tests.Integration.Common {
             }
 
             try {
-                ILogs logs = webDriver.Manage().Logs;
+                var logs = webDriver.Manage().Logs;
 
-                foreach (string logType in logs.AvailableLogTypes) {
+                foreach (var logType in logs.AvailableLogTypes) {
                     TestContext.WriteLine($"Browser log: {logType}");
 
-                    foreach (LogEntry logEntry in logs.GetLog(logType)) {
+                    foreach (var logEntry in logs.GetLog(logType)) {
                         TestContext.WriteLine($"\t[{logEntry.Level}] [{logEntry.Timestamp:s}] {logEntry.Message}");
                     }
                 }

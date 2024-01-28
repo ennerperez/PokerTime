@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : EstimationGivenNotification.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications.EstimationGiven {
+﻿namespace PokerTime.Application.Notifications.EstimationGiven {
     using Common.Models;
     using MediatR;
 
@@ -15,8 +8,8 @@ namespace PokerTime.Application.Notifications.EstimationGiven {
         public string SessionId { get; }
 
         public EstimationGivenNotification(string sessionId, EstimationModel estimation) {
-            this.SessionId = sessionId;
-            this.Estimation = estimation;
+            SessionId = sessionId;
+            Estimation = estimation;
         }
     }
 }

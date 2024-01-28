@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : BaseDataSeeder.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.App.Commands.SeedBaseData {
+﻿namespace PokerTime.Application.App.Commands.SeedBaseData {
     using System;
     using System.Drawing;
     using System.Globalization;
@@ -19,21 +12,21 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
         private readonly IPokerTimeDbContext _pokerTimeDbContext;
 
         public BaseDataSeeder(IPokerTimeDbContext pokerTimeDbContext) {
-            this._pokerTimeDbContext = pokerTimeDbContext;
+            _pokerTimeDbContext = pokerTimeDbContext;
         }
 
         public async Task SeedAllAsync(CancellationToken cancellationToken) {
-            await this.SeedPredefinedParticipantColor(cancellationToken);
-            await this.SeedPokerCardSymbols(cancellationToken);
+            await SeedPredefinedParticipantColor(cancellationToken);
+            await SeedPokerCardSymbols(cancellationToken);
 
-            await this._pokerTimeDbContext.SaveChangesAsync(cancellationToken);
+            await _pokerTimeDbContext.SaveChangesAsync(cancellationToken);
         }
 
         private async Task SeedPokerCardSymbols(CancellationToken cancellationToken) {
-            int order = 1;
+            var order = 1;
 
             async Task SeedSymbolSet(string name, Action<SymbolSet> callback) {
-                SymbolSet symbolSet = await this._pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x != null && x.Name == name, cancellationToken);
+                var symbolSet = await _pokerTimeDbContext.SymbolSets.FirstOrDefaultAsync(x => x != null && x.Name == name, cancellationToken);
 
                 if (symbolSet == null) {
                     // Reset order
@@ -46,7 +39,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
             }
 
             void IntSymbol(int num, SymbolSet symbolSet) {
-                this._pokerTimeDbContext.Symbols.Add(new Symbol {
+                _pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Number,
                     SymbolSet = symbolSet,
                     ValueAsNumber = num,
@@ -56,7 +49,7 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
             }
 
             void StringSymbol(string str, SymbolSet symbolSet, int? intValue = null) {
-                this._pokerTimeDbContext.Symbols.Add(new Symbol {
+                _pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = SymbolType.Characters,
                     SymbolSet = symbolSet,
                     ValueAsString = str,
@@ -66,14 +59,14 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
             }
 
             void TypeSymbol(SymbolType symbolType, SymbolSet symbolSet) {
-                string symbolString = symbolType switch
+                var symbolString = symbolType switch
                 {
                     SymbolType.Break => "☕",
                     SymbolType.Infinite => "∞",
                     _ => throw new ArgumentOutOfRangeException(nameof(symbolType), symbolType, null)
                 };
 
-                this._pokerTimeDbContext.Symbols.Add(new Symbol {
+                _pokerTimeDbContext.Symbols.Add(new Symbol {
                     Type = symbolType,
                     SymbolSet = symbolSet,
                     ValueAsString = symbolString,
@@ -147,12 +140,12 @@ namespace PokerTime.Application.App.Commands.SeedBaseData {
         }
 
         private async Task SeedPredefinedParticipantColor(CancellationToken cancellationToken) {
-            if (await this._pokerTimeDbContext.PredefinedParticipantColors.AnyAsync(cancellationToken)) {
+            if (await _pokerTimeDbContext.PredefinedParticipantColors.AnyAsync(cancellationToken)) {
                 return;
             }
 
             // Seed note lanes
-            this._pokerTimeDbContext.PredefinedParticipantColors.AddRange(
+            _pokerTimeDbContext.PredefinedParticipantColors.AddRange(
                 new PredefinedParticipantColor("Red", Color.Red),
                 new PredefinedParticipantColor("Blue", Color.Blue),
                 new PredefinedParticipantColor("Green", Color.Green),

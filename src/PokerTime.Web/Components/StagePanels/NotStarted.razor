@@ -9,8 +9,8 @@
         </p>
 
         <NextStageInvocationForm TModel="InitiateDiscussionStageCommand"
-                                 Model="@this.Command"
-                                 OnContinue="@this.OnInvokeContinueToNextStage"
+                                 Model="@Command"
+                                 OnContinue="@OnInvokeContinueToNextStage"
                                  ButtonText="Start session">
             <div class="field">
                 <div class="control">
@@ -34,5 +34,5 @@
 @code {
     private InitiateDiscussionStageCommand Command { get; } = new InitiateDiscussionStageCommand();
 
-    private Task OnInvokeContinueToNextStage(InitiateDiscussionStageCommand command) => this.Mediator.Send(command);
+    private Task OnInvokeContinueToNextStage(InitiateDiscussionStageCommand command) => Mediator.Send(command);
 }

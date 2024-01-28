@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CurrentParticipantModel.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Models {
+﻿namespace PokerTime.Application.Common.Models {
     using System;
 
     public readonly struct CurrentParticipantModel : IEquatable<CurrentParticipantModel> {
@@ -13,32 +6,32 @@ namespace PokerTime.Application.Common.Models {
         public string Name { get; }
         public string HexColorString { get; }
         public bool IsFacilitator { get; }
-        public bool IsAuthenticated => this.Id != 0;
+        public bool IsAuthenticated => Id != 0;
 
         public CurrentParticipantModel(int id, string name, string color, bool isFacilitator) {
-            this.Id = id;
-            this.Name = name;
-            this.HexColorString = color;
-            this.IsFacilitator = isFacilitator;
+            Id = id;
+            Name = name;
+            HexColorString = color;
+            IsFacilitator = isFacilitator;
         }
 
-        public bool Equals(CurrentParticipantModel other) => this.Id == other.Id;
+        public bool Equals(CurrentParticipantModel other) => Id == other.Id;
 
-        public override bool Equals(object obj) => obj is CurrentParticipantModel other && this.Equals(other);
+        public override bool Equals(object obj) => obj is CurrentParticipantModel other && Equals(other);
 
-        public override int GetHashCode() => this.Id;
+        public override int GetHashCode() => Id;
 
         public static bool operator ==(CurrentParticipantModel left, CurrentParticipantModel right) => left.Equals(right);
 
         public static bool operator !=(CurrentParticipantModel left, CurrentParticipantModel right) => !left.Equals(right);
 
         public void Deconstruct(out int participantId, out string name, out string color, out bool isFacilitator) {
-            participantId = this.Id;
-            name = this.Name;
-            color = this.HexColorString;
-            isFacilitator = this.IsFacilitator;
+            participantId = Id;
+            name = Name;
+            color = HexColorString;
+            isFacilitator = IsFacilitator;
         }
 
-        public override string ToString() => $"[{this.Id}|{(this.IsFacilitator ? "M" : "P")}|{this.Name}]";
+        public override string ToString() => $"[{Id}|{(IsFacilitator ? "M" : "P")}|{Name}]";
     }
 }

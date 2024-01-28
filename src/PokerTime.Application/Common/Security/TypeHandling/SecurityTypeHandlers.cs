@@ -1,15 +1,7 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SecurityTypeHandlers.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Security.TypeHandling {
+﻿namespace PokerTime.Application.Common.Security.TypeHandling {
     using System;
     using System.Diagnostics;
     using System.Linq;
-    using System.Reflection;
     using Domain.Entities;
     using Models;
 
@@ -18,8 +10,8 @@ namespace PokerTime.Application.Common.Security.TypeHandling {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1810:Initialize reference type static fields inline", Justification = "There is only a single field and this is for clarity too.")]
         static SecurityTypeHandlers() {
-            Assembly searchAssembly = typeof(SecurityTypeHandlers).Assembly;
-            Type typeInterface = typeof(ITypeSecurityHandler);
+            var searchAssembly = typeof(SecurityTypeHandlers).Assembly;
+            var typeInterface = typeof(ITypeSecurityHandler);
 
             All =
                 (from type in searchAssembly.GetTypes()
@@ -35,7 +27,7 @@ namespace PokerTime.Application.Common.Security.TypeHandling {
         }
 
         public static void HandleOperation(SecurityOperation operation, Session session, object entity, in CurrentParticipantModel currentParticipant) {
-            foreach (ITypeSecurityHandler handler in All) {
+            foreach (var handler in All) {
                 handler.HandleOperation(operation, session, entity, currentParticipant);
             }
         }

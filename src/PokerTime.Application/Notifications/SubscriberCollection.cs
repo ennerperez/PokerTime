@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SubscriberCollection.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications {
+﻿namespace PokerTime.Application.Notifications {
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -20,12 +13,12 @@ namespace PokerTime.Application.Notifications {
 
         public void Subscribe(TSubscriber subscriber) {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
-            this._subscribers.TryAdd(subscriber.UniqueId, new WeakReference<TSubscriber>(subscriber));
+            _subscribers.TryAdd(subscriber.UniqueId, new WeakReference<TSubscriber>(subscriber));
         }
 
         public void Unsubscribe(TSubscriber subscriber) {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
-            this._subscribers.TryRemove(subscriber.UniqueId, out _);
+            _subscribers.TryRemove(subscriber.UniqueId, out _);
         }
 
         public IEnumerable<TSubscriber> GetItems() {
@@ -33,10 +26,10 @@ namespace PokerTime.Application.Notifications {
             var deadSubscribers = new List<Guid>();
 
             // We need to take a read lock on the queue so at least stuff does not get removed while iterating
-            this._subscriberCollectionLock.EnterReadLock();
+            _subscriberCollectionLock.EnterReadLock();
             try {
-                foreach (KeyValuePair<Guid, WeakReference<TSubscriber>> subscriberItem in this._subscribers) {
-                    if (!subscriberItem.Value.TryGetTarget(out TSubscriber subscriber)) {
+                foreach (var subscriberItem in _subscribers) {
+                    if (!subscriberItem.Value.TryGetTarget(out var subscriber)) {
                         deadSubscribers.Add(subscriberItem.Key);
                     }
                     else {
@@ -45,26 +38,26 @@ namespace PokerTime.Application.Notifications {
                 }
             }
             finally {
-                this._subscriberCollectionLock.ExitReadLock();
+                _subscriberCollectionLock.ExitReadLock();
             }
 
             // Remove dead subscribers
             if (deadSubscribers.Count > 0) {
-                this._subscriberCollectionLock.EnterWriteLock();
+                _subscriberCollectionLock.EnterWriteLock();
 
                 try {
-                    foreach (Guid deadSubscriber in deadSubscribers) {
-                        this._subscribers.TryRemove(deadSubscriber, out _);
+                    foreach (var deadSubscriber in deadSubscribers) {
+                        _subscribers.TryRemove(deadSubscriber, out _);
                     }
                 }
                 finally {
-                    this._subscriberCollectionLock.ExitWriteLock();
+                    _subscriberCollectionLock.ExitWriteLock();
                 }
             }
         }
 
         public void Dispose() {
-            this._subscriberCollectionLock?.Dispose();
+            _subscriberCollectionLock?.Dispose();
 
             GC.SuppressFinalize(this);
         }

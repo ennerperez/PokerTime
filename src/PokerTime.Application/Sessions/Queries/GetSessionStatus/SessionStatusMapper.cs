@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionStatusMapper.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
+﻿namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
     using System;
     using System.Linq;
     using System.Threading;
@@ -25,18 +18,18 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
         private readonly IMapper _mapper;
 
         public SessionStatusMapper(IPokerTimeDbContext pokerTimeDbContext, IMapper mapper) {
-            this._mapper = mapper;
-            this._pokerTimeDbContext = pokerTimeDbContext;
+            _mapper = mapper;
+            _pokerTimeDbContext = pokerTimeDbContext;
         }
 
         public async Task<SessionStatus> GetSessionStatus(Session session, CancellationToken cancellationToken) {
             if (session == null) throw new ArgumentNullException(nameof(session));
 
-            UserStory currentUserStory = await this._pokerTimeDbContext.UserStories.Where(x => x.SessionId == session.Id).
+            var currentUserStory = await _pokerTimeDbContext.UserStories.Where(x => x.SessionId == session.Id).
                 OrderByDescending(x => x.Id).
                 FirstOrDefaultAsync(cancellationToken);
 
-            UserStoryModel currentUserStoryModel = currentUserStory != null ? this._mapper.Map<UserStoryModel>(currentUserStory) : null;
+            var currentUserStoryModel = currentUserStory != null ? _mapper.Map<UserStoryModel>(currentUserStory) : null;
             var sessionStatus = new SessionStatus(session.UrlId.StringId, session.Title, session.CurrentStage, session.SymbolSetId, currentUserStoryModel);
 
             return sessionStatus;

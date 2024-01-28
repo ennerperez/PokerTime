@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : DatabaseOptions.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Configuration {
+﻿namespace PokerTime.Web.Configuration {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Data.SqlClient;
@@ -27,18 +20,18 @@ namespace PokerTime.Web.Configuration {
         public DatabaseProvider DatabaseProvider { get; set; }
 
         public string CreateConnectionString() {
-            if (this._cachedConnectionString != null) {
-                return this._cachedConnectionString;
+            if (_cachedConnectionString != null) {
+                return _cachedConnectionString;
             }
 
             // Create new conn string
-            switch (this.DatabaseProvider) {
+            switch (DatabaseProvider) {
                 case DatabaseProvider.SqlServer:
-                    return this.CreateSqlServerConnectionString();
+                    return CreateSqlServerConnectionString();
                 case DatabaseProvider.Sqlite:
-                    return this.CreateSqliteConnectionString();
+                    return CreateSqliteConnectionString();
                 default:
-                    throw new InvalidOperationException($"Invalid database provider: {this.DatabaseProvider}");
+                    throw new InvalidOperationException($"Invalid database provider: {DatabaseProvider}");
             }
         }
 
@@ -46,17 +39,17 @@ namespace PokerTime.Web.Configuration {
             var connStringBuilder = new SqliteConnectionStringBuilder();
 
             // Set values current connection string
-            if (this.Database != null) connStringBuilder.DataSource = this.Database;
+            if (Database != null) connStringBuilder.DataSource = Database;
             connStringBuilder.ForeignKeys = true;
             connStringBuilder.Mode = SqliteOpenMode.ReadWriteCreate;
             connStringBuilder.Cache = SqliteCacheMode.Private;
 
             // Copy current connection string, overriding options here
-            if (!String.IsNullOrEmpty(value: this.ConnectionString)) {
-                var srcConnStringBuilder = new SqliteConnectionStringBuilder(connectionString: this.ConnectionString);
+            if (!string.IsNullOrEmpty(value: ConnectionString)) {
+                var srcConnStringBuilder = new SqliteConnectionStringBuilder(connectionString: ConnectionString);
                 foreach (string key in srcConnStringBuilder.Keys ??
                                         throw new InvalidOperationException(message: "Invalid connection string")) {
-                    if (key != null && !String.IsNullOrEmpty(srcConnStringBuilder[key]?.ToString())) {
+                    if (key != null && !string.IsNullOrEmpty(srcConnStringBuilder[key]?.ToString())) {
                         connStringBuilder[key] = srcConnStringBuilder[key];
                     }
                 }
@@ -69,17 +62,17 @@ namespace PokerTime.Web.Configuration {
             var connStringBuilder = new SqlConnectionStringBuilder();
 
             // Set values current connection string
-            if (this.ConnectionTimeout != null) connStringBuilder.ConnectTimeout = this.ConnectionTimeout.Value;
-            if (this.Encrypt != null) connStringBuilder.Encrypt = this.Encrypt.Value;
-            if (this.IntegratedSecurity != null) connStringBuilder.IntegratedSecurity = this.IntegratedSecurity.Value;
-            if (!String.IsNullOrEmpty(value: this.UserId)) connStringBuilder.UserID = this.UserId;
-            if (!String.IsNullOrEmpty(value: this.Password)) connStringBuilder.Password = this.Password;
-            if (!String.IsNullOrEmpty(value: this.Server)) connStringBuilder.DataSource = this.Server;
-            if (!String.IsNullOrEmpty(value: this.Database)) connStringBuilder.InitialCatalog = this.Database;
+            if (ConnectionTimeout != null) connStringBuilder.ConnectTimeout = ConnectionTimeout.Value;
+            if (Encrypt != null) connStringBuilder.Encrypt = Encrypt.Value;
+            if (IntegratedSecurity != null) connStringBuilder.IntegratedSecurity = IntegratedSecurity.Value;
+            if (!string.IsNullOrEmpty(value: UserId)) connStringBuilder.UserID = UserId;
+            if (!string.IsNullOrEmpty(value: Password)) connStringBuilder.Password = Password;
+            if (!string.IsNullOrEmpty(value: Server)) connStringBuilder.DataSource = Server;
+            if (!string.IsNullOrEmpty(value: Database)) connStringBuilder.InitialCatalog = Database;
 
             // Copy current connection string, overriding options here
-            if (!String.IsNullOrEmpty(value: this.ConnectionString)) {
-                var srcConnStringBuilder = new SqlConnectionStringBuilder(connectionString: this.ConnectionString);
+            if (!string.IsNullOrEmpty(value: ConnectionString)) {
+                var srcConnStringBuilder = new SqlConnectionStringBuilder(connectionString: ConnectionString);
                 foreach (string key in srcConnStringBuilder.Keys ??
                                         throw new InvalidOperationException(message: "Invalid connection string")) {
                     if (key != null) {
@@ -93,7 +86,7 @@ namespace PokerTime.Web.Configuration {
 
             // Cache and return
             // (thread safety notice: assignment is atomic)
-            return this._cachedConnectionString = connStringBuilder.ToString();
+            return _cachedConnectionString = connStringBuilder.ToString();
         }
     }
 }

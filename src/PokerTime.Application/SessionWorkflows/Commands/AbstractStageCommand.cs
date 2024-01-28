@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : AbstractStageCommand.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SessionWorkflows.Commands
+﻿namespace PokerTime.Application.SessionWorkflows.Commands
 {
 
 

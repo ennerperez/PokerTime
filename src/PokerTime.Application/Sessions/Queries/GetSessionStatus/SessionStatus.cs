@@ -1,12 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionStatus.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
-    using System;
+﻿namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
     using Common.Models;
     using Domain.Entities;
 
@@ -21,12 +13,12 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
 
         public UserStoryModel UserStory { get; }
 
-        public bool CanViewOwnCards => this.Stage != SessionStage.Finished && this.Stage != SessionStage.NotStarted;
-        public bool CanChooseCards => this.Stage == SessionStage.Estimation;
-        public bool CanViewEstimationPanel => this.Stage != SessionStage.Discussion && this.Stage != SessionStage.Finished && this.Stage != SessionStage.NotStarted;
-        public bool CanViewEstimations => this.Stage == SessionStage.EstimationDiscussion || this.Stage == SessionStage.Finished;
-        public bool ShowUserStoriesOverview => this.Stage == SessionStage.Finished;
-        public bool IsStarted => this.Stage != SessionStage.NotStarted;
+        public bool CanViewOwnCards => Stage != SessionStage.Finished && Stage != SessionStage.NotStarted;
+        public bool CanChooseCards => Stage == SessionStage.Estimation;
+        public bool CanViewEstimationPanel => Stage != SessionStage.Discussion && Stage != SessionStage.Finished && Stage != SessionStage.NotStarted;
+        public bool CanViewEstimations => Stage == SessionStage.EstimationDiscussion || Stage == SessionStage.Finished;
+        public bool ShowUserStoriesOverview => Stage == SessionStage.Finished;
+        public bool IsStarted => Stage != SessionStage.NotStarted;
 
         public SessionStatus(
             string sessionId,
@@ -35,17 +27,17 @@ namespace PokerTime.Application.Sessions.Queries.GetSessionStatus {
             int symbolSetId,
             UserStoryModel currentUserStory
         ) {
-            this.SessionId = sessionId;
-            this.Title = title;
-            this.SymbolSetId = symbolSetId;
-            this.Stage = sessionStage;
-            this.UserStory = currentUserStory;
+            SessionId = sessionId;
+            Title = title;
+            SymbolSetId = symbolSetId;
+            Stage = sessionStage;
+            UserStory = currentUserStory;
         }
 
         public SessionStatus() {
-            this.SessionId = String.Empty;
-            this.Title = String.Empty;
-            this.Stage = SessionStage.NotStarted;
+            SessionId = string.Empty;
+            Title = string.Empty;
+            Stage = SessionStage.NotStarted;
         }
     }
 }

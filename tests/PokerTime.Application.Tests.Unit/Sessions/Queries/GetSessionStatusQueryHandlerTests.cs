@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetSessionStatusQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
@@ -23,7 +16,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
             // Given
             const string sessionId = "surely-not-found";
             var query = new GetSessionStatusQuery(sessionId);
-            var handler = new GetSessionStatusQueryHandler(this.Context, Substitute.For<ISessionStatusMapper>());
+            var handler = new GetSessionStatusQueryHandler(Context, Substitute.For<ISessionStatusMapper>());
 
             // When
             TestDelegate action = () => handler.Handle(query, CancellationToken.None).GetAwaiter().GetResult();
@@ -46,12 +39,12 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                 FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
-            string sessionId = retro.UrlId.StringId;
-            this.Context.Sessions.Add(retro);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            var sessionId = retro.UrlId.StringId;
+            Context.Sessions.Add(retro);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             var query = new GetSessionStatusQuery(sessionId);
-            var handler = new GetSessionStatusQueryHandler(this.Context, new SessionStatusMapper(this.Context, this.Mapper));
+            var handler = new GetSessionStatusQueryHandler(Context, new SessionStatusMapper(Context, Mapper));
 
             // When
             var result = await handler.Handle(query, CancellationToken.None);

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : JoinPokerSessionCommand.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
+﻿namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
     using MediatR;
     using Queries.GetParticipantsInfo;
 
@@ -20,6 +13,6 @@ namespace PokerTime.Application.Sessions.Commands.JoinPokerSession {
         public bool JoiningAsFacilitator { get; set; }
         public string SessionId { get; set; }
 
-        public override string ToString() => $"[{nameof(JoinPokerSessionCommand)}] Join retro {this.SessionId} as {this.Name} (facilitator: {this.JoiningAsFacilitator})";
+        public override string ToString() => $"[{nameof(JoinPokerSessionCommand)}] Join retro {SessionId} as {Name} (facilitator: {JoiningAsFacilitator})";
     }
 }

@@ -13,7 +13,7 @@
 @using PokerTime.Application.Sessions.Queries.GetParticipantsInfo
 @using PokerTime.Web.Components.Layout
 
-@if (this.SessionInfo == null)
+@if (SessionInfo == null)
 {
     <section class="alert alert-danger" role="alert">
         <h4 class="alert-heading">Session not found</h4>
@@ -24,22 +24,22 @@
 }
 else
 {
-    <h1>Join planning poker session: @this.SessionInfo.Title</h1>
+    <h1>Join planning poker session: @SessionInfo.Title</h1>
     <p class="lead">To estimate your next moves</p>
 
     <div class="row">
         <div class="col">
             <p class="lead">
-                Join the planning poker session "@this.SessionInfo.Title" by filling in the necessary information on the form below.
+                Join the planning poker session "@SessionInfo.Title" by filling in the necessary information on the form below.
             </p>
 
-            @if (this.SessionInfo.IsFinished)
+            @if (SessionInfo.IsFinished)
             {
                 <Notification Type="Notification.NotificationType.Warning">
                     This session has already finished. You can log in and view the past results but you won't be able to participate anymore.
                 </Notification>
             }
-            else if (this.SessionInfo.IsStarted)
+            else if (SessionInfo.IsStarted)
             {
                 <Notification Type="Notification.NotificationType.Info">
                     This session has already started. Hurry up!
@@ -63,18 +63,18 @@ else
                                @onblur="@OnParticipantNameChanged"
                                placeholder="Enter your name, so we know who you are"/>
                     <ValidationMessage For="() => Model.Name"></ValidationMessage>
-                    @if (this.ShowParticipantAlreadyJoinedWarning)
+                    @if (ShowParticipantAlreadyJoinedWarning)
                     {
                         <p class="text-muted small">@Model.Name has already joined the session. If this was not you, please choose a different name.</p>
                     }
                 </div>
 
-                @if (UseOwnColor || this.AvailablePredefinedColors.Count == 0)
+                @if (UseOwnColor || AvailablePredefinedColors.Count == 0)
                 {
                     <div class="mt-3">
                         <label class="form-label" for="pokertime-color">Your custom color</label>
                         <div class="input-group">
-                            <InputText id="pokertime-color" type="color" class="form-control input--pokertime-color" @bind-Value="@Model.Color" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
+                            <InputText id="pokertime-color" type="color" class="form-control input--pokertime-color" @bind-Value="@Model.Color" disabled="@(ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
                         </div>
                         <ValidationMessage For="() => Model.Color"></ValidationMessage>
                     </div>
@@ -86,7 +86,7 @@ else
                         <div class="input-group">
                             <InputSelect @bind-Value="@Model.Color" id="pokertime-color-choices" class="form-control">
                                 <option value="">Select an option</option>
-                                @foreach (AvailableParticipantColorModel color in this.AvailablePredefinedColors)
+                                @foreach (var color in AvailablePredefinedColors)
                                 {
                                     <option style="color: #@color.HexString" value="#@color.HexString">@color.Name</option>
                                 }
@@ -101,7 +101,7 @@ else
 
                 <div class="mt-3">
                     <div class="form-check">
-                        <InputCheckbox class="form-check-input" @bind-Value="@Model.JoiningAsFacilitator" id="pokertime-is-facilitator" disabled="@(this.ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
+                        <InputCheckbox class="form-check-input" @bind-Value="@Model.JoiningAsFacilitator" id="pokertime-is-facilitator" disabled="@(ShowParticipantAlreadyJoinedWarning ? "disabled" : null)"/>
                         <label class="form-check-label" for="pokertime-is-facilitator">
                             I'm the facilitator of this planning poker
                         </label>
@@ -117,7 +117,7 @@ else
                         <p class="text-muted small">You should have set this password yourself. If you've lost it, create a new planning poker instead.</p>
                     </div>
                 }
-                else if (this.SessionInfo.NeedsParticipantPassphrase)
+                else if (SessionInfo.NeedsParticipantPassphrase)
                 {
                     <div class="mt-3">
                         <label class="form-label" for="pokertime-passphrase">Passphrase</label>
@@ -136,7 +136,7 @@ else
         </div>
 
         <div class="col-3">
-            <SessionOnlineList SessionId="@this.SessionId"/>
+            <SessionOnlineList SessionId="@SessionId"/>
         </div>
     </div>
 }
@@ -164,96 +164,96 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        this.SessionInfo = await this.Mediator.Send(new GetJoinPokerSessionInfoQuery {SessionId = this.SessionId});
+        SessionInfo = await Mediator.Send(new GetJoinPokerSessionInfoQuery {SessionId = SessionId});
 
-        if (this.SessionInfo != null)
+        if (SessionInfo != null)
         {
-            this.Layout?.Update(new PokerSessionLayoutInfo(this.SessionInfo.Title));
-            this.AvailablePredefinedColors = await this.Mediator.Send(new GetAvailablePredefinedParticipantColorsQuery(this.SessionId));
+            Layout?.Update(new PokerSessionLayoutInfo(SessionInfo.Title));
+            AvailablePredefinedColors = await Mediator.Send(new GetAvailablePredefinedParticipantColorsQuery(SessionId));
         }
         else
         {
-            this.Layout?.Update(new PokerSessionLayoutInfo("Not found"));
+            Layout?.Update(new PokerSessionLayoutInfo("Not found"));
         }
     }
 
     protected override void OnParametersSet()
     {
-        this.Model.SessionId = this.SessionId;
+        Model.SessionId = SessionId;
     }
 
     private void ChooseOwnColor()
     {
-        this.UseOwnColor = true;
+        UseOwnColor = true;
     }
 
     private async Task OnParticipantNameChanged()
     {
-        if (String.IsNullOrEmpty(this.Model.Name))
+        if (string.IsNullOrEmpty(Model.Name))
         {
             return;
         }
 
-        bool wasShowingParticipantWarning = this.ShowParticipantAlreadyJoinedWarning;
+        var wasShowingParticipantWarning = ShowParticipantAlreadyJoinedWarning;
 
-        ParticipantInfo result = await this.Mediator.Send(new GetParticipantQuery(this.Model.Name, this.SessionId));
-        this.ShowParticipantAlreadyJoinedWarning = result != null;
+        var result = await Mediator.Send(new GetParticipantQuery(Model.Name, SessionId));
+        ShowParticipantAlreadyJoinedWarning = result != null;
 
         if (result != null)
         {
     // Disable controls as the choice has already been made
-            this.Model.JoiningAsFacilitator = result.IsFacilitator;
-            this.UseOwnColor = this.AvailablePredefinedColors.Any(x => x.HasSameColors(result.Color)) == false;
-            this.Model.Color = "#" + result.Color.HexString;
+            Model.JoiningAsFacilitator = result.IsFacilitator;
+            UseOwnColor = AvailablePredefinedColors.Any(x => x.HasSameColors(result.Color)) == false;
+            Model.Color = "#" + result.Color.HexString;
         }
         else if (wasShowingParticipantWarning)
         {
     // Reset form to use normal controls
-            this.UseOwnColor = false;
-            this.Model.Color = null;
-            this.Model.JoiningAsFacilitator = false;
+            UseOwnColor = false;
+            Model.Color = null;
+            Model.JoiningAsFacilitator = false;
         }
     }
 
     private async Task HandleValidSubmit()
     {
-        this.ShowErrorMessage = false;
+        ShowErrorMessage = false;
 
         try
         {
-            this.Model.Color = this.Model.Color?.TrimStart('#');
-            this.Model.Color = this.Model.Color?.Length != 6 ? "CCCCCC" : this.Model.Color;
+            Model.Color = Model.Color?.TrimStart('#');
+            Model.Color = Model.Color?.Length != 6 ? "CCCCCC" : Model.Color;
 
-            await this.Mediator.Send(this.Model);
+            await Mediator.Send(Model);
         }
         catch (Exception ex)
         {
-            this.ShowErrorMessage = true;
+            ShowErrorMessage = true;
 
-            Logger.LogError(ex, $"Error joining planning poker session {this.SessionId} with name {this.Model.Name}");
+            Logger.LogError(ex, $"Error joining planning poker session {SessionId} with name {Model.Name}");
             return;
         }
 
-        this.NavigationManager.NavigateTo("pokertime-session/" + this.SessionId + "/lobby");
+        NavigationManager.NavigateTo("pokertime-session/" + SessionId + "/lobby");
     }
 
     private void HandleInvalidSubmit()
     {
-        this.ShowErrorMessage = false;
+        ShowErrorMessage = false;
     }
 
     public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs)
     {
-        if (eventArgs.SessionId != this.SessionId)
+        if (eventArgs.SessionId != SessionId)
         {
             return Task.CompletedTask;
         }
 
-        return this.InvokeAsync(async () =>
+        return InvokeAsync(async () =>
         {
-            this.AvailablePredefinedColors = await this.Mediator.Send(new GetAvailablePredefinedParticipantColorsQuery(this.SessionId));
+            AvailablePredefinedColors = await Mediator.Send(new GetAvailablePredefinedParticipantColorsQuery(SessionId));
 
-            this.NotificationIsHandled();
+            NotificationIsHandled();
         });
     }
 }

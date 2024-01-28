@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : FakeDbContext.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Support {
+﻿namespace PokerTime.Application.Tests.Unit.Support {
     using System;
     using System.Threading;
     using App.Commands.SeedBaseData;
@@ -14,7 +7,7 @@ namespace PokerTime.Application.Tests.Unit.Support {
 
     public static class ReturnDbContextFactory {
         public static PokerTimeDbContext Create() {
-            DbContextOptions<PokerTimeDbContext> options = new DbContextOptionsBuilder<PokerTimeDbContext>()
+            var options = new DbContextOptionsBuilder<PokerTimeDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 

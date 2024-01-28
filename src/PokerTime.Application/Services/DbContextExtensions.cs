@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : DbContextExtensions.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Services {
+﻿namespace PokerTime.Application.Services {
     using System;
     using System.Linq;
     using System.Threading;

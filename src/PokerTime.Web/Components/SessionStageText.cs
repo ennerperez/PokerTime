@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionStageTitle.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Components {
+﻿namespace PokerTime.Web.Components {
     using Application.Sessions.Queries.GetSessionStatus;
     using Domain.Entities;
     using Microsoft.AspNetCore.Components;
@@ -25,8 +18,8 @@ namespace PokerTime.Web.Components {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Framework infrastructure provides argument")]
         protected override void BuildRenderTree(RenderTreeBuilder builder) {
-            if (this.SessionStatus?.Stage == this.ApplicableTo) {
-                builder.AddContent(0, this.Text);
+            if (SessionStatus?.Stage == ApplicableTo) {
+                builder.AddContent(0, Text);
             }
         }
     }
