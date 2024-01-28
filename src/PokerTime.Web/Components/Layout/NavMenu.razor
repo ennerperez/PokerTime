@@ -1,9 +1,6 @@
+@inject IJSRuntime JsRuntime
+
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item">
-        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-            Home
-        </NavLink>
-    </li>
     <li class="nav-item">
         <NavLink class="nav-link" href="/create-poker-session">
             <span class="icon">
@@ -11,47 +8,38 @@
             </span>&nbsp;<span> Create planning poker session</span>
         </NavLink>
     </li>
-    <li class="nav-item dropdown">
-        <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme (dark)">
-            <svg class="bi my-1 theme-icon-active">
-                <use href="#moon-stars-fill"></use>
-            </svg>
-            <span class="d-lg-none ms-2" id="bd-theme-text">Toggle theme</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-                    <svg class="bi me-2 opacity-50 theme-icon">
-                        <use href="#sun-fill"></use>
-                    </svg>
-                    Light
-                    <svg class="bi ms-auto d-none">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
-                    <svg class="bi me-2 opacity-50 theme-icon">
-                        <use href="#moon-stars-fill"></use>
-                    </svg>
-                    Dark
-                    <svg class="bi ms-auto d-none">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-            <li>
-                <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
-                    <svg class="bi me-2 opacity-50 theme-icon">
-                        <use href="#circle-half"></use>
-                    </svg>
-                    Auto
-                    <svg class="bi ms-auto d-none">
-                        <use href="#check2"></use>
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </li>
 </ul>
+<div class="d-flex">
+    <div class="navbar-item p-0 mx-2">
+        <div class="btn-group dropstart">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-circle-half-stroke me-1"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-start">
+                <li>
+                    <button class="dropdown-item" @onclick="() => SetTheme('L')"><i class="fa-regular fa-sun me-2"></i>Light</button>
+                </li>
+                <li>
+                    <button class="dropdown-item" @onclick="() => SetTheme('D')"><i class="fa-solid fa-moon me-2"></i>Dark</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private void SetTheme(char theme)
+    {
+        switch (theme)
+        {
+            case 'D':
+                JsRuntime.InvokeAsync<string>("setTheme", "dark");
+                break;
+            default:
+                JsRuntime.InvokeAsync<string>("setTheme", "light");
+                break;
+        }
+    }
+}

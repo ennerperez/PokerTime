@@ -37,6 +37,9 @@ namespace PokerTime.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+#if DEBUG
+            services.AddSassCompiler();
+#endif
             // App
             services.AddInfrastructure();
             services.AddPersistence();
@@ -67,7 +70,7 @@ namespace PokerTime.Web
             // Framework
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddValidatorsFromAssembly(typeof(IUrlGenerator).Assembly, ServiceLifetime.Scoped);
+            services.AddValidatorsFromAssembly(typeof(IUrlGenerator).Assembly);
             services.AddDataProtection();
         }
 

@@ -1,6 +1,5 @@
 <Project>
     <PropertyGroup>
-        <OutputPath>../../build/</OutputPath>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 

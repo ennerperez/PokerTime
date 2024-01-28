@@ -14,9 +14,9 @@
         [Test]
         public void InitiateDiscussionStageCommandHandler_InvalidSessionId_ThrowsNotFoundException() {
             // Given
-            const string sessionId = "not found surely :)";
+            const string SessionId = "not found surely :)";
             var handler = new InitiateDiscussionStageCommandHandler(Context, SessionStatusUpdateDispatcherMock);
-            var request = new InitiateDiscussionStageCommand { SessionId = sessionId };
+            var request = new InitiateDiscussionStageCommand { SessionId = SessionId };
 
             // When
             TestDelegate action = () => handler.Handle(request, CancellationToken.None).GetAwaiter().GetResult();

@@ -297,7 +297,7 @@
                 responseProcessor.Invoke(r);
                 return Task.CompletedTask;
             });
-        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => EnqueueMediatorAction<TResponse>(null, requestFunc, responseProcessor);
+        private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Func<TResponse, Task> responseProcessor) => EnqueueMediatorAction(null, requestFunc, responseProcessor);
         private TestCaseBuilder EnqueueMediatorAction<TResponse>(Func<IRequest<TResponse>> requestFunc, Action<TResponse> responseProcessor) =>
             EnqueueMediatorAction(requestFunc, r => {
                 responseProcessor.Invoke(r);

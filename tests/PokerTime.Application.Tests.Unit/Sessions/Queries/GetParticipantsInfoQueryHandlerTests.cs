@@ -13,8 +13,8 @@
         [Test]
         public async Task GetParticipantsInfoCommand_ReturnsEmptyList_OnSessionNotFound() {
             // Given
-            const string sessionId = "surely-not-found";
-            var query = new GetParticipantsInfoQuery(sessionId);
+            const string SessionId = "surely-not-found";
+            var query = new GetParticipantsInfoQuery(SessionId);
             var handler = new GetParticipantsInfoQueryHandler(Context, Mapper);
 
             // When

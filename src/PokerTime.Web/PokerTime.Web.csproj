@@ -1,56 +1,69 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <KeepOutputPath>True</KeepOutputPath>
-    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-    <LangVersion>default</LangVersion>
-  </PropertyGroup>
-  
-  <Import Project="../Common.props" />
+    <PropertyGroup>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
-    <PackageReference Update="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
-    <PackageReference Update="Microsoft.AspNetCore.Components.Analyzers" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
+    <Import Project="../Common.props"/>
 
-    <PackageReference Include="NReco.Logging.File" Version="1.2.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <ItemGroup>
+        <PackageReference Include="AspNetCore.SassCompiler" Version="1.69.5" />
+        <PackageReference Include="BuildBundlerMinifierPlus" Version="5.3.0" />
+        <PackageReference Include="Blazored.FluentValidation" Version="2.1.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Analyzers" Version="8.0.1"/>
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
+        <PackageReference Include="NReco.Logging.File" Version="1.2.0"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
+        <PackageReference Include="Scrutor" Version="4.2.2"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1"/>
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0"/>
+        <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2"/>
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0"/>
+        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0"/>
+        <PackageReference Include="SkiaSharp" Version="2.88.7"/>
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7"/>
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7"/>
+    </ItemGroup>
 
-    <!--Scrutor provides decorator abilities for IServiceCollection -->
-    <PackageReference Include="Scrutor" Version="4.2.2" />
-    
-    <!-- Serilog -->
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
-    <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
-    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
-    <PackageReference Include="SkiaSharp" Version="2.88.7" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\PokerTime.Common\PokerTime.Common.csproj"/>
+        <ProjectReference Include="..\PokerTime.Infrastructure\PokerTime.Infrastructure.csproj"/>
+        <ProjectReference Include="..\PokerTime.Persistence\PokerTime.Persistence.csproj"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PokerTime.Common\PokerTime.Common.csproj" />
-    <ProjectReference Include="..\PokerTime.Infrastructure\PokerTime.Infrastructure.csproj" />
-    <ProjectReference Include="..\PokerTime.Persistence\PokerTime.Persistence.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="wwwroot\**\*;node_modules\**\*"/>
+        <TypeScriptCompile Remove="wwwroot\**\*;node_modules\**\*"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="wwwroot\**\*;node_modules\**\*" />
-    <TypeScriptCompile Remove="wwwroot\**\*;node_modules\**\*" />
-  </ItemGroup>
+    <ItemGroup>
+        <Watch Include="**\*.razor"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Watch Include="**\*.razor" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Update="appsettings.*.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.*.json">
-      <DependentUpon>appsettings.json</DependentUpon>
-    </Content>
-  </ItemGroup>
-  
+    <ItemGroup>
+      <None Include="wwwroot\js\main.js" />
+      <None Include="wwwroot\scss\main.scss" />
+      <None Include="wwwroot\scss\_blazor-integration.scss" />
+      <None Include="wwwroot\scss\_common.scss" />
+      <None Include="wwwroot\scss\_estimated-card.scss" />
+      <None Include="wwwroot\scss\_online-list.scss" />
+      <None Include="wwwroot\scss\_poker-card.scss" />
+      <None Include="wwwroot\scss\_poker-progress.scss" />
+      <None Include="wwwroot\scss\_poker-status-panel.scss" />
+      <None Include="wwwroot\scss\_preview-card.scss" />
+      <None Include="wwwroot\scss\_reveal.scss" />
+      <None Include="wwwroot\scss\_session-overview-table.scss" />
+      <None Include="wwwroot\scss\_user-card.scss" />
+    </ItemGroup>
+
 </Project>

@@ -14,8 +14,8 @@
         [Test]
         public void GetEstimationsQueryHandlerTests_ThrowsNotFoundException_WhenSessionNotFound() {
             // Given
-            const string sessionId = "surely-not-found";
-            var query = new GetEstimationsQuery(sessionId, 3);
+            const string SessionId = "surely-not-found";
+            var query = new GetEstimationsQuery(SessionId, 3);
             var handler = new GetEstimationsQueryHandler(Context, Mapper);
 
             // When

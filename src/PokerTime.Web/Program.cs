@@ -37,6 +37,14 @@
             // Initialize Logger
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(config).CreateLogger();
 
+#if DEBUG
+            var darts = System.Diagnostics.Process.GetProcessesByName("dart");
+            foreach (var process in darts)
+            {
+                process.Kill();
+            }
+#endif
+
             var host = CreateWebHostBuilder(args: args).Build();
 
             using (var scope = host.Services.CreateScope())
@@ -126,14 +134,14 @@
         {
             if (cfg == null) throw new ArgumentNullException(nameof(cfg));
 
-            const string configFileName = "config";
-            const string iniFileExt = "ini";
-            const string jsonFileExt = "json";
+            const string ConfigFileName = "config";
+            const string IniFileExt = "ini";
+            const string JsonFileExt = "json";
 
             string MakeFilePath(string extension)
             {
                 return EmitConfigSearchMessage(
-                    EnvironmentPath.CreatePath(Path.ChangeExtension(configFileName, extension)));
+                    EnvironmentPath.CreatePath(Path.ChangeExtension(ConfigFileName, extension)));
             }
 
             string EmitConfigSearchMessage(string path)
@@ -142,8 +150,8 @@
                 return path;
             }
 
-            cfg.AddJsonFile(MakeFilePath(jsonFileExt), true);
-            cfg.AddIniFile(MakeFilePath(iniFileExt), true);
+            cfg.AddJsonFile(MakeFilePath(JsonFileExt), true);
+            cfg.AddIniFile(MakeFilePath(IniFileExt), true);
         }
 
         private static void ConfigureServerOptions(WebHostBuilderContext wc, IServiceCollection sc)

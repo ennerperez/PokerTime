@@ -1,6 +1,6 @@
 services:
-  instance:
-    container_name: PokerTime.Web
+  PokerTimeWeb:
+    container_name: PokerTimeWeb
     build:
       context: .
       dockerfile: src/PokerTime.Web/Dockerfile

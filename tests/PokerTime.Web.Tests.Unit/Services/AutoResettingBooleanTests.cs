@@ -7,20 +7,20 @@
         [Test]
         public void AutoResettingBoolean_NoIntervention_GetsInitialValue() {
             // Given
-            const bool initialValue = true;
-            var resettingBoolean = new AutoResettingBoolean(initialValue);
+            const bool InitialValue = true;
+            var resettingBoolean = new AutoResettingBoolean(InitialValue);
 
             // When / then
             for (var i = 0; i < 10; i++) {
-                Assert.That(resettingBoolean.GetValue, Is.EqualTo(initialValue));
+                Assert.That(resettingBoolean.GetValue, Is.EqualTo(InitialValue));
             }
         }
 
         [Test]
         public void AutoResettingBoolean_WhenSet_ResetsToInitialValue() {
             // Given
-            const bool initialValue = true;
-            var resettingBoolean = new AutoResettingBoolean(initialValue);
+            const bool InitialValue = true;
+            var resettingBoolean = new AutoResettingBoolean(InitialValue);
 
             // When
             resettingBoolean.Set();

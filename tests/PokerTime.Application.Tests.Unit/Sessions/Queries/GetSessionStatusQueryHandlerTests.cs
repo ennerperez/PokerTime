@@ -14,8 +14,8 @@
         [Test]
         public void GetSessionStatusCommand_ThrowsNotFoundException_WhenNotFound() {
             // Given
-            const string sessionId = "surely-not-found";
-            var query = new GetSessionStatusQuery(sessionId);
+            const string SessionId = "surely-not-found";
+            var query = new GetSessionStatusQuery(SessionId);
             var handler = new GetSessionStatusQueryHandler(Context, Substitute.For<ISessionStatusMapper>());
 
             // When

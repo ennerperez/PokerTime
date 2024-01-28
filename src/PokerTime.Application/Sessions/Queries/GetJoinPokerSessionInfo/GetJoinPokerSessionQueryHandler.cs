@@ -21,8 +21,8 @@
         public async Task<JoinPokerSessionInfo> Handle(GetJoinPokerSessionInfoQuery request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var Session = await _dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
-            if (Session == null) {
+            var session = await _dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            if (session == null) {
                 _logger.LogWarning($"Session with id {request.SessionId} was not found");
 
                 return null;
@@ -30,10 +30,10 @@
 
             _logger.LogInformation($"Session with id {request.SessionId} was found");
             return new JoinPokerSessionInfo(
-                Session.Title,
-                Session.HashedPassphrase != null,
-                Session.IsStarted(),
-                Session.CurrentStage == SessionStage.Finished);
+                session.Title,
+                session.HashedPassphrase != null,
+                session.IsStarted(),
+                session.CurrentStage == SessionStage.Finished);
         }
     }
 }

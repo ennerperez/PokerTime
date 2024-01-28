@@ -1,13 +1,13 @@
 @using System.Reflection
 @{
-    Assembly currentAssembly = typeof(Startup).Assembly;
+    var currentAssembly = typeof(Startup).Assembly;
 
-    string version = currentAssembly.GetName().Version?.ToString(3) ?? ThisAssembly.AssemblyVersion;
-    string uniqueVersionId = ThisAssembly.AssemblyInformationalVersion;
+    var version = currentAssembly.GetName().Version?.ToString(3) ?? ThisAssembly.AssemblyVersion;
+    var uniqueVersionId = ThisAssembly.AssemblyInformationalVersion;
 }
 
 <footer class="d-none d-sm-block mt-5">
-    <nav class="navbar navbar-light bg-light fixed-bottom border-top pb-2">
+    <nav class="navbar fixed-bottom border-top pb-2 bg-body-tertiary">
         <div class="container-fluid">
             <span class="navbar-text p-0 m-0">
                 <span title="@uniqueVersionId">
@@ -15,13 +15,15 @@
                 </span> by <a href="https://damsteen.nl/">Sebastiaan Dammann</a>
                 Refresh by <a href="https://ennerperez.dev/">Enner Pérez</a>
             </span>
-            <span class="navbar-text p-0 m-0">
-                <a href="https://github.com/ennerperez/PokerTime" target="_blank" class="footer__gh-link">
-                    <span class="icon">
-                        <span class="fab fa-github"></span>
-                    </span>
-                </a>
-            </span>
+            <div class="d-flex">
+                <span class="navbar-text p-0 m-0">
+                    <a href="https://github.com/ennerperez/PokerTime" target="_blank" class="mx-1">
+                        <span class="icon">
+                            <span class="fab fa-github"></span>
+                        </span>
+                    </a>
+                </span>
+            </div>
         </div>
     </nav>
 </footer>

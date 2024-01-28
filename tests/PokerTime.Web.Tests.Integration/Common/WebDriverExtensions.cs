@@ -153,7 +153,7 @@
         public static void ExecuteDragAndDrop(this IWebDriver webDriver, IWebElement from, IWebElement dest) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
             // https://gist.github.com/druska/624501b7209a74040175#file-native_js_drag_and_drop_helper-js
-            const string script = @"
+            const string Script = @"
 
 function simulateDragDrop(sourceNode, destinationNode) {
     var EVENT_TYPES = {
@@ -201,7 +201,7 @@ function simulateDragDrop(sourceNode, destinationNode) {
 
 simulateDragDrop(arguments[0], arguments[1]);";
 
-            webDriver.ExecuteJavaScript(script, from, dest);
+            webDriver.ExecuteJavaScript(Script, from, dest);
         }
     }
 }

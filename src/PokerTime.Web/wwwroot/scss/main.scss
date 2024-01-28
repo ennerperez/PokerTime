@@ -7,25 +7,8 @@ $navbar-background-color: $beige-light;
 $body-background-color: $beige-lighter;
 $box-radius: 4px;
 
-// Import font awesome
-$fa-font-path: '/build/fonts';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/regular.scss';
-@import '../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
-
 // Import Bootstrap
-@import "../node_modules/bootstrap/scss/bootstrap";
-
-//// Import bulma
-//@import '../node_modules/bulma/sass/utilities/_all';
-//@import '../node_modules/bulma/sass/base/_all';
-//@import '../node_modules/bulma/sass/elements/_all';
-//@import '../node_modules/bulma/sass/form/_all';
-//@import '../node_modules/bulma/sass/components/_all';
-//@import '../node_modules/bulma/sass/grid/_all';
-//@import '../node_modules/bulma/sass/helpers/_all';
-//@import '../node_modules/bulma/sass/layout/_all';
+@import "../lib/bootstrap/scss/bootstrap";
 
 // Vars
 $reveal-shadow-color: yellow;
@@ -36,11 +19,11 @@ $poker-card-shadow-color: #666;
 $poker-card-shadow-size: 2px;
 $poker-card-shadow-spread: 8px;
 
-$bg-body: #eff0eb;
-
-body {
-    background-color: $bg-body !important;
-}
+//$bg-body: #eff0eb;
+//
+//body {
+//    background-color: $bg-body !important;
+//}
 
 #main-content{
     margin-top: 2em;

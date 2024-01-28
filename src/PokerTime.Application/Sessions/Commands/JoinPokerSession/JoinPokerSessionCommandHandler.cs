@@ -31,10 +31,10 @@
 
         public async Task<ParticipantInfo> Handle(JoinPokerSessionCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            var Session = await _pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            var session = await _pokerTimeDbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
 
-            if (Session == null) {
-                throw new NotFoundException(nameof(Session), request.SessionId);
+            if (session == null) {
+                throw new NotFoundException(nameof(session), request.SessionId);
             }
 
             // Create domain object
@@ -42,7 +42,7 @@
 
             participant.IsFacilitator = request.JoiningAsFacilitator;
             participant.Name = request.Name;
-            participant.Session = Session;
+            participant.Session = session;
             participant.Color = new ParticipantColor {
                 R = byte.Parse(request.Color[0..2], NumberStyles.AllowHexSpecifier, Culture.Invariant),
                 G = byte.Parse(request.Color[2..4], NumberStyles.AllowHexSpecifier, Culture.Invariant),

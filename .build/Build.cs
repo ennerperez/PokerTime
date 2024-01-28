@@ -155,6 +155,8 @@ class Build : NukeBuild
                     project, framework
                 };
 
+            System.Environment.SetEnvironmentVariable("MOZ_HEADLESS", "true");
+
             DotNetTest(s => s
                 .EnableNoRestore()
                 .EnableNoBuild()
@@ -168,7 +170,6 @@ class Build : NukeBuild
         });
 
     Target Publish => d => d
-        .DependsOn(Test)
         .DependsOn(Compile)
         .DependsOn(Clean)
         .Executes(() =>

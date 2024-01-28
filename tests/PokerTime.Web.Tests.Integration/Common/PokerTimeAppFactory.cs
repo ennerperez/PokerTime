@@ -45,20 +45,19 @@
 
 
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MOZ_HEADLESS"))) {
-                const int windowWidth = 1600, windowHeight = 900;
+                const int WindowWidth = 1600, WindowHeight = 900;
                 TestContext.WriteLine("Going to run Chrome headless");
                 webDriverOptions.AddArgument("headless");
                 webDriverOptions.AddArguments("disable-gpu");
 
-                TestContext.WriteLine($"Going to run Chrome at {windowWidth}x{windowHeight}");
-                webDriverOptions.AddArgument($"window-size={windowWidth},{windowHeight}");
+                TestContext.WriteLine($"Going to run Chrome at {WindowWidth}x{WindowHeight}");
+                webDriverOptions.AddArgument($"window-size={WindowWidth},{WindowHeight}");
                 webDriverOptions.AddArgument("shm-size=1gb");
             }
             else
             {
                 webDriverOptions.AddArgument("start-maximized");
             }
-            webDriverOptions.AddArgument("zoom=50%");
 
             var webDriver = new ChromeDriver(webDriverOptions);
 
