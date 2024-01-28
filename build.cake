@@ -431,20 +431,20 @@ TestTask("Unit-Domain", $"{baseName}.Domain.Tests.Unit");
 TestTask("Unit-Web", $"{baseName}.Web.Tests.Unit");
 TestTask("Integration-Web", $"{baseName}.Web.Tests.Integration");
 
-Task("Test-PreReq-Playwright-Browser-Deps")
-    .Description("Prepare playwright")
-	.IsDependentOn("Build")
-	.Does(() => {
-	DotNetTool(".", "playwright", "install-deps firefox chromium");
-});
+// Task("Test-PreReq-Playwright-Browser-Deps")
+//     .Description("Prepare playwright")
+// 	.IsDependentOn("Build")
+// 	.Does(() => {
+// 	DotNetTool(".", "playwright", "install-deps firefox chromium");
+// });
 
-Task("Test-PreReq-Playwright-Browser")
-    .Description("Prepare playwright")
-	.IsDependentOn("Test-PreReq-Playwright-Browser-Deps")
-	.IsDependeeOf("Test-CS-Integration-Web")
-	.Does(() => {
-	DotNetTool(".", "playwright", "install firefox chromium");
-});
+// Task("Test-PreReq-Playwright-Browser")
+//     .Description("Prepare playwright")
+// 	//.IsDependentOn("Test-PreReq-Playwright-Browser-Deps")
+// 	.IsDependeeOf("Test-CS-Integration-Web")
+// 	.Does(() => {
+// 	DotNetTool(".", "playwright", "install firefox chromium");
+// });
 
 Task("Test-CS")
     .Description("Test backend-end compiled code");
