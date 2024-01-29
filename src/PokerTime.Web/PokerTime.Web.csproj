@@ -52,20 +52,4 @@
         </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <None Include="wwwroot\js\main.js" />
-      <None Include="wwwroot\scss\main.scss" />
-      <None Include="wwwroot\scss\_blazor-integration.scss" />
-      <None Include="wwwroot\scss\_common.scss" />
-      <None Include="wwwroot\scss\_estimated-card.scss" />
-      <None Include="wwwroot\scss\_online-list.scss" />
-      <None Include="wwwroot\scss\_poker-card.scss" />
-      <None Include="wwwroot\scss\_poker-progress.scss" />
-      <None Include="wwwroot\scss\_poker-status-panel.scss" />
-      <None Include="wwwroot\scss\_preview-card.scss" />
-      <None Include="wwwroot\scss\_reveal.scss" />
-      <None Include="wwwroot\scss\_session-overview-table.scss" />
-      <None Include="wwwroot\scss\_user-card.scss" />
-    </ItemGroup>
-
 </Project>
