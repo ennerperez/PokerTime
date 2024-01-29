@@ -1,100 +1,138 @@
 $poker-progress-arrow-width: 12px;
-$poker-progress-arrow-height-modifier: calc(48px/2);
+$poker-progress-arrow-height-modifier: calc(48px / 2);
 $poker-progress-active-color: $gray-400;
 $poker-progress-previous-color: $gray-200;
 
+$poker-progress-active-color-dark: $gray-800;
+$poker-progress-previous-color-dark: $gray-900;
+
 .poker-title {
-    font-weight: bold;
-    font-size: 1.3rem;
+  font-weight: bold;
+  font-size: 1.3rem;
 }
 
 .poker-progress-container {
-    align-self: stretch;
+  align-self: stretch;
 }
 
 .poker-progress {
+  height: 100%;
+  cursor: default;
+  user-select: none;
+  margin-right: 1rem;
+
+  transition: opacity ease 500ms;
+  opacity: 1;
+
+  &--inactive {
+    opacity: 0;
+  }
+
+  &__item {
+    display: inline-flex;
+    position: relative;
+    align-content: center;
     height: 100%;
-    cursor: default;
-    user-select: none;
-    margin-right: 1rem;
+    padding: 0.25rem (2 * $poker-progress-arrow-width);
+    padding-left: (3 * $poker-progress-arrow-width);
+    margin-right: -$poker-progress-arrow-width;
+    transition-property: background-color, color;
+    transition-timing-function: ease;
+    transition-duration: 500ms;
 
-    transition: opacity ease 500ms;
-    opacity: 1;
-
-    &--inactive {
-        opacity: 0;
+    &::after,
+    &::before {
+      position: absolute;
+      top: 0;
+      border: 0 solid transparent;
+      border-top-width: $poker-progress-arrow-height-modifier;
+      border-bottom-width: $poker-progress-arrow-height-modifier;
+      border-left-width: $poker-progress-arrow-width;
+      display: block;
+      content: '';
+      transition-property: border-left-color, border-right-color;
+      transition-timing-function: ease;
+      transition-duration: 500ms;
     }
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: (-1 * $poker-progress-arrow-width);
+    }
+
+    &--is-current{
+      &::before {
+        border-left-color: transparent;
+      }
+    }
+
+    &--future {
+      background-color: inherit;
+      color: inherit;
+    }
+
+    &:last-child::after {
+      display: none;
+    }
+  }
+}
+
+@include color-mode(light) {
+  .poker-progress {
 
     &__item {
-        display: inline-flex;
-        position: relative;
-        align-content: center;
-        height: 100%;
-        padding: 0.25rem (2 * $poker-progress-arrow-width);
-        padding-left: (3 * $poker-progress-arrow-width);
-        margin-right: -$poker-progress-arrow-width;
-        transition-property: background-color, color;
-        transition-timing-function: ease;
-        transition-duration: 500ms;
 
-        &::after,
-        &::before {
-            position: absolute;
-            top: 0;
-            border: 0 solid transparent;
-            border-top-width: $poker-progress-arrow-height-modifier;
-            border-bottom-width: $poker-progress-arrow-height-modifier;
-            border-left-width: $poker-progress-arrow-width;
-            display: block;
-            content: '';
-            transition-property: border-left-color, border-right-color;
-            transition-timing-function: ease;
-            transition-duration: 500ms;
-        }
-
-        &::before {
-            left: 0;
-        }
+      &--is-current {
+        background-color: $poker-progress-active-color;
+        color: $white;
 
         &::after {
-            right: (-1 * $poker-progress-arrow-width);
+          border-left-color: $poker-progress-active-color;
         }
+      }
 
-        &--is-current {
-            background-color: $poker-progress-active-color;
-            color: $white;
+      &--is-previous {
+        background-color: $poker-progress-previous-color;
 
-            &::after {
-                border-left-color: $poker-progress-active-color;
-            }
+        &::after {
+          border-left-color: $poker-progress-active-color;
         }
-
-        &--is-current + &::before {
-            border-left-color: transparent;
+        &::before {
+          border-left-color: $poker-progress-previous-color;
         }
-
-        &--is-previous {
-            background-color: $poker-progress-previous-color;
-
-            &::after {
-                border-left-color: $poker-progress-previous-color;
-            }
-        }
-
-        &--is-previous + &::before {
-            border-left-color: $poker-progress-previous-color;
-        }
-
-        &--future {
-            background-color: inherit;
-            color: inherit;
-
-            &::after {
-            }
-        }
-
-        &:last-child::after {
-            display: none;
-        }
+      }
     }
+  }
+}
+
+@include color-mode(dark) {
+  .poker-progress {
+
+    &__item {
+
+      &--is-current {
+        background-color: $poker-progress-active-color-dark;
+        color: $black;
+
+        &::after {
+          border-left-color: $poker-progress-active-color-dark;
+        }
+      }
+
+      &--is-previous {
+        background-color: $poker-progress-previous-color-dark;
+
+        &::after {
+          border-left-color: $poker-progress-active-color-dark;
+        }
+        &::before {
+          border-left-color: $poker-progress-previous-color-dark;
+        }
+      }
+
+    }
+  }
 }
