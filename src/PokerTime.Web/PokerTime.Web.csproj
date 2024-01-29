@@ -2,6 +2,9 @@
     <PropertyGroup>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <LangVersion>default</LangVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <Deterministic>false</Deterministic>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <Import Project="../Common.props"/>
@@ -12,7 +15,6 @@
         <PackageReference Include="Blazored.FluentValidation" Version="2.1.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.Analyzers" Version="8.0.1"/>
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
         <PackageReference Include="NReco.Logging.File" Version="1.2.0"/>

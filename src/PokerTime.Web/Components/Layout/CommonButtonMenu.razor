@@ -1,16 +1,14 @@
 @using System.Reflection
 @{
     var currentAssembly = typeof(Startup).Assembly;
-
-    var version = currentAssembly.GetName().Version?.ToString(3) ?? ThisAssembly.AssemblyVersion;
-    var uniqueVersionId = ThisAssembly.AssemblyInformationalVersion;
+    var version = currentAssembly.GetName().Version?.ToString(3);
 }
 
 <footer class="d-none d-sm-block mt-5">
     <nav class="navbar fixed-bottom border-top pb-2 bg-body-tertiary">
         <div class="container-fluid">
             <span class="navbar-text p-0 m-0">
-                <span title="@uniqueVersionId">
+                <span>
                     <strong>PokerTime</strong> v@(version)
                 </span> by <a href="https://damsteen.nl/">Sebastiaan Dammann</a>
                 Refresh by <a href="https://ennerperez.dev/">Enner Pérez</a>
