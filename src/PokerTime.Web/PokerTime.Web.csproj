@@ -10,25 +10,26 @@
     <Import Project="../Common.props"/>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.SassCompiler" Version="1.69.5" />
+        <PackageReference Include="AspNetCore.SassCompiler" Version="1.79.5" />
         <PackageReference Include="BuildBundlerMinifierPlus" Version="5.3.0" />
-        <PackageReference Include="Blazored.FluentValidation" Version="2.1.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Analyzers" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0"/>
-        <PackageReference Include="NReco.Logging.File" Version="1.2.0"/>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Analyzers" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+        <PackageReference Include="NReco.Logging.File" Version="1.2.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
-        <PackageReference Include="Scrutor" Version="4.2.2"/>
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1"/>
-        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0"/>
-        <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2"/>
-        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0"/>
-        <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0"/>
-        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0"/>
-        <PackageReference Include="SkiaSharp" Version="2.88.7"/>
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7"/>
-        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.7"/>
+        <PackageReference Include="Scrutor" Version="6.0.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+        <PackageReference Include="Serilog.Enrichers.Process" Version="3.0.0" />
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+        <PackageReference Include="SkiaSharp" Version="3.116.1" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
     </ItemGroup>
 
     <ItemGroup>
