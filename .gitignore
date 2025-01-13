@@ -586,6 +586,7 @@ package-lock.json
 [Oo]utput
 [Ss]cripts
 [Tt]ests/[Rr]esults
+[Bb]uild
 
 # LibraryManager
 **/lib
