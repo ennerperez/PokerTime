@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SecurityValidator.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Security {
+﻿namespace PokerTime.Application.Common.Security {
     using System;
     using System.Threading.Tasks;
     using Abstractions;
@@ -24,33 +17,33 @@ namespace PokerTime.Application.Common.Security {
         private readonly ILogger<SecurityValidator> _logger;
 
         public SecurityValidator(ICurrentParticipantService currentParticipantService, ILogger<SecurityValidator> logger) {
-            this._currentParticipantService = currentParticipantService;
-            this._logger = logger;
+            _currentParticipantService = currentParticipantService;
+            _logger = logger;
         }
 
         public async ValueTask EnsureOperation(Session session, SecurityOperation operation, object entity) {
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            CurrentParticipantModel participant = await this.GetAuthenticatedParticipant(operation, entity.GetType());
+            var participant = await GetAuthenticatedParticipant(operation, entity.GetType());
 
             if (operation == SecurityOperation.AddOrUpdate || operation == SecurityOperation.Delete) {
-                this.EnsureOperationSecurity(operation, entity, participant);
+                EnsureOperationSecurity(operation, entity, participant);
             }
 
-            this.InvokeTypeSecurityChecks(operation, session, participant, entity);
+            InvokeTypeSecurityChecks(operation, session, participant, entity);
         }
 
         private async ValueTask<CurrentParticipantModel> GetAuthenticatedParticipant(SecurityOperation operation, Type entityType) {
-            CurrentParticipantModel participant = await this._currentParticipantService.GetParticipant();
+            var participant = await _currentParticipantService.GetParticipant();
 
             static void ThrowSecurityException(string message) {
                 throw new OperationSecurityException(message);
             }
 
             if (participant.IsAuthenticated == false) {
-                string message = $"Operation {operation} on type {entityType} not allowed: user is not authenticated.";
-                this._logger.LogError(message);
+                var message = $"Operation {operation} on type {entityType} not allowed: user is not authenticated.";
+                _logger.LogError(message);
 
                 ThrowSecurityException(message);
             }
@@ -65,9 +58,9 @@ namespace PokerTime.Application.Common.Security {
         ) {
             if (entity is IOwnedByParticipant ownedEntity) {
                 if (participant.Id != ownedEntity.ParticipantId && ownedEntity.ParticipantId != 0) {
-                    string message =
+                    var message =
                         $"Operation '{operation}': Not allowed - entity is owned by participant {ownedEntity.ParticipantId}. Operation is performed by {participant.Id} ({participant.Name})";
-                    this._logger.LogError(message);
+                    _logger.LogError(message);
 
                     throw new OperationSecurityException(message);
                 }
@@ -78,14 +71,14 @@ namespace PokerTime.Application.Common.Security {
             try {
                 SecurityTypeHandlers.HandleOperation(operation, session, entity, participant);
 
-                if (this._logger.IsEnabled(LogLevel.Trace)) {
-                    this._logger.LogTrace($"Operation {operation} granted for entity {entity.GetType()} for participant #{participant.Id}");
+                if (_logger.IsEnabled(LogLevel.Trace)) {
+                    _logger.LogTrace($"Operation {operation} granted for entity {entity.GetType()} for participant #{participant.Id}");
                 }
             }
             catch (OperationSecurityException ex) {
-                string message =
+                var message =
                     $"Failure asserting operation '{operation}' for entity {entity.GetType()} for participant #{participant.Id} ({participant.Name})";
-                this._logger.LogError(ex, message);
+                _logger.LogError(ex, message);
 
                 throw new OperationSecurityException(message, ex);
             }

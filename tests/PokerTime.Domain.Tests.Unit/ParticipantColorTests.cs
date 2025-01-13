@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ParticipantColorTests.cs
-//  Project         : PokerTime.Domain.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Domain.Tests.Unit {
+﻿namespace PokerTime.Domain.Tests.Unit {
     using System.Drawing;
     using Domain.ValueObjects;
     using NUnit.Framework;
@@ -15,7 +8,7 @@ namespace PokerTime.Domain.Tests.Unit {
         [Test]
         public static void ParticipantColor_FromColor_AssignsComponentsCorrectly() {
             // Given
-            Color source = Color.BlueViolet;
+            var source = Color.BlueViolet;
 
             // When
             ParticipantColor target = source;
@@ -29,11 +22,11 @@ namespace PokerTime.Domain.Tests.Unit {
         [Test]
         public static void ParticipantColor_ToHex_FormatsCorrectly() {
             // Given
-            Color source = Color.BlueViolet;
+            var source = Color.BlueViolet;
             ParticipantColor target = source;
 
             // When
-            string hexStr = target.ToHex();
+            var hexStr = target.ToHex();
 
             // Then
             Assert.That(hexStr, Is.EqualTo("8A2BE2"));

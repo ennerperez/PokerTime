@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetEstimationsQueryHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Estimations.Queries {
+﻿namespace PokerTime.Application.Estimations.Queries {
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,16 +17,16 @@ namespace PokerTime.Application.Estimations.Queries {
         private readonly IMapper _mapper;
 
         public GetEstimationsQueryHandler(IPokerTimeDbContextFactory dbContextFactory, IMapper mapper) {
-            this._dbContextFactory = dbContextFactory;
-            this._mapper = mapper;
+            _dbContextFactory = dbContextFactory;
+            _mapper = mapper;
         }
 
         public async Task<GetEstimationsQueryResponse> Handle(GetEstimationsQuery request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
+            using var dbContext = _dbContextFactory.CreateForEditContext();
 
-            UserStory userStory = await dbContext.UserStories.
+            var userStory = await dbContext.UserStories.
                 Where(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId).
                 FirstOrDefaultAsync(cancellationToken);
 
@@ -41,7 +34,7 @@ namespace PokerTime.Application.Estimations.Queries {
                 throw new NotFoundException(nameof(UserStory), request.UserStoryId);
             }
 
-            List<Estimation> estimations = await
+            var estimations = await
                 dbContext.Estimations
                     .Include(x => x.Participant)
                     .Include(x => x.Symbol)
@@ -49,7 +42,7 @@ namespace PokerTime.Application.Estimations.Queries {
                     .ToListAsync(cancellationToken);
 
             var response = new GetEstimationsQueryResponse(
-                this._mapper.Map<List<EstimationModel>>(estimations)
+                _mapper.Map<List<EstimationModel>>(estimations)
             );
 
             return response;

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ColorModelTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Common.Models {
+﻿namespace PokerTime.Application.Tests.Unit.Common.Models {
     using System.Drawing;
     using Application.Common.Models;
     using NUnit.Framework;
@@ -19,7 +12,7 @@ namespace PokerTime.Application.Tests.Unit.Common.Models {
             var color = new ColorModel { R = derivedColor.R, B = derivedColor.B, G = derivedColor.G };
 
             // When
-            bool result = color.HasSameColors(derivedColor);
+            var result = color.HasSameColors(derivedColor);
 
             // Then
             Assert.That(result, Is.True);
@@ -34,7 +27,7 @@ namespace PokerTime.Application.Tests.Unit.Common.Models {
             derivedColor.G = 0;
 
             // When
-            bool result = color.HasSameColors(derivedColor);
+            var result = color.HasSameColors(derivedColor);
 
             // Then
             Assert.That(result, Is.False);
@@ -44,10 +37,10 @@ namespace PokerTime.Application.Tests.Unit.Common.Models {
             public string KnownName { get; }
 
             public DerivedColorModel(Color color) {
-                this.KnownName = color.Name;
-                this.R = color.R;
-                this.G = color.G;
-                this.B = color.B;
+                KnownName = color.Name;
+                R = color.R;
+                G = color.G;
+                B = color.B;
             }
         }
     }

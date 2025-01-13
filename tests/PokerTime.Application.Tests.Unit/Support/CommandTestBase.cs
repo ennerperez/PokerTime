@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : CommandTestBase.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Support {
+﻿namespace PokerTime.Application.Tests.Unit.Support {
     using System;
     using Persistence;
 
@@ -14,11 +7,11 @@ namespace PokerTime.Application.Tests.Unit.Support {
         protected PokerTimeDbContext Context { get; }
 
         public CommandTestBase() {
-            this.Context = ReturnDbContextFactory.Create();
+            Context = ReturnDbContextFactory.Create();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "Not necessary for test")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "Not necessary for test")]
-        public void Dispose() => ReturnDbContextFactory.Destroy(this.Context);
+        public void Dispose() => ReturnDbContextFactory.Destroy(Context);
     }
 }

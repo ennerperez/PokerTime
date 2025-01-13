@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : CreatePokerSessionCommandHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
     using System;
     using System.Linq;
     using System.Threading;
@@ -29,7 +22,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             var passphraseService = Substitute.For<IPassphraseService>();
             var systemClock = Substitute.For<ISystemClock>();
             var urlGenerator = Substitute.For<IUrlGenerator>();
-            var handler = new CreatePokerSessionCommandHandler(this.Context, passphraseService, systemClock, urlGenerator, new NullLogger<CreatePokerSessionCommandHandler>());
+            var handler = new CreatePokerSessionCommandHandler(Context, passphraseService, systemClock, urlGenerator, new NullLogger<CreatePokerSessionCommandHandler>());
 
             passphraseService.CreateHashedPassphrase("anything").Returns("myhash");
             passphraseService.CreateHashedPassphrase("facilitator password").Returns("facilitatorhash");
@@ -42,8 +35,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             {
                 Name = "Test123"
             };
-            this.Context.SymbolSets.Add(symbolSet);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            Context.SymbolSets.Add(symbolSet);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             var request = new CreatePokerSessionCommand {
                 Passphrase = "anything",
@@ -53,13 +46,13 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             };
 
             // When
-            CreatePokerSessionCommandResponse result = await handler.Handle(request, CancellationToken.None);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             // Then
             Assert.That(result.Identifier.StringId, Is.Not.Null);
-            Assert.That(this.Context.Sessions.Any(), Is.True);
-            Assert.That(this.Context.Sessions.First().FacilitatorHashedPassphrase, Is.EqualTo("facilitatorhash"));
-            Assert.That(this.Context.Sessions.First().CreationTimestamp, Is.EqualTo(DateTimeOffset.UnixEpoch));
+            Assert.That(Context.Sessions.Any(), Is.True);
+            Assert.That(Context.Sessions.First().FacilitatorHashedPassphrase, Is.EqualTo("facilitatorhash"));
+            Assert.That(Context.Sessions.First().CreationTimestamp, Is.EqualTo(DateTimeOffset.UnixEpoch));
         }
     }
 }

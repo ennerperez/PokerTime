@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetJoinPokerSessionInfoQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -20,8 +13,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         [Test]
         public async Task GetJoinPokerSessionInfoCommandHandler_ReturnsNull_OnSessionNotFound() {
             // Given
-            string sessionId = "whatever-whatever";
-            var handler = new GetJoinPokerSessionInfoQueryHandler(this.Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());
+            var sessionId = "whatever-whatever";
+            var handler = new GetJoinPokerSessionInfoQueryHandler(Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());
             var command = new GetJoinPokerSessionInfoQuery { SessionId = sessionId };
 
             // When
@@ -40,11 +33,11 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                 HashedPassphrase = "hello",
                 FacilitatorHashedPassphrase = "xxx"
             };
-            string sessionId = session.UrlId.StringId;
-            this.Context.Sessions.Add(session);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            var sessionId = session.UrlId.StringId;
+            Context.Sessions.Add(session);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetJoinPokerSessionInfoQueryHandler(this.Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());
+            var handler = new GetJoinPokerSessionInfoQueryHandler(Context, new NullLogger<GetJoinPokerSessionInfoQueryHandler>());
             var command = new GetJoinPokerSessionInfoQuery { SessionId = sessionId };
 
             // When

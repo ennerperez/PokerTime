@@ -6,15 +6,14 @@
 @using PokerTime.Application.Common.Models
 @using PokerTime.Application.Common.Settings
 @using PokerTime.Application.Sessions.Commands.CreatePokerSession
-@using PokerTime.Application.Symbols.Queries
 @using PokerTime.Application.SymbolSets.Queries
 @using PokerTime.Web.Services
 @inject ILogger<CreatePokerSession> Logger
 @inject IOptions<SecuritySettings> SecuritySettingsAccessor
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
 @inject ClipboardService ClipboardService
 
-@if (ShowCompletionMessage)
+@if (_showCompletionMessage)
 {
     <section class="alert alert-success" role="alert">
         <h4 class="alert-heading">
@@ -43,11 +42,11 @@
 
         <div class="mt-3">
             <p>
-                <img src="@Result.QrCode.ToBase64(4, 0)" class="pokertime-qrcode" alt=""/>
+                <img src="@Result.QrCode.ToBase64(4)" class="pokertime-qrcode" alt=""/>
             </p>
         </div>
 
-        if (!String.IsNullOrEmpty(Model.Passphrase))
+        if (!string.IsNullOrEmpty(Model.Passphrase))
         {
             <p data-test-element-id="participator instructions">
                 To enter the planning poker, the participants need to enter the following password: <code>@Model.Passphrase</code>.
@@ -78,12 +77,12 @@ else
         Create a planning poker session with the form below. After completion you will receive a url to share with your team members.
     </p>
 
-    if (ShowErrorMessage)
+    if (_showErrorMessage)
     {
         <ErrorMessage Text="Something went wrong creating the planning poker session. Please try again."/>
     }
 
-    if (ShowLoadErrorMessage)
+    if (_showLoadErrorMessage)
     {
         <ErrorMessage Text="Something went wrong loading the form. Please try again."/>
     }
@@ -106,7 +105,7 @@ else
             <div class="control">
                 <div class="select">
                     <select class="form-control" @bind="@Model.SymbolSetId" id="pokertime-session-symbol-set">
-                        @foreach (SymbolSetModel symbolSet in this.SymbolSets)
+                        @foreach (var symbolSet in _symbolSets)
                         {
                             <option value="@symbolSet.Id">@symbolSet.Name</option>
                         }
@@ -118,7 +117,7 @@ else
         </div>
 
         @{
-            SymbolSetModel selectedSymbolSet = this.SelectedSymbolSet;
+            var selectedSymbolSet = SelectedSymbolSet;
 
             if (selectedSymbolSet != null)
             {
@@ -127,7 +126,7 @@ else
                     <div class="card poker-card-preview-container w-100">
                         <div class="card-body">
                             <div>
-                                @foreach (SymbolModel symbol in this.SelectedSymbolSet.Symbols)
+                                @foreach (var symbol in SelectedSymbolSet.Symbols)
                                 {
                                     <PreviewCard Symbol="@symbol"/>
                                 }
@@ -164,7 +163,7 @@ else
 
         @if (SecuritySettingsAccessor.Value.LobbyCreationNeedsPassphrase)
         {
-            <Modal Id="lobby-creation-passphrase-modal" IsShown="@this.ShowPasswordModal">
+            <Modal Id="lobby-creation-passphrase-modal" IsShown="@_showPasswordModal">
                 <div class="modal-header">
                     <h5 class="modal-title" for="pokertime-lobby-creation-passphrase">Session creation passphrase</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -203,34 +202,34 @@ else
 
     Task HandleInvalidSubmit(EditContext editContext)
     {
-        this.ShowErrorMessage = false;
+        _showErrorMessage = false;
 
-        bool hasLobbyCreationPassphraseError = editContext.GetValidationMessages(() => this.Model.LobbyCreationPassphrase).Any();
-        this.ShowPasswordModal = hasLobbyCreationPassphraseError;
+        var hasLobbyCreationPassphraseError = editContext.GetValidationMessages(() => Model.LobbyCreationPassphrase).Any();
+        _showPasswordModal = hasLobbyCreationPassphraseError;
 
         return Task.CompletedTask;
     }
 
     void HandleProtectedFormSubmit()
     {
-        this.ShowPasswordModal = true;
+        _showPasswordModal = true;
     }
 
     async Task HandleValidSubmit()
     {
-        this.ShowPasswordModal = false;
-        this.ShowErrorMessage = false;
+        _showPasswordModal = false;
+        _showErrorMessage = false;
 
         try
         {
-            CreatePokerSessionCommandResponse response = await this.Mediator.Send(this.Model);
+            var response = await Mediator.Send(Model);
 
-            this.Result = response;
-            this.ShowCompletionMessage = true;
+            Result = response;
+            _showCompletionMessage = true;
         }
         catch (Exception ex)
         {
-            this.ShowErrorMessage = true;
+            _showErrorMessage = true;
 
             Logger.LogError(ex, "Error creating planning poker session");
         }
@@ -240,13 +239,13 @@ else
     {
         try
         {
-            GetSymbolSetsQueryResponse response = await this.Mediator.Send(new GetSymbolSetsQuery());
-            this.SymbolSets = response.SymbolSets;
-            this.Model.SymbolSetId = this.SymbolSets.First().Id;
+            var response = await Mediator.Send(new GetSymbolSetsQuery());
+            _symbolSets = response.SymbolSets;
+            Model.SymbolSetId = _symbolSets.First().Id;
         }
         catch (Exception ex)
         {
-            ShowLoadErrorMessage = true;
+            _showLoadErrorMessage = true;
 
             Logger.LogError(ex, "Error loading planning poker session form");
         }
@@ -254,19 +253,19 @@ else
 
     private CreatePokerSessionCommandResponse Result { get; set; }
 
-    private bool ShowCompletionMessage;
-    private bool ShowErrorMessage;
-    private bool ShowLoadErrorMessage;
-    private bool ShowPasswordModal;
+    private bool _showCompletionMessage;
+    private bool _showErrorMessage;
+    private bool _showLoadErrorMessage;
+    private bool _showPasswordModal;
 
-    private SymbolSetModel[] SymbolSets = new SymbolSetModel[0];
-    private SymbolSetModel SelectedSymbolSet => this.SymbolSets.FirstOrDefault(x => x.Id == this.Model.SymbolSetId);
+    private SymbolSetModel[] _symbolSets = new SymbolSetModel[0];
+    private SymbolSetModel SelectedSymbolSet => _symbolSets.FirstOrDefault(x => x.Id == Model.SymbolSetId);
 
     [Parameter] public CreatePokerSessionCommand Model { get; set; } = new CreatePokerSessionCommand();
 
     private async void CopyToClipboard() => await ClipboardService.WriteTextAsync(Result.Location);
 
     private async void NavigateInNewTab() =>
-        await JSRuntime.InvokeVoidAsync("open", Result.Location, "_blank");
+        await JsRuntime.InvokeVoidAsync("open", Result.Location, "_blank");
 
 }

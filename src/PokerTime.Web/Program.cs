@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : Program.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web
+﻿namespace PokerTime.Web
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -44,11 +37,19 @@ namespace PokerTime.Web
             // Initialize Logger
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(config).CreateLogger();
 
-            IWebHost host = CreateWebHostBuilder(args: args).Build();
-
-            using (IServiceScope scope = host.Services.CreateScope())
+#if DEBUG
+            var darts = System.Diagnostics.Process.GetProcessesByName("dart");
+            foreach (var process in darts)
             {
-                IServiceProvider services = scope.ServiceProvider;
+                process.Kill();
+            }
+#endif
+
+            var host = CreateWebHostBuilder(args: args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
 
                 try
                 {
@@ -92,8 +93,8 @@ namespace PokerTime.Web
                 }).
                 ConfigureLogging((wc, logging) =>
                 {
-                    IWebHostEnvironment env = wc.HostingEnvironment;
-                    IConfiguration config = wc.Configuration;
+                    var env = wc.HostingEnvironment;
+                    var config = wc.Configuration;
 
                     Console.WriteLine($"Current environment: {env.EnvironmentName}");
 
@@ -107,10 +108,10 @@ namespace PokerTime.Web
                     }
                     else
                     {
-                        IConfigurationSection fileSection = config.GetSection("Logging").GetSection("File");
-                        string fileName = fileSection?.GetValue<string>("Path");
+                        var fileSection = config.GetSection("Logging").GetSection("File");
+                        var fileName = fileSection?.GetValue<string>("Path");
 
-                        if (!String.IsNullOrEmpty(fileName))
+                        if (!string.IsNullOrEmpty(fileName))
                         {
                             try
                             {
@@ -133,14 +134,14 @@ namespace PokerTime.Web
         {
             if (cfg == null) throw new ArgumentNullException(nameof(cfg));
 
-            const string configFileName = "config";
-            const string iniFileExt = "ini";
-            const string jsonFileExt = "json";
+            const string ConfigFileName = "config";
+            const string IniFileExt = "ini";
+            const string JsonFileExt = "json";
 
             string MakeFilePath(string extension)
             {
                 return EmitConfigSearchMessage(
-                    EnvironmentPath.CreatePath(Path.ChangeExtension(configFileName, extension)));
+                    EnvironmentPath.CreatePath(Path.ChangeExtension(ConfigFileName, extension)));
             }
 
             string EmitConfigSearchMessage(string path)
@@ -149,8 +150,8 @@ namespace PokerTime.Web
                 return path;
             }
 
-            cfg.AddJsonFile(MakeFilePath(jsonFileExt), true);
-            cfg.AddIniFile(MakeFilePath(iniFileExt), true);
+            cfg.AddJsonFile(MakeFilePath(JsonFileExt), true);
+            cfg.AddIniFile(MakeFilePath(IniFileExt), true);
         }
 
         private static void ConfigureServerOptions(WebHostBuilderContext wc, IServiceCollection sc)

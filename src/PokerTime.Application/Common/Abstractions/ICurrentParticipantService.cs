@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ICurrentParticipantService.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Abstractions {
+﻿namespace PokerTime.Application.Common.Abstractions {
     using System.Threading.Tasks;
     using Models;
 

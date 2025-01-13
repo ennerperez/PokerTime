@@ -1,10 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PokerSessionLobbyTestsBase.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-namespace PokerTime.Web.Tests.Integration.Pages {
+﻿namespace PokerTime.Web.Tests.Integration.Pages {
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -12,7 +6,6 @@ namespace PokerTime.Web.Tests.Integration.Pages {
     using System.Threading.Tasks;
     using Common;
     using Domain.Entities;
-    using Microsoft.Extensions.DependencyInjection;
     using NUnit.Framework;
     using OpenQA.Selenium.Support.UI;
 
@@ -21,13 +14,13 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         private int _colorIndex = 1;
 
         [SetUp]
-        public void ResetColorIndex() => this._colorIndex = 1;
+        public void ResetColorIndex() => _colorIndex = 1;
 
         [SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = "Retry runs while the webdriver runs")]
         protected void Join(PokerSessionLobby pageObject, bool facilitator, string name = null, bool alreadyJoined = false, string colorName = null, Action submitCallback = null) {
             using var joinPage = new JoinPokerSessionPage();
             joinPage.InitializeFrom(pageObject);
-            joinPage.Navigate(this.App, this.SessionId);
+            joinPage.Navigate(App, SessionId);
 
             joinPage.NameInput.SendKeys(name ?? Name.Create());
 
@@ -37,7 +30,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
                     new SelectElement(joinPage.ColorSelect).SelectByText(colorName, true);
                 }
                 else {
-                    new SelectElement(joinPage.ColorSelect).SelectByIndex(this._colorIndex++);
+                    new SelectElement(joinPage.ColorSelect).SelectByIndex(_colorIndex++);
                 }
             }
             else {
@@ -67,18 +60,18 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
         protected void WaitNavigatedToLobby() =>
             Task.WaitAll(
-                Task.Run(() => WaitNavigatedToLobby(this.Client1)),
-                Task.Run(() => WaitNavigatedToLobby(this.Client2))
+                Task.Run(() => WaitNavigatedToLobby(Client1)),
+                Task.Run(() => WaitNavigatedToLobby(Client2))
             );
 
         protected Task SetSession(Action<Session> action) {
-            using IServiceScope scope = this.App.CreateTestServiceScope();
-            return scope.SetSession(this.SessionId, action);
+            using var scope = App.CreateTestServiceScope();
+            return scope.SetSession(SessionId, action);
         }
 
         protected Task SetCurrentUserStory(Action<UserStory> action = null) {
-            using IServiceScope scope = this.App.CreateTestServiceScope();
-            return scope.SetCurrentUserStory(this.SessionId, action);
+            using var scope = App.CreateTestServiceScope();
+            return scope.SetCurrentUserStory(SessionId, action);
         }
 
         protected static void WaitNavigatedToLobby(PokerSessionLobby pageObject) {

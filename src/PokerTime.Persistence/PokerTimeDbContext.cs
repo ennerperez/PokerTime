@@ -1,24 +1,13 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PokerTimeDbContext.cs
-//  Project         : PokerTime.Persistence
-// ******************************************************************************
-
-namespace PokerTime.Persistence {
+﻿namespace PokerTime.Persistence {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Common.Abstractions;
     using Conventions;
     using Domain.Entities;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using Microsoft.EntityFrameworkCore.Metadata;
     using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
     [ExcludeFromCodeCoverage] // No use testing the database context
@@ -30,26 +19,26 @@ namespace PokerTime.Persistence {
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public PokerTimeDbContext(DbContextOptions options) : base(options) {
-            this._options = options;
+            _options = options;
         }
 
         public PokerTimeDbContext(IDatabaseOptions databaseOptions) {
-            this._databaseOptions = databaseOptions;
+            _databaseOptions = databaseOptions;
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             // Use connection string if available
-            if (this._databaseOptions != null) {
-                switch (this._databaseOptions.DatabaseProvider) {
+            if (_databaseOptions != null) {
+                switch (_databaseOptions.DatabaseProvider) {
                     case DatabaseProvider.SqlServer:
-                        optionsBuilder.UseSqlServer(this._databaseOptions.CreateConnectionString(), sql => sql.EnableRetryOnFailure());
+                        optionsBuilder.UseSqlServer(_databaseOptions.CreateConnectionString(), sql => sql.EnableRetryOnFailure());
                         break;
                     case DatabaseProvider.Sqlite:
-                        SqliteConfigurator.ConfigureDbContext(optionsBuilder, this._databaseOptions);
+                        SqliteConfigurator.ConfigureDbContext(optionsBuilder, _databaseOptions);
                         break;
                     default:
-                        throw new InvalidOperationException($"Invalid database provider: {this._databaseOptions.DatabaseProvider}");
+                        throw new InvalidOperationException($"Invalid database provider: {_databaseOptions.DatabaseProvider}");
                 }
             }
 
@@ -79,16 +68,16 @@ namespace PokerTime.Persistence {
 
             // Fix datetime offset support for integration tests
             // See: https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
-            if (this.Database.ProviderName == SqliteProvider) {
+            if (Database.ProviderName == SqliteProvider) {
                 // SQLite does not have proper support for DateTimeOffset via Entity Framework Core, see the limitations
                 // here: https://docs.microsoft.com/en-us/ef/core/providers/sqlite/limitations#query-limitations
                 // To work around this, when the Sqlite database provider is used, all model properties of type DateTimeOffset
                 // use the DateTimeOffsetToBinaryConverter
                 // Based on: https://github.com/aspnet/EntityFrameworkCore/issues/10784#issuecomment-415769754
                 // This only supports millisecond precision, but should be sufficient for most use cases.
-                foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes()) {
-                    IEnumerable<PropertyInfo> properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset));
-                    foreach (PropertyInfo property in properties) {
+                foreach (var entityType in modelBuilder.Model.GetEntityTypes()) {
+                    var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset));
+                    foreach (var property in properties) {
                         if (entityType.IsOwned() == false) {
                             modelBuilder
                                 .Entity(entityType.Name)
@@ -101,18 +90,18 @@ namespace PokerTime.Persistence {
         }
 
         public Task Reload(object entity, CancellationToken cancellationToken) {
-            EntityEntry entry = this.Entry(entity);
+            var entry = Entry(entity);
             return entry.ReloadAsync(cancellationToken);
         }
 
-        public IPokerTimeDbContext CreateForEditContext() => this._databaseOptions != null ? new PokerTimeDbContext(this._databaseOptions) : new PokerTimeDbContext(this._options);
+        public IPokerTimeDbContext CreateForEditContext() => _databaseOptions != null ? new PokerTimeDbContext(_databaseOptions) : new PokerTimeDbContext(_options);
 
         public void Initialize() {
-            if (this.Database.ProviderName == SqliteProvider) {
-                this.Database.EnsureCreated();
+            if (Database.ProviderName == SqliteProvider) {
+                Database.EnsureCreated();
             }
             else {
-                this.Database.Migrate();
+                Database.Migrate();
             }
         }
     }

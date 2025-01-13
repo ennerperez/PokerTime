@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : Interface1.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Mapping {
+﻿namespace PokerTime.Application.Common.Mapping {
     using System;
     using AutoMapper;
 
@@ -13,7 +6,7 @@ namespace PokerTime.Application.Common.Mapping {
         void Mapping(Profile profile) {
             if (profile == null) throw new ArgumentNullException(nameof(profile));
 
-            profile.CreateMap(typeof(T), this.GetType());
+            profile.CreateMap(typeof(T), GetType());
         }
     }
 }

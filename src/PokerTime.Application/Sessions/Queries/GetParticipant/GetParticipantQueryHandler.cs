@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetParticipantQueryHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Queries.GetParticipant {
+﻿namespace PokerTime.Application.Sessions.Queries.GetParticipant {
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -21,14 +14,14 @@ namespace PokerTime.Application.Sessions.Queries.GetParticipant {
         private readonly IMapper _mapper;
 
         public GetParticipantQueryHandler(IPokerTimeDbContext pokerTimeDbContext, IMapper mapper) {
-            this._pokerTimeDbContext = pokerTimeDbContext;
-            this._mapper = mapper;
+            _pokerTimeDbContext = pokerTimeDbContext;
+            _mapper = mapper;
         }
 
         public async Task<ParticipantInfo> Handle(GetParticipantQuery request, CancellationToken cancellationToken) {
-            ParticipantInfo result = await this._pokerTimeDbContext.Participants.
+            var result = await _pokerTimeDbContext.Participants.
                     Where(x => x.Session.UrlId.StringId == request.SessionId && x.Name == request.Name).
-                    ProjectTo<ParticipantInfo>(this._mapper.ConfigurationProvider).
+                    ProjectTo<ParticipantInfo>(_mapper.ConfigurationProvider).
                     FirstOrDefaultAsync(cancellationToken);
 
             return result;

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CreatePokerSessionCommand.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
+﻿namespace PokerTime.Application.Sessions.Commands.CreatePokerSession {
     using MediatR;
 
     public class CreatePokerSessionCommand : IRequest<CreatePokerSessionCommandResponse> {

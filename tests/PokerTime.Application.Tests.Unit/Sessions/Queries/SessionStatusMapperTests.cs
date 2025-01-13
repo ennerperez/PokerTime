@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionStatusMapperTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
@@ -19,7 +12,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         [Test]
         public void SessionStatusMapper_NullArgument_ThrowsArgumentNullException() {
             // Given
-            var mapper = new SessionStatusMapper(this.Context,this.Mapper);
+            var mapper = new SessionStatusMapper(Context,Mapper);
 
             // When
             TestDelegate action = () => mapper.GetSessionStatus(null, CancellationToken.None).GetAwaiter().GetResult();
@@ -42,14 +35,14 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                 FacilitatorHashedPassphrase = "xxx",
                 CurrentStage = SessionStage.Discussion
             };
-            string sessionId = session.UrlId.StringId;
-            this.Context.Sessions.Add(session);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            var sessionId = session.UrlId.StringId;
+            Context.Sessions.Add(session);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
-            var mapper = new SessionStatusMapper(this.Context, this.Mapper);
+            var mapper = new SessionStatusMapper(Context, Mapper);
 
             // When
-            SessionStatus result = await mapper.GetSessionStatus(session, CancellationToken.None);
+            var result = await mapper.GetSessionStatus(session, CancellationToken.None);
 
             // Then
             Assert.That(result.SessionId, Is.EqualTo(sessionId));

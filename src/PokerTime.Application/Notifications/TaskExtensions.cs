@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : TaskExtensions.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications {
+﻿namespace PokerTime.Application.Notifications {
     using System;
     using System.Threading;
     using System.Threading.Tasks;

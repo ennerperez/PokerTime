@@ -1,19 +1,10 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : MappingTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit {
+﻿namespace PokerTime.Application.Tests.Unit {
     using System.Drawing;
     using System.Linq;
     using Application.Common.Models;
-    using Application.Estimations.Queries;
     using Application.PredefinedParticipantColors.Queries.GetAvailablePredefinedParticipantColors;
     using Application.Sessions.Queries.GetParticipantsInfo;
     using Domain.Entities;
-    using Estimations.Queries;
     using NUnit.Framework;
     using Support;
 
@@ -21,16 +12,16 @@ namespace PokerTime.Application.Tests.Unit {
     public sealed class MappingTests : MappingTestBase {
         [Test]
         public void ShouldHaveValidConfiguration() {
-            this.ConfigurationProvider.AssertConfigurationIsValid();
+            ConfigurationProvider.AssertConfigurationIsValid();
         }
 
         [Test]
         public void ShouldMap_PredefinedParticipantColor_ToAvailableParticipantColor() {
             // Given
-            var entity = new Domain.Entities.PredefinedParticipantColor("Color A", Color.Tomato);
+            var entity = new PredefinedParticipantColor("Color A", Color.Tomato);
 
             // When
-            var mapped = this.Mapper.Map<AvailableParticipantColorModel>(entity);
+            var mapped = Mapper.Map<AvailableParticipantColorModel>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);
@@ -48,7 +39,7 @@ namespace PokerTime.Application.Tests.Unit {
             };
 
             // When
-            var mapped = this.Mapper.Map<ParticipantInfo>(entity);
+            var mapped = Mapper.Map<ParticipantInfo>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);
@@ -68,7 +59,7 @@ namespace PokerTime.Application.Tests.Unit {
             };
 
             // When
-            var mapped = this.Mapper.Map<UserStoryModel>(entity);
+            var mapped = Mapper.Map<UserStoryModel>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);
@@ -109,7 +100,7 @@ namespace PokerTime.Application.Tests.Unit {
             };
 
             // When
-            var mapped = this.Mapper.Map<UserStoryEstimation>(entity);
+            var mapped = Mapper.Map<UserStoryEstimation>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);
@@ -138,7 +129,7 @@ namespace PokerTime.Application.Tests.Unit {
             };
 
             // When
-            var mapped = this.Mapper.Map<SymbolModel>(entity);
+            var mapped = Mapper.Map<SymbolModel>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);
@@ -163,7 +154,7 @@ namespace PokerTime.Application.Tests.Unit {
             };
 
             // When
-            var mapped = this.Mapper.Map<SymbolSetModel>(entity);
+            var mapped = Mapper.Map<SymbolSetModel>(entity);
 
             // Then
             Assert.That(mapped, Is.Not.Null);

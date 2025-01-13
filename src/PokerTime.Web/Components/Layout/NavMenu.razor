@@ -1,14 +1,43 @@
+@inject IJSRuntime JsRuntime
+
 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
     <li class="nav-item">
-        <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-            Home
-        </NavLink>
-    </li>
-    <li class="nav-item">
         <NavLink class="nav-link" href="/create-poker-session">
-            <span class="icon">
-                <span class="fas fa-users"></span>
-            </span>&nbsp;<span> Create planning poker session</span>
+            <span> New planning session</span>
         </NavLink>
     </li>
 </ul>
+<div class="d-flex">
+    <div class="navbar-item p-0 mx-2">
+        <div class="btn-group dropstart">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-circle-half-stroke me-1"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-start">
+                <li>
+                    <button class="dropdown-item" @onclick="() => SetTheme('L')"><i class="fa-regular fa-sun me-2"></i>Light</button>
+                </li>
+                <li>
+                    <button class="dropdown-item" @onclick="() => SetTheme('D')"><i class="fa-solid fa-moon me-2"></i>Dark</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private void SetTheme(char theme)
+    {
+        switch (theme)
+        {
+            case 'D':
+                JsRuntime.InvokeAsync<string>("setTheme", "dark");
+                break;
+            default:
+                JsRuntime.InvokeAsync<string>("setTheme", "light");
+                break;
+        }
+    }
+}

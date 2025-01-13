@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetSymbolSetsQueryHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SymbolSets.Queries {
+﻿namespace PokerTime.Application.SymbolSets.Queries {
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -20,14 +13,14 @@ namespace PokerTime.Application.SymbolSets.Queries {
         private readonly IMapper _mapper;
 
         public GetSymbolSetsQueryHandler(IPokerTimeDbContextFactory dbContextFactory, IMapper mapper) {
-            this._dbContextFactory = dbContextFactory;
-            this._mapper = mapper;
+            _dbContextFactory = dbContextFactory;
+            _mapper = mapper;
         }
 
         public async Task<GetSymbolSetsQueryResponse> Handle(GetSymbolSetsQuery request, CancellationToken cancellationToken) {
-            using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
+            using var dbContext = _dbContextFactory.CreateForEditContext();
 
-            SymbolSetModel[] symbolSets = this._mapper.Map<SymbolSetModel[]>(
+            var symbolSets = _mapper.Map<SymbolSetModel[]>(
                 await dbContext.SymbolSets.Include(x => x.Symbols).OrderBy(x => x.Id).ToListAsync(cancellationToken));
 
             return new GetSymbolSetsQueryResponse(symbolSets);

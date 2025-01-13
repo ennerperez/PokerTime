@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionExtensions.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Services {
+﻿namespace PokerTime.Domain.Services {
     using System;
     using Entities;
 

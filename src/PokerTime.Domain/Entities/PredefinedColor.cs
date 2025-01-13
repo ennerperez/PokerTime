@@ -1,24 +1,17 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PredefinedParticipantColor.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using ValueObjects;
 
     public class PredefinedParticipantColor {
         public PredefinedParticipantColor(string name) {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Color = new ParticipantColor();
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Color = new ParticipantColor();
         }
 
         public PredefinedParticipantColor(string name, ParticipantColor participantColor) {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Color = participantColor;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Color = participantColor;
         }
 
         public int Id { get; set; }

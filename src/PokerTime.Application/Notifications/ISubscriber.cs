@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ISubscriber.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications {
+﻿namespace PokerTime.Application.Notifications {
     using System;
 
     /// <summary>

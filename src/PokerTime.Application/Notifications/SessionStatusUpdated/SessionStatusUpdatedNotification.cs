@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SessionStatusUpdatedNotification.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications.SessionStatusUpdated {
+﻿namespace PokerTime.Application.Notifications.SessionStatusUpdated {
     using MediatR;
     using Sessions.Queries.GetSessionStatus;
 
@@ -13,7 +6,7 @@ namespace PokerTime.Application.Notifications.SessionStatusUpdated {
         public SessionStatus SessionStatus { get; }
 
         public SessionStatusUpdatedNotification(SessionStatus sessionStatus) {
-            this.SessionStatus = sessionStatus;
+            SessionStatus = sessionStatus;
         }
     }
 }

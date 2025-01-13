@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : GetParticipantQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
@@ -31,8 +24,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                 HashedPassphrase = "abef",
                 FacilitatorHashedPassphrase = "xxx"
             };
-            this._retro1Id = retro.UrlId.StringId;
-            this.Context.Sessions.Add(retro);
+            _retro1Id = retro.UrlId.StringId;
+            Context.Sessions.Add(retro);
 
             var retro2 = new Session {
                 Title = "Who",
@@ -44,16 +37,16 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
                 HashedPassphrase = "abef",
                 FacilitatorHashedPassphrase = "xxx"
             };
-            this._retro2Id = retro2.UrlId.StringId;
-            this.Context.Sessions.Add(retro2);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            _retro2Id = retro2.UrlId.StringId;
+            Context.Sessions.Add(retro2);
+            await Context.SaveChangesAsync(CancellationToken.None);
         }
 
         [Test]
         public async Task GetParticipantQueryHandler_ReturnsParticipantInfo_IfFound() {
             // Given
-            var handler = new GetParticipantQueryHandler(this.Context, this.Mapper);
-            var query = new GetParticipantQuery("John", this._retro1Id);
+            var handler = new GetParticipantQueryHandler(Context, Mapper);
+            var query = new GetParticipantQuery("John", _retro1Id);
 
             // When
             var result = await handler.Handle(query, CancellationToken.None);
@@ -66,8 +59,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         [Test]
         public async Task GetParticipantQueryHandler_ReturnsNull_IfNotFound1() {
             // Given
-            var handler = new GetParticipantQueryHandler(this.Context, this.Mapper);
-            var query = new GetParticipantQuery("Jane", this._retro2Id);
+            var handler = new GetParticipantQueryHandler(Context, Mapper);
+            var query = new GetParticipantQuery("Jane", _retro2Id);
 
             // When
             var result = await handler.Handle(query, CancellationToken.None);
@@ -79,8 +72,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Queries {
         [Test]
         public async Task GetParticipantQueryHandler_ReturnsNull_IfNotFound2() {
             // Given
-            var handler = new GetParticipantQueryHandler(this.Context, this.Mapper);
-            var query = new GetParticipantQuery("Baz", this._retro1Id);
+            var handler = new GetParticipantQueryHandler(Context, Mapper);
+            var query = new GetParticipantQuery("Baz", _retro1Id);
 
             // When
             var result = await handler.Handle(query, CancellationToken.None);

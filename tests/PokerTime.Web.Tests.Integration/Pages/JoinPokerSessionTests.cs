@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : JoinPokerSessionTests.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Pages {
+﻿namespace PokerTime.Web.Tests.Integration.Pages {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -32,29 +25,29 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public void JoinPokerSessionPage_UnknownSession_ShowNotFoundMessage() {
             // Given
-            string sessionIdentifier = new SessionIdentifierService().CreateNew().StringId;
+            var sessionIdentifier = new SessionIdentifierService().CreateNew().StringId;
 
             // When
-            this.Page.Navigate(this.App, sessionIdentifier);
+            Page.Navigate(App, sessionIdentifier);
 
             // Then
-            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-danger")), Has.Count.EqualTo(1).Retry());
+            Assert.That(() => Page.WebDriver.FindElements(By.CssSelector(".alert.alert-danger")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
         public async Task JoinPokerSessionPage_KnownSession_FormShownWithValidation() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            this.Page.Navigate(this.App, sessionId);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            Page.Navigate(App, sessionId);
 
             // When
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            string[] messages = new DefaultWait<JoinPokerSessionPage>(this.Page)
+            var messages = new DefaultWait<JoinPokerSessionPage>(Page)
                 .Until(p => {
-                    ReadOnlyCollection<IWebElement> collection = p.GetValidationMessages();
+                    var collection = p.GetValidationMessages();
                     if (collection.Count == 0) return null;
                     return collection;
                 })
@@ -69,63 +62,63 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task JoinPokerSessionPage_KnownSessionAlreadyStarted_ShowMessage() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            await this.SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Discussion);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            await SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Discussion);
 
             // When
-            this.Page.Navigate(this.App, sessionId);
+            Page.Navigate(App, sessionId);
 
             // Then
-            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-info")), Has.Count.EqualTo(1).Retry());
+            Assert.That(() => Page.WebDriver.FindElements(By.CssSelector(".alert.alert-info")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
         public async Task JoinPokerSessionPage_KnownSessionFinished_ShowMessage() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            await this.SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Finished);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            await SetSession(sessionId, retro => retro.CurrentStage = SessionStage.Finished);
 
             // When
-            this.Page.Navigate(this.App, sessionId);
+            Page.Navigate(App, sessionId);
 
             // Then
-            Assert.That(() => this.Page.WebDriver.FindElements(By.CssSelector(".alert.alert-warning")), Has.Count.EqualTo(1).Retry());
+            Assert.That(() => Page.WebDriver.FindElements(By.CssSelector(".alert.alert-warning")), Has.Count.EqualTo(1).Retry());
         }
 
         [Test]
         public async Task JoinPokerSessionPage_KnownSession_ValidatesParticipantPassphaseAndRedirectsToLobby() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            string myName = Name.Create();
-            this.Page.Navigate(this.App, sessionId);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            var myName = Name.Create();
+            Page.Navigate(App, sessionId);
 
             // When
-            this.Page.NameInput.SendKeys(myName);
-            new SelectElement(this.Page.ColorSelect).SelectByIndex(1);
-            this.Page.ParticipantPassphraseInput.SendKeys("secret");
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.NameInput.SendKeys(myName);
+            new SelectElement(Page.ColorSelect).SelectByIndex(1);
+            Page.ParticipantPassphraseInput.SendKeys("secret");
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            Assert.That(() => this.Page.WebDriver.Url, Does.Match("/pokertime-session/" + sessionId + "/lobby").Retry());
+            Assert.That(() => Page.WebDriver.Url, Does.Match("/pokertime-session/" + sessionId + "/lobby").Retry());
         }
 
         [Test]
         public async Task JoinPokerSessionPage_KnownSession_JoinParticipantUpdatesParticipantListInRealtime() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            string myName = Name.Create();
-            this.Page.Navigate(this.App, sessionId);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            var myName = Name.Create();
+            Page.Navigate(App, sessionId);
 
-            var secondInstance = this.App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
-            secondInstance.Navigate(this.App, sessionId);
+            var secondInstance = App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
+            secondInstance.Navigate(App, sessionId);
 
             // When
-            this.Page.NameInput.SendKeys(myName);
-            new SelectElement(this.Page.ColorSelect).SelectByIndex(1);
-            this.Page.ParticipantPassphraseInput.SendKeys("secret");
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.NameInput.SendKeys(myName);
+            new SelectElement(Page.ColorSelect).SelectByIndex(1);
+            Page.ParticipantPassphraseInput.SendKeys("secret");
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
             Assert.That(() => secondInstance.OnlineList.OnlineListItems.Select(x => x.Text), Has.One.Contains(myName));
@@ -134,31 +127,31 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task JoinPokerSessionPage_KnownSession_JoinParticipantUpdatesColorListInRealtime() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            string myName = Name.Create();
-            this.Page.Navigate(this.App, sessionId);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            var myName = Name.Create();
+            Page.Navigate(App, sessionId);
 
-            JoinPokerSessionPage secondInstance = this.App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
-            secondInstance.Navigate(this.App, sessionId);
+            var secondInstance = App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
+            secondInstance.Navigate(App, sessionId);
 
             IList<AvailableParticipantColorModel> availableColors;
             {
-                using IServiceScope scope = this.App.CreateTestServiceScope();
+                using var scope = App.CreateTestServiceScope();
                 scope.SetNoAuthenticationInfo();
                 availableColors = await scope.Send(new GetAvailablePredefinedParticipantColorsQuery(sessionId));
             }
-            AvailableParticipantColorModel colorToSelect = availableColors[TestContext.CurrentContext.Random.Next(0, availableColors.Count)];
+            var colorToSelect = availableColors[TestContext.CurrentContext.Random.Next(0, availableColors.Count)];
 
             // When
-            var selectList = new SelectElement(this.Page.ColorSelect);
+            var selectList = new SelectElement(Page.ColorSelect);
             //Assert.That(() => selectList.Options.Select(x => x.GetProperty("value")).Where(x => !String.IsNullOrEmpty(x)), Is.EquivalentTo(availableColors.Select(x => "#" + x.HexString)).Retry(),
             //    "Cannot find all available colors in the selection list");
             selectList.SelectByValue("#" + colorToSelect.HexString);
 
-            this.Page.NameInput.SendKeys(myName);
-            this.Page.ParticipantPassphraseInput.SendKeys("secret");
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.NameInput.SendKeys(myName);
+            Page.ParticipantPassphraseInput.SendKeys("secret");
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
             Assert.That(() => new SelectElement(secondInstance.ColorSelect).Options.Select(x => x.GetAttribute("value")), Does.Not.Contains("#" + colorToSelect.HexString).And.Not.EquivalentTo(availableColors.Select(x => "#" + x.HexString)).Retry());
@@ -167,30 +160,30 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public async Task JoinPokerSessionPage_KnownSession_JoinAsFacilitatorUpdatesParticipantListInRealtime() {
             // Given
-            string sessionId = await this.CreatePokerSession("scrummaster", "secret");
-            string myName = Name.Create();
-            this.Page.Navigate(this.App, sessionId);
+            var sessionId = await CreatePokerSession("scrummaster", "secret");
+            var myName = Name.Create();
+            Page.Navigate(App, sessionId);
 
-            var secondInstance = this.App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
-            secondInstance.Navigate(this.App, sessionId);
+            var secondInstance = App.CreatePageObject<JoinPokerSessionPage>().RegisterAsTestDisposable();
+            secondInstance.Navigate(App, sessionId);
 
             // When
-            this.Page.NameInput.SendKeys(myName);
-            new SelectElement(this.Page.ColorSelect).SelectByIndex(2);
-            this.Page.IsFacilitatorCheckbox.Click();
-            this.Page.WebDriver.Retry(_ => {
-                this.Page.FacilitatorPassphraseInput.SendKeys("scrummaster");
+            Page.NameInput.SendKeys(myName);
+            new SelectElement(Page.ColorSelect).SelectByIndex(2);
+            Page.IsFacilitatorCheckbox.Click();
+            Page.WebDriver.Retry(_ => {
+                Page.FacilitatorPassphraseInput.SendKeys("scrummaster");
                 return true;
             });
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             Thread.Sleep(500);
 
-            using IServiceScope scope = this.App.CreateTestServiceScope();
+            using var scope = App.CreateTestServiceScope();
             scope.SetNoAuthenticationInfo();
-            ParticipantsInfoList participants = await scope.Send(new GetParticipantsInfoQuery(sessionId));
-            ParticipantInfo facilitator = participants.Participants.First(x => x.Name == myName);
+            var participants = await scope.Send(new GetParticipantsInfoQuery(sessionId));
+            var facilitator = participants.Participants.First(x => x.Name == myName);
 
             // Then
             Assert.That(() => secondInstance.OnlineList.OnlineListItems.Select(x => x.Text), Has.One.Contains(myName));
@@ -198,7 +191,7 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         }
 
         private Task SetSession(string sessionId, Action<Session> action) {
-            using IServiceScope scope = this.App.CreateTestServiceScope();
+            using var scope = App.CreateTestServiceScope();
             return scope.SetSession(sessionId, action);
         }
         private async Task<string> CreatePokerSession(string facilitatorPassword, string password) {
@@ -206,31 +199,31 @@ namespace PokerTime.Web.Tests.Integration.Pages {
                 Title = TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault(),
                 FacilitatorPassphrase = facilitatorPassword,
                 Passphrase = password,
-                SymbolSetId = (await this.ServiceScope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>().SymbolSets.FirstAsync()).Id
+                SymbolSetId = (await ServiceScope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>().SymbolSets.FirstAsync()).Id
             };
 
-            this.ServiceScope.SetNoAuthenticationInfo();
+            ServiceScope.SetNoAuthenticationInfo();
 
-            CreatePokerSessionCommandResponse result = await this.ServiceScope.Send(command);
+            var result = await ServiceScope.Send(command);
             return result.Identifier.StringId;
         }
     }
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Dynamically instantiated")]
     public sealed class JoinPokerSessionPage : PageObject {
-        public IWebElement Title => this.WebDriver.FindElement(By.CssSelector("h1.title"));
-        public IWebElement NameInput => this.WebDriver.FindElement(By.Id("pokertime-name"));
-        public IWebElement FacilitatorPassphraseInput => this.WebDriver.FindElement(By.Id("pokertime-facilitator-passphrase"));
-        public IWebElement ParticipantPassphraseInput => this.WebDriver.FindElement(By.Id("pokertime-passphrase"));
-        public IWebElement ColorInput => this.WebDriver.FindElement(By.Id("pokertime-color"));
-        public IWebElement ColorSelect => this.WebDriver.FindElement(By.Id("pokertime-color-choices"));
-        public IWebElement IsFacilitatorCheckbox => this.WebDriver.FindElement(By.Id("pokertime-is-facilitator"));
-        public IWebElement SubmitButton => this.WebDriver.FindVisibleElement(By.Id("join-pokertime-button"));
-        public void Submit() => this.SubmitButton.Click();
+        public IWebElement Title => WebDriver.FindElement(By.CssSelector("h1.title"));
+        public IWebElement NameInput => WebDriver.FindElement(By.Id("pokertime-name"));
+        public IWebElement FacilitatorPassphraseInput => WebDriver.FindElement(By.Id("pokertime-facilitator-passphrase"));
+        public IWebElement ParticipantPassphraseInput => WebDriver.FindElement(By.Id("pokertime-passphrase"));
+        public IWebElement ColorInput => WebDriver.FindElement(By.Id("pokertime-color"));
+        public IWebElement ColorSelect => WebDriver.FindElement(By.Id("pokertime-color-choices"));
+        public IWebElement IsFacilitatorCheckbox => WebDriver.FindElement(By.Id("pokertime-is-facilitator"));
+        public IWebElement SubmitButton => WebDriver.FindVisibleElement(By.Id("join-pokertime-button"));
+        public void Submit() => SubmitButton.Click();
 
-        public ReadOnlyCollection<IWebElement> GetValidationMessages() => this.WebDriver.FindElements(By.ClassName("validation-message"));
-        public void Navigate(PokerTimeAppFactory app, string sessionId) => this.WebDriver.NavigateToBlazorPage(app.CreateUri($"pokertime-session/{sessionId}/join"));
+        public ReadOnlyCollection<IWebElement> GetValidationMessages() => WebDriver.FindElements(By.ClassName("validation-message"));
+        public void Navigate(PokerTimeAppFactory app, string sessionId) => WebDriver.NavigateToBlazorPage(app.CreateUri($"pokertime-session/{sessionId}/join"));
 
-        public PokerOnlineListComponent OnlineList => new PokerOnlineListComponent(this.WebDriver);
+        public PokerOnlineListComponent OnlineList => new PokerOnlineListComponent(WebDriver);
     }
 }

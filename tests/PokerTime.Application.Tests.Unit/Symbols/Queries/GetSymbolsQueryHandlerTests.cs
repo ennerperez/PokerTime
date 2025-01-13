@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetSymbolsQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Symbols.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.Symbols.Queries {
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -18,15 +11,15 @@ namespace PokerTime.Application.Tests.Unit.Symbols.Queries {
         [Test]
         public async Task GetSymbolsQueryHandlerTest_ReturnsSymbols() {
             // Given
-            int symbolSetId = this.Context.SymbolSets.First().Id;
+            var symbolSetId = Context.SymbolSets.First().Id;
             var query = new GetSymbolsQuery(symbolSetId);
-            var handler = new GetSymbolsQueryHandler(this.Context, this.Mapper);
+            var handler = new GetSymbolsQueryHandler(Context, Mapper);
 
             // When
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Then
-            Assert.That(result.Symbols.Select(x => x.Id), Is.EquivalentTo(this.Context.Symbols.Where(x => x.SymbolSetId == symbolSetId).Select(x => x.Id)));
+            Assert.That(result.Symbols.Select(x => x.Id), Is.EquivalentTo(Context.Symbols.Where(x => x.SymbolSetId == symbolSetId).Select(x => x.Id)));
         }
     }
 }

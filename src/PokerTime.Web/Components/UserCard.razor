@@ -1,13 +1,13 @@
 @using PokerTime.Application.Common.Models
 @using PokerTime.Application.Sessions.Queries.GetSessionStatus
 
-<div class="user-card @(this.SessionStatus.CanChooseCards ? "user-card--enabled" : "user-card--disabled")"
-     style="background-color: #@this.CurrentParticipant.HexColorString"
+<div class="user-card @(SessionStatus.CanChooseCards ? "user-card--enabled" : "user-card--disabled")"
+     style="background-color: #@CurrentParticipant.HexColorString"
      data-test-element-id="user-poker-card"
-     data-symbol-id="@this.Symbol.Id"
-     data-id="@this.Symbol.Id"
-     @onclick="() => this.OnClick?.Invoke(this.Symbol)!">
-    <div class="user-card__symbol" data-test-element-id="symbol">@this.Symbol.AsString</div>
+     data-symbol-id="@Symbol.Id"
+     data-id="@Symbol.Id"
+     @onclick="() => OnClick?.Invoke(Symbol)!">
+    <div class="user-card__symbol" data-test-element-id="symbol">@Symbol.AsString</div>
 </div>
 
 @code {

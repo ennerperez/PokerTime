@@ -1,19 +1,10 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionWorkflowCommandTestBase.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
     using System.Drawing;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Abstractions;
     using Application.SessionWorkflows.Common;
     using Domain.Entities;
-    using Microsoft.EntityFrameworkCore;
     using NSubstitute;
     using NUnit.Framework;
     using PokerTime.Common;
@@ -41,23 +32,23 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
                 CurrentStage = SessionStage.NotStarted
             };
 
-            this.SessionId = session.UrlId.StringId;
-            this.Session = session;
-            this.ConfigureSession(session);
+            SessionId = session.UrlId.StringId;
+            Session = session;
+            ConfigureSession(session);
 
-            this.Context.Sessions.Add(session);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            Context.Sessions.Add(session);
+            await Context.SaveChangesAsync(CancellationToken.None);
         }
 
         [SetUp]
         public void SetUp() {
-            this.SessionStatusUpdateDispatcherMock = Substitute.For<ISessionStatusUpdateDispatcher>();
-            this.SystemClockMock = Substitute.For<ISystemClock>();
+            SessionStatusUpdateDispatcherMock = Substitute.For<ISessionStatusUpdateDispatcher>();
+            SystemClockMock = Substitute.For<ISystemClock>();
         }
 
         protected void RefreshObject() {
-            using IPokerTimeDbContext newEditContext = this.Context.CreateForEditContext();
-            this.Session = newEditContext.Sessions.FirstOrDefault(x => x.Id == this.Session.Id);
+            using var newEditContext = Context.CreateForEditContext();
+            Session = newEditContext.Sessions.FirstOrDefault(x => x.Id == Session.Id);
         }
 
         protected virtual void ConfigureSession(Session session) { }

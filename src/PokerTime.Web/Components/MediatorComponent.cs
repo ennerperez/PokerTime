@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : MediatorComponent.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Components {
+﻿namespace PokerTime.Web.Components {
     using MediatR;
     using Microsoft.AspNetCore.Components;
 

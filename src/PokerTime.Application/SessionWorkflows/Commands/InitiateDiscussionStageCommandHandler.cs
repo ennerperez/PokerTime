@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : InitiateDiscussionStageCommandHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SessionWorkflows.Commands {
+﻿namespace PokerTime.Application.SessionWorkflows.Commands {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -25,14 +18,14 @@ namespace PokerTime.Application.SessionWorkflows.Commands {
 
             var userStory = new UserStory {
                 Session = session,
-                Title = String.IsNullOrEmpty(request.UserStoryTitle) ? null : request.UserStoryTitle
+                Title = string.IsNullOrEmpty(request.UserStoryTitle) ? null : request.UserStoryTitle
             };
 
-            this.DbContext.UserStories.Add(userStory);
+            DbContext.UserStories.Add(userStory);
 
-            await this.DbContext.SaveChangesAsync(cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken);
 
-            await this.DispatchUpdate(session, cancellationToken);
+            await DispatchUpdate(session, cancellationToken);
 
             return Unit.Value;
         }

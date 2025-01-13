@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionRolePanel.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Components {
+﻿namespace PokerTime.Web.Components {
     using Application.Common.Models;
     using Microsoft.AspNetCore.Components;
     using Microsoft.AspNetCore.Components.Rendering;
@@ -27,7 +20,7 @@ namespace PokerTime.Web.Components {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Framework infrastructure provides argument")]
         protected override void BuildRenderTree(RenderTreeBuilder builder) {
-            RenderFragment applicableRenderFragment = this.CurrentParticipantInfo.IsFacilitator ? this.Facilitator : this.Participant;
+            var applicableRenderFragment = CurrentParticipantInfo.IsFacilitator ? Facilitator : Participant;
 
             applicableRenderFragment.Invoke(builder);
         }

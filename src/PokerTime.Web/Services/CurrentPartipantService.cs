@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CurrentPartipantService.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Services {
+﻿namespace PokerTime.Web.Services {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Security.Claims;
@@ -31,33 +24,33 @@ namespace PokerTime.Web.Services {
         private ClaimsPrincipal _currentClaimsPrincipal;
 
         public CurrentParticipantService(AuthenticationStateProvider authenticationStateProvider) {
-            this._authenticationStateProvider = authenticationStateProvider ?? throw new ArgumentNullException(nameof(authenticationStateProvider));
+            _authenticationStateProvider = authenticationStateProvider ?? throw new ArgumentNullException(nameof(authenticationStateProvider));
 
-            this._authenticationStateProvider.AuthenticationStateChanged += this.OnAuthenticationStateChanged;
+            _authenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
         }
 
         private void OnAuthenticationStateChanged(Task<AuthenticationState> task) =>
             task.ContinueWith(t => {
                 if (t.IsCompletedSuccessfully) {
-                    this._currentClaimsPrincipal = t.Result?.User;
+                    _currentClaimsPrincipal = t.Result?.User;
                 }
             }, TaskScheduler.Current);
 
         internal void SetHttpContext(HttpContext httpContext) {
-            this._httpContext = httpContext;
-            this._hasNoHttpContext = false;
+            _httpContext = httpContext;
+            _hasNoHttpContext = false;
         }
 
-        internal void SetNoHttpContext() => this._hasNoHttpContext = true;
+        internal void SetNoHttpContext() => _hasNoHttpContext = true;
 
         public void SetParticipant(CurrentParticipantModel currentParticipant) {
-            var hostEnvProvider = this._authenticationStateProvider as IHostEnvironmentAuthenticationStateProvider;
+            var hostEnvProvider = _authenticationStateProvider as IHostEnvironmentAuthenticationStateProvider;
 
             if (hostEnvProvider == null) {
                 return;
             }
 
-            (int participantId, string name, string color, bool isFacilitator) = currentParticipant;
+            (var participantId, var name, var color, var isFacilitator) = currentParticipant;
 
             var identity = new ClaimsIdentity();
             identity.AddClaim(new Claim(ParticipantClaimType, participantId.ToString(Culture.Invariant), participantId.GetType().FullName));
@@ -67,13 +60,13 @@ namespace PokerTime.Web.Services {
                 identity.AddClaim(new Claim(FacilitatorClaimType, FacilitatorClaimContent, FacilitatorClaimContent.GetType().FullName));
             }
 
-            this._currentClaimsPrincipal = new ClaimsPrincipal(identity);
+            _currentClaimsPrincipal = new ClaimsPrincipal(identity);
 
-            hostEnvProvider.SetAuthenticationState(Task.FromResult(new AuthenticationState(this._currentClaimsPrincipal)));
+            hostEnvProvider.SetAuthenticationState(Task.FromResult(new AuthenticationState(_currentClaimsPrincipal)));
         }
 
         public async ValueTask<CurrentParticipantModel> GetParticipant() {
-            ClaimsPrincipal user = await this.GetUser().ConfigureAwait(false);
+            var user = await GetUser().ConfigureAwait(false);
 
             return new CurrentParticipantModel(
                 GetParticipantId(user),
@@ -84,47 +77,47 @@ namespace PokerTime.Web.Services {
         }
 
         private async ValueTask<ClaimsPrincipal> GetUser() {
-            if (this._hasNoHttpContext) {
+            if (_hasNoHttpContext) {
                 return new ClaimsPrincipal();
             }
 
-            if (this._currentClaimsPrincipal != null) {
-                return this._currentClaimsPrincipal;
+            if (_currentClaimsPrincipal != null) {
+                return _currentClaimsPrincipal;
             }
 
-            AuthenticationState authState = await this._authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false);
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync().ConfigureAwait(false);
 
             if (authState != null) {
-                this._currentClaimsPrincipal = authState.User;
+                _currentClaimsPrincipal = authState.User;
                 return authState.User;
             }
 
-            if (this._httpContext == null) {
+            if (_httpContext == null) {
                 throw new InvalidOperationException("HttpContext not set");
             }
 
-            return this._httpContext.User;
+            return _httpContext.User;
         }
 
         private static string GetNameLocal(ClaimsPrincipal user) => user.FindFirstValue(ParticipantNameClaimType);
         private static string GetColor(ClaimsPrincipal user) => user.FindFirstValue(ParticipantColorClaimType);
 
         private static bool IsFacilitator(ClaimsPrincipal user) {
-            string rawParticipantId = user.FindFirstValue(FacilitatorClaimType);
-            if (String.IsNullOrEmpty(rawParticipantId)) {
+            var rawParticipantId = user.FindFirstValue(FacilitatorClaimType);
+            if (string.IsNullOrEmpty(rawParticipantId)) {
                 return default;
             }
 
-            return String.Equals(rawParticipantId, FacilitatorClaimContent, StringComparison.Ordinal);
+            return string.Equals(rawParticipantId, FacilitatorClaimContent, StringComparison.Ordinal);
         }
 
         private static int GetParticipantId(ClaimsPrincipal user) {
-            string rawParticipantId = user.FindFirstValue(ParticipantClaimType);
-            if (String.IsNullOrEmpty(rawParticipantId)) {
+            var rawParticipantId = user.FindFirstValue(ParticipantClaimType);
+            if (string.IsNullOrEmpty(rawParticipantId)) {
                 return default;
             }
 
-            if (!Int32.TryParse(rawParticipantId, out int participantId)) {
+            if (!int.TryParse(rawParticipantId, out var participantId)) {
                 return default;
             }
 
@@ -137,7 +130,7 @@ namespace PokerTime.Web.Services {
         private readonly RequestDelegate _next;
 
         public CurrentParticipantServiceHttpContextSetterMiddleware(RequestDelegate next) {
-            this._next = next;
+            _next = next;
         }
 
         public Task InvokeAsync(HttpContext httpContext) {
@@ -148,7 +141,7 @@ namespace PokerTime.Web.Services {
                     GetRequiredService<ICurrentParticipantService>();
             currentParticipantService.SetHttpContext(httpContext);
 
-            return this._next.Invoke(httpContext);
+            return _next.Invoke(httpContext);
         }
     }
 

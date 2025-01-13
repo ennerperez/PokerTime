@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : InitiateEstimationDiscussionStageCommandHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -20,9 +13,9 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
         [Test]
         public void InitiateEstimationDiscussionStageCommand_InvalidSessionId_ThrowsNotFoundException() {
             // Given
-            const string sessionId = "not found surely :)";
-            var handler = new InitiateEstimationDiscussionStageCommandHandler(this.Context, this.SessionStatusUpdateDispatcherMock);
-            var request = new InitiateEstimationDiscussionStageCommand { SessionId = sessionId };
+            const string SessionId = "not found surely :)";
+            var handler = new InitiateEstimationDiscussionStageCommandHandler(Context, SessionStatusUpdateDispatcherMock);
+            var request = new InitiateEstimationDiscussionStageCommand { SessionId = SessionId };
 
             // When
             TestDelegate action = () => handler.Handle(request, CancellationToken.None).GetAwaiter().GetResult();
@@ -34,20 +27,20 @@ namespace PokerTime.Application.Tests.Unit.SessionWorkflows.Commands {
         [Test]
         public async Task InitiateEstimationDiscussionStageCommand_OnStatusChange_UpdatesRetroStageAndInvokesNotification() {
             // Given
-            var handler = new InitiateEstimationDiscussionStageCommandHandler(this.Context, this.SessionStatusUpdateDispatcherMock);
-            var request = new InitiateEstimationDiscussionStageCommand { SessionId = this.SessionId };
+            var handler = new InitiateEstimationDiscussionStageCommandHandler(Context, SessionStatusUpdateDispatcherMock);
+            var request = new InitiateEstimationDiscussionStageCommand { SessionId = SessionId };
 
-            this.SystemClockMock.CurrentTimeOffset.Returns(DateTimeOffset.UnixEpoch);
+            SystemClockMock.CurrentTimeOffset.Returns(DateTimeOffset.UnixEpoch);
 
             // When
             await handler.Handle(request, CancellationToken.None);
 
-            this.RefreshObject();
+            RefreshObject();
 
             // Then
-            Assert.That(this.Session.CurrentStage, Is.EqualTo(SessionStage.EstimationDiscussion));
+            Assert.That(Session.CurrentStage, Is.EqualTo(SessionStage.EstimationDiscussion));
 
-            await this.SessionStatusUpdateDispatcherMock.Received().DispatchUpdate(Arg.Any<Session>(), CancellationToken.None);
+            await SessionStatusUpdateDispatcherMock.Received().DispatchUpdate(Arg.Any<Session>(), CancellationToken.None);
         }
     }
 }

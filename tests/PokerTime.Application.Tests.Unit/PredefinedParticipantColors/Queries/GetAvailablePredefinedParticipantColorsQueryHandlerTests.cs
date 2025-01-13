@@ -1,13 +1,5 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetAvailablePredefinedParticipantColorsQueryHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.PredefinedParticipantColors.Queries {
+﻿namespace PokerTime.Application.Tests.Unit.PredefinedParticipantColors.Queries {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Drawing;
     using System.Linq;
@@ -30,16 +22,16 @@ namespace PokerTime.Application.Tests.Unit.PredefinedParticipantColors.Queries {
                 Participants = { new Participant { Name = "John", Color = Color.Gold } }
             };
             Trace.Assert(pokerSession.UrlId.ToString() != null);
-            this.Context.Sessions.Add(pokerSession);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            Context.Sessions.Add(pokerSession);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             // When
-            var command = new GetAvailablePredefinedParticipantColorsQueryHandler(this.Context, this.Mapper);
+            var command = new GetAvailablePredefinedParticipantColorsQueryHandler(Context, Mapper);
 
-            IList<AvailableParticipantColorModel> result = await command.Handle(new GetAvailablePredefinedParticipantColorsQuery(pokerSession.UrlId.StringId), CancellationToken.None);
+            var result = await command.Handle(new GetAvailablePredefinedParticipantColorsQuery(pokerSession.UrlId.StringId), CancellationToken.None);
 
             // Then
-            List<int> colors = result.Select(x => Color.FromArgb(255, x.R, x.G, x.B).ToArgb()).ToList();
+            var colors = result.Select(x => Color.FromArgb(255, x.R, x.G, x.B).ToArgb()).ToList();
 
             Assert.That(colors, Does.Not.Contains(Color.Gold.ToArgb()));
             Assert.That(colors, Does.Contain(Color.Blue.ToArgb()));

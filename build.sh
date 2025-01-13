@@ -1,96 +1,67 @@
 #!/usr/bin/env bash
 
-# Define directories.
-SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-TOOLS_DIR=$SCRIPT_DIR/tools
+bash --version 2>&1 | head -n 1
 
-# Make sure the tools folder exist.
-if [ ! -d "$TOOLS_DIR" ]; then
-  mkdir "$TOOLS_DIR"
-fi
-
-#!/usr/bin/env bash
-# Define varibles
-SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source $SCRIPT_DIR/build.config
-TOOLS_DIR=$SCRIPT_DIR/tools
-BROWSERS_DIR=$SCRIPT_DIR/tools/browsers
-CAKE_EXE=$TOOLS_DIR/dotnet-cake
-CAKE_PATH=$TOOLS_DIR/.store/cake.tool/$CAKE_VERSION
-
-if [ "$CAKE_VERSION" = "" ] || [ "$DOTNET_VERSION" = "" ]; then
-    echo "An error occured while parsing Cake / .NET Core SDK version."
-    exit 1
-fi
-
-# Make sure the tools folder exist.
-if [ ! -d "$TOOLS_DIR" ]; then
-  mkdir "$TOOLS_DIR"
-fi
-
-# Make sure the tools folder exist.
-if [ ! -d "$BROWSERS_DIR" ]; then
-  mkdir "$BROWSERS_DIR"
-fi
-
-export PLAYWRIGHT_BROWSERS_PATH=$BROWSERS_DIR
+set -eo pipefail
+SCRIPT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)
 
 ###########################################################################
-# INSTALL .NET CORE CLI
+# CONFIGURATION
 ###########################################################################
 
-DOTNET_INSTALLED_VERSION=$(dotnet --version 2>&1)
+BUILD_PROJECT_FILE="$SCRIPT_DIR/.build/_build.csproj"
+TEMP_DIRECTORY="$SCRIPT_DIR//.nuke/temp"
 
-if [ "$DOTNET_VERSION" != "$DOTNET_INSTALLED_VERSION" ]; then
-	echo "Installing .NET CLI..."
-	if [ ! -d "$SCRIPT_DIR/.dotnet" ]; then
-	  mkdir "$SCRIPT_DIR/.dotnet"
-	fi
-	curl -Lsfo "$SCRIPT_DIR/.dotnet/dotnet-install.sh" https://dot.net/v1/dotnet-install.sh
-	bash "$SCRIPT_DIR/.dotnet/dotnet-install.sh" --version $DOTNET_VERSION --install-dir .dotnet --no-path
-	export PATH="$SCRIPT_DIR/.dotnet":$PATH
-fi
+DOTNET_GLOBAL_FILE="$SCRIPT_DIR//global.json"
+DOTNET_INSTALL_URL="https://dot.net/v1/dotnet-install.sh"
+DOTNET_CHANNEL="LTS"
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-
-export DOTNET_ROOT=$SCRIPT_DIR/.dotnet
-
-# Restore .NET tools
-dotnet tool restore
+export DOTNET_NOLOGO=1
 
 ###########################################################################
-# INSTALL CAKE
+# EXECUTION
 ###########################################################################
 
-CAKE_INSTALLED_VERSION=$(dotnet-cake --version 2>&1)
+function FirstJsonValue {
+    perl -nle 'print $1 if m{"'"$1"'": "([^"]+)",?}' <<< "${@:2}"
+}
 
-if [ "$CAKE_VERSION" != "$CAKE_INSTALLED_VERSION" ]; then
-    if [ ! -f "$CAKE_EXE" ] || [ ! -d "$CAKE_PATH" ]; then
-        if [ -f "$CAKE_EXE" ]; then
-            dotnet tool uninstall --tool-path $TOOLS_DIR Cake.Tool
-        fi
-
-        echo "Installing Cake $CAKE_VERSION..."
-        dotnet tool install --tool-path $TOOLS_DIR --version $CAKE_VERSION Cake.Tool
-        if [ $? -ne 0 ]; then
-            echo "An error occured while installing Cake."
-            exit 1
-        fi
-    fi
-
-    # Make sure that Cake has been installed.
-    if [ ! -f "$CAKE_EXE" ]; then
-        echo "Could not find Cake.exe at '$CAKE_EXE'."
-        exit 1
-    fi
+# If dotnet CLI is installed globally and it matches requested version, use for execution
+if [ -x "$(command -v dotnet)" ] && dotnet --version &>/dev/null; then
+    export DOTNET_EXE="$(command -v dotnet)"
 else
-    CAKE_EXE="dotnet-cake"
+    # Download install script
+    DOTNET_INSTALL_FILE="$TEMP_DIRECTORY/dotnet-install.sh"
+    mkdir -p "$TEMP_DIRECTORY"
+    curl -Lsfo "$DOTNET_INSTALL_FILE" "$DOTNET_INSTALL_URL"
+    chmod +x "$DOTNET_INSTALL_FILE"
+
+    # If global.json exists, load expected version
+    if [[ -f "$DOTNET_GLOBAL_FILE" ]]; then
+        DOTNET_VERSION=$(FirstJsonValue "version" "$(cat "$DOTNET_GLOBAL_FILE")")
+        if [[ "$DOTNET_VERSION" == ""  ]]; then
+            unset DOTNET_VERSION
+        fi
+    fi
+
+    # Install by channel or version
+    DOTNET_DIRECTORY="$TEMP_DIRECTORY/dotnet-unix"
+    if [[ -z ${DOTNET_VERSION+x} ]]; then
+        "$DOTNET_INSTALL_FILE" --install-dir "$DOTNET_DIRECTORY" --channel "$DOTNET_CHANNEL" --no-path
+    else
+        "$DOTNET_INSTALL_FILE" --install-dir "$DOTNET_DIRECTORY" --version "$DOTNET_VERSION" --no-path
+    fi
+    export DOTNET_EXE="$DOTNET_DIRECTORY/dotnet"
+    export PATH="$DOTNET_DIRECTORY:$PATH"
 fi
 
-###########################################################################
-# RUN BUILD SCRIPT
-###########################################################################
+echo "Microsoft (R) .NET SDK version $("$DOTNET_EXE" --version)"
 
-# Start Cake
-(exec "$CAKE_EXE" --bootstrap) && (exec "$CAKE_EXE" "$@")
+if [[ ! -z ${NUKE_ENTERPRISE_TOKEN+x} && "$NUKE_ENTERPRISE_TOKEN" != "" ]]; then
+    "$DOTNET_EXE" nuget remove source "nuke-enterprise" &>/dev/null || true
+    "$DOTNET_EXE" nuget add source "https://f.feedz.io/nuke/enterprise/nuget" --name "nuke-enterprise" --username "PAT" --password "$NUKE_ENTERPRISE_TOKEN" --store-password-in-clear-text &>/dev/null || true
+fi
+
+"$DOTNET_EXE" build "$BUILD_PROJECT_FILE" /nodeReuse:false /p:UseSharedCompilation=false -nologo -clp:NoSummary --verbosity quiet
+"$DOTNET_EXE" run --project "$BUILD_PROJECT_FILE" --no-build -- "$@"

@@ -40,29 +40,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerTime.Domain.Tests.Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerTime.Web.Tests.Unit", "tests\PokerTime.Web.Tests.Unit\PokerTime.Web.Tests.Unit.csproj", "{B946FB03-8FD6-47CB-8A1B-5ECA5EFB269A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{D6A25E46-E0CC-408F-B824-AA704427EBAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerTime.Web.Tests.Integration", "tests\PokerTime.Web.Tests.Integration\PokerTime.Web.Tests.Integration.csproj", "{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_build", ".build\_build.csproj", "{583E0AC5-ADD9-48AC-85ED-A6878E4A2E25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{630FBB47-35FE-42D0-BA7B-0A052A68F627}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{F85FD120-5831-4079-BDB0-5A3A337F425E}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".files", ".files", "{027069D7-FAE7-4861-BC29-A210EEEFEDB7}"
+	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		.prettierrc = .prettierrc
-		Dockerfile = Dockerfile
-		README.md = README.md
-		version.json = version.json
-		appveyor.yml = appveyor.yml
-		build.cake = build.cake
-		build.cmd = build.cmd
-		build.config = build.config
-		build.ps1 = build.ps1
-		build.sh = build.sh
-		docker-compose.publish.yml = docker-compose.publish.yml
-		dotnet-tools.json = dotnet-tools.json
+		docker-compose.yml = docker-compose.yml
 		LICENSE = LICENSE
 		package.json = package.json
+		README.md = README.md
+		global.json = global.json
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerTime.Web.Tests.Integration", "tests\PokerTime.Web.Tests.Integration\PokerTime.Web.Tests.Integration.csproj", "{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -70,6 +70,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{583E0AC5-ADD9-48AC-85ED-A6878E4A2E25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{583E0AC5-ADD9-48AC-85ED-A6878E4A2E25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0522614E-D955-469C-A83C-D2A15EBA18CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0522614E-D955-469C-A83C-D2A15EBA18CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0522614E-D955-469C-A83C-D2A15EBA18CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -129,6 +131,7 @@ Global
 		{4C3695A0-5F39-422D-82E5-6D394D738582} = {E3D9368D-D98C-4E89-B681-D444BF548688}
 		{B946FB03-8FD6-47CB-8A1B-5ECA5EFB269A} = {E3D9368D-D98C-4E89-B681-D444BF548688}
 		{D120FE6A-74F8-474E-9654-FC4E1CCD2B9E} = {E3D9368D-D98C-4E89-B681-D444BF548688}
+		{583E0AC5-ADD9-48AC-85ED-A6878E4A2E25} = {630FBB47-35FE-42D0-BA7B-0A052A68F627}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73E1A111-F2B0-4572-8345-36721BEF16DC}

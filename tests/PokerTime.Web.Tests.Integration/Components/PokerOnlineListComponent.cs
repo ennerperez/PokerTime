@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SessionOnlineList.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Components {
+﻿namespace PokerTime.Web.Tests.Integration.Components {
     using System.Collections.Generic;
     using Common;
     using OpenQA.Selenium;
@@ -14,10 +7,10 @@ namespace PokerTime.Web.Tests.Integration.Components {
         private readonly IWebDriver _webDriver;
 
         public PokerOnlineListComponent(IWebDriver webDriver) {
-            this._webDriver = webDriver;
+            _webDriver = webDriver;
         }
 
-        public IEnumerable<IWebElement> OnlineListItems => this._webDriver.FindElements(By.CssSelector("#poker-online-list span[data-participant-id]"));
-        public IWebElement GetListItem(int id) => this._webDriver.FindVisibleElement(By.CssSelector($"#poker-online-list span[data-participant-id=\"{id}\"]"));
+        public IEnumerable<IWebElement> OnlineListItems => _webDriver.FindElements(By.CssSelector("#poker-online-list span[data-participant-id]"));
+        public IWebElement GetListItem(int id) => _webDriver.FindVisibleElement(By.CssSelector($"#poker-online-list span[data-participant-id=\"{id}\"]"));
     }
 }

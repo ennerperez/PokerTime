@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : AutoResettingBooleanTests.cs
-//  Project         : PokerTime.Web.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Unit.Services {
+﻿namespace PokerTime.Web.Tests.Unit.Services {
     using NUnit.Framework;
     using Web.Services;
 
@@ -14,25 +7,25 @@ namespace PokerTime.Web.Tests.Unit.Services {
         [Test]
         public void AutoResettingBoolean_NoIntervention_GetsInitialValue() {
             // Given
-            const bool initialValue = true;
-            var resettingBoolean = new AutoResettingBoolean(initialValue);
+            const bool InitialValue = true;
+            var resettingBoolean = new AutoResettingBoolean(InitialValue);
 
             // When / then
-            for (int i = 0; i < 10; i++) {
-                Assert.That(resettingBoolean.GetValue, Is.EqualTo(initialValue));
+            for (var i = 0; i < 10; i++) {
+                Assert.That(resettingBoolean.GetValue, Is.EqualTo(InitialValue));
             }
         }
 
         [Test]
         public void AutoResettingBoolean_WhenSet_ResetsToInitialValue() {
             // Given
-            const bool initialValue = true;
-            var resettingBoolean = new AutoResettingBoolean(initialValue);
+            const bool InitialValue = true;
+            var resettingBoolean = new AutoResettingBoolean(InitialValue);
 
             // When
             resettingBoolean.Set();
-            bool first = resettingBoolean.GetValue();
-            bool second = resettingBoolean.GetValue();
+            var first = resettingBoolean.GetValue();
+            var second = resettingBoolean.GetValue();
 
             // Then
             Assert.That(first, Is.False);

@@ -59,7 +59,9 @@ document.addEventListener('drop', function(ev) {
 
         // Append non-modifier keys (Left, and any char keys)
         var modifiers = ['Control', 'Shift', 'Alt'];
-        appendModifier(modifiers.indexOf(ev.key) === -1 && ev.key, ev.key.length > 1 ? ev.key : ev.key.toUpperCase());
+        if (ev.key !== undefined) {
+            appendModifier(modifiers.indexOf(ev.key) === -1 && ev.key, ev.key.length > 1 ? ev.key : ev.key.toUpperCase());
+        }
 
         // Example strings now:
         //  CTRL+Left

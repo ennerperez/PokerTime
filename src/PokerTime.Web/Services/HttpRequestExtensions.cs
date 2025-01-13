@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : HttpRequestExtensions.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Services {
+﻿namespace PokerTime.Web.Services {
     using System;
     using Microsoft.AspNetCore.Http;
 
@@ -21,11 +14,11 @@ namespace PokerTime.Web.Services {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (String.IsNullOrWhiteSpace(request.Scheme)) {
+            if (string.IsNullOrWhiteSpace(request.Scheme)) {
                 throw new ArgumentException("Http request Scheme is not specified");
             }
 
-            return new Uri(request.Scheme + "://" + (request.Host.HasValue ? (request.Host.Value.IndexOf(",", StringComparison.Ordinal) > 0 ? "MULTIPLE-HOST" : request.Host.Value) : "UNKNOWN-HOST") + (request.Path.HasValue ? request.Path.Value : String.Empty) + (request.QueryString.HasValue ? request.QueryString.Value : String.Empty));
+            return new Uri(request.Scheme + "://" + (request.Host.HasValue ? (request.Host.Value.IndexOf(",", StringComparison.Ordinal) > 0 ? "MULTIPLE-HOST" : request.Host.Value) : "UNKNOWN-HOST") + (request.Path.HasValue ? request.Path.Value : string.Empty) + (request.QueryString.HasValue ? request.QueryString.Value : string.Empty));
         }
     }
 }

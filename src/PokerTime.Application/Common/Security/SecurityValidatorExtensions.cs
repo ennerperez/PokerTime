@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SecurityValidatorExtensions.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Security {
+﻿namespace PokerTime.Application.Common.Security {
     using System;
     using System.Threading.Tasks;
     using Domain.Entities;

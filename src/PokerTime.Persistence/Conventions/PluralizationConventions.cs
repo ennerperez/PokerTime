@@ -1,17 +1,9 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PluralizationConventions.cs
-//  Project         : PokerTime.Persistence
-// ******************************************************************************
-
-namespace PokerTime.Persistence.Conventions {
+﻿namespace PokerTime.Persistence.Conventions {
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata;
 
     internal static class PluralizationConventions {
         public static void RemovePluralizingTableNameConvention(this ModelBuilder modelBuilder) {
-            foreach (IMutableEntityType entity in modelBuilder.Model.GetEntityTypes()) {
+            foreach (var entity in modelBuilder.Model.GetEntityTypes()) {
                 if (!entity.IsOwned()) {
                     entity.SetTableName(entity.DisplayName());
                 }

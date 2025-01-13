@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PageObject.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using NUnit.Framework;
     using OpenQA.Selenium;
@@ -15,43 +8,43 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private bool _ownsWebdriver;
         private WebDriverContainer _webDriverContainer;
 
-        public IWebDriver WebDriver => this._webDriverContainer?.WebDriver;
+        public IWebDriver WebDriver => _webDriverContainer?.WebDriver;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design",
             "CA1033:Interface methods should be callable by child types",
             Justification = "Not necessary for testing framework")]
         void IPageObject.SetWebDriver(WebDriverContainer webDriver) {
-            this._webDriverContainer = webDriver;
-            this._ownsWebdriver = true;
+            _webDriverContainer = webDriver;
+            _ownsWebdriver = true;
         }
 
         public void Unfocus() {
             TestContext.WriteLine("Unfocus by sending tab");
-            this.WebDriver.FindElement(By.CssSelector("body")).SendKeys("\t");
+            WebDriver.FindElement(By.CssSelector("body")).SendKeys("\t");
         }
 
         public void InitializeFrom(PageObject owner) {
-            this._webDriverContainer = owner._webDriverContainer;
-            this._ownsWebdriver = false;
+            _webDriverContainer = owner._webDriverContainer;
+            _ownsWebdriver = false;
         }
 
         public void ScrollDown()
         {
-            this.WebDriver.ExecuteJavaScript("window.scrollTo(0, document.body.scrollHeight)");
+            WebDriver.ExecuteJavaScript("window.scrollTo(0, document.body.scrollHeight)");
         }
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
-                if (this._ownsWebdriver) {
-                    this._webDriverContainer?.Dispose();
+                if (_ownsWebdriver) {
+                    _webDriverContainer?.Dispose();
                 }
 
-                this._webDriverContainer = null;
+                _webDriverContainer = null;
             }
         }
 
         public void Dispose() {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

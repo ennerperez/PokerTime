@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : Symbol.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     /// <summary>
     /// Represents a symbol that can be chosen in an estimation
     /// </summary>

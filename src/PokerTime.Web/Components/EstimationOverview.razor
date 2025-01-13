@@ -4,16 +4,16 @@
 <h3 class="lead">Estimations of your team</h3>
 
 <div data-test-element-id="estimation-overview">
-    @foreach (EstimationModel estimation in this.Estimations.Values)
+    @foreach (var estimation in Estimations.Values)
     {
         <Revealable @key="@estimation.ParticipantId" Inline="true" CssClass="estimated-card-container">
             <EstimatedCard Estimation="@estimation" />
         </Revealable>
     }
 
-    @if (this.SessionStatus.CanChooseCards)
+    @if (SessionStatus.CanChooseCards)
     {
-        @foreach (string participantWithoutEstimation in this.ParticipantsWithoutEstimation)
+        @foreach (var participantWithoutEstimation in ParticipantsWithoutEstimation)
         {
             <Revealable Inline="true" CssClass="estimated-card-container">
                 <div class="estimated-card estimated-card--pending" 

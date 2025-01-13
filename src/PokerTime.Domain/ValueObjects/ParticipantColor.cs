@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : ParticipantColor.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.ValueObjects {
+﻿namespace PokerTime.Domain.ValueObjects {
     using System.Collections.Generic;
     using System.Drawing;
     using Common;
@@ -15,9 +8,9 @@ namespace PokerTime.Domain.ValueObjects {
         }
 
         public ParticipantColor(byte r, byte g, byte b) {
-            this.R = r;
-            this.G = g;
-            this.B = b;
+            R = r;
+            G = g;
+            B = b;
         }
 
         public byte R { get; set; }
@@ -27,12 +20,12 @@ namespace PokerTime.Domain.ValueObjects {
         public static implicit operator ParticipantColor(Color color) => FromColor(color);
         public static ParticipantColor FromColor(Color color) => new ParticipantColor(color.R, color.G, color.B);
 
-        public string ToHex() => $"{this.R:X2}{this.G:X2}{this.B:X2}";
+        public string ToHex() => $"{R:X2}{G:X2}{B:X2}";
 
         protected override IEnumerable<object> GetAtomicValues() {
-            yield return this.R;
-            yield return this.G;
-            yield return this.B;
+            yield return R;
+            yield return G;
+            yield return B;
         }
     }
 }

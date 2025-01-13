@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SessionStatusUpdatedNotificationDispatcher.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications.SessionStatusUpdated {
+﻿namespace PokerTime.Application.Notifications.SessionStatusUpdated {
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
 

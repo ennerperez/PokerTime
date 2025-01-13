@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : JoinPokerSessionCommandHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
     using System;
     using System.Drawing;
     using System.Linq;
@@ -43,10 +36,10 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
                 FacilitatorHashedPassphrase = "xxx"
             };
 
-            this.Context.Sessions.Add(retro);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            Context.Sessions.Add(retro);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
-            this._session = retro;
+            _session = retro;
         }
 
         [Test]
@@ -55,7 +48,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             var command = new JoinPokerSessionCommand {
                 SessionId = "not found"
             };
-            var handler = new JoinPokerSessionCommandHandler(this.Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMediator>(), Substitute.For<IMapper>());
+            var handler = new JoinPokerSessionCommandHandler(Context, Substitute.For<ICurrentParticipantService>(), Substitute.For<IMediator>(), Substitute.For<IMapper>());
 
             // When
             TestDelegate action = () => handler.Handle(command, CancellationToken.None).GetAwaiter().GetResult();
@@ -67,14 +60,14 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
         [Test]
         public async Task JoinPokerSessionCommand_SetsParticipantId_WhenJoiningSession() {
             // Given
-            var retro = this._session ?? throw new InvalidOperationException("OneTimeSetup not executed");
+            var retro = _session ?? throw new InvalidOperationException("OneTimeSetup not executed");
 
             var mediator = Substitute.For<IMediator>();
             var mapper = Substitute.For<IMapper>();
 
             var currentParticipantService = Substitute.For<ICurrentParticipantService>();
             var handler = new JoinPokerSessionCommandHandler(
-                this.Context,
+                Context,
                 currentParticipantService,
                 mediator,
                 mapper
@@ -95,7 +88,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             currentParticipantService.ReceivedWithAnyArgs(Quantity.Exactly(1))
                 .SetParticipant(Arg.Any<CurrentParticipantModel>());
 
-            Session checkRetro = await this.Context.Sessions.AsNoTracking().
+            var checkRetro = await Context.Sessions.AsNoTracking().
                 Include(x => x.Participants).
                 FindBySessionId(retro.UrlId.StringId, CancellationToken.None).
                 ConfigureAwait(false);
@@ -109,14 +102,14 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
         [Test]
         public async Task JoinPokerSessionCommand_DuplicateJoin_DoesNotCreateNewParticipant() {
             // Given
-            var retro = this._session ?? throw new InvalidOperationException("OneTimeSetup not executed");
+            var retro = _session ?? throw new InvalidOperationException("OneTimeSetup not executed");
 
             var mediator = Substitute.For<IMediator>();
             var mapper = Substitute.For<IMapper>();
 
             var currentParticipantService = Substitute.For<ICurrentParticipantService>();
             var handler = new JoinPokerSessionCommandHandler(
-                this.Context,
+                Context,
                 currentParticipantService,
                 mediator,
                 mapper
@@ -136,7 +129,7 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
             await handler.Handle(command, CancellationToken.None);
 
             // Then
-            var participants = await this.Context.Sessions.
+            var participants = await Context.Sessions.
                  SelectMany(x => x.Participants).AsNoTracking().ToListAsync();
 
             Assert.That(participants.Count(x => x.Name == "Duplicate joiner"), Is.EqualTo(1));

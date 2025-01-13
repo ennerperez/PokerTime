@@ -1,4 +1,4 @@
-@if (this.IsHidden == false)
+@if (IsHidden == false)
 {
     <div class="alert alert-@GetCssClass() alert-dismissible fade show" role="alert">
         @ChildContent
@@ -20,7 +20,7 @@
 
     private string GetCssClass()
     {
-        switch (this.Type)
+        switch (Type)
         {
             case NotificationType.Primary:
                 return "primary";
@@ -39,7 +39,7 @@
 
     public void HideNotification()
     {
-        this.IsHidden = true;
+        IsHidden = true;
     }
 
     public enum NotificationType

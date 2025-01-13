@@ -10,15 +10,15 @@
         </p>
         
         <NextStageInvocationForm TModel="InitiateDiscussionStageCommand"
-                                 Model="@this.ReestimateCommand"
-                                 OnContinue="@this.OnInvokeReestimate"
+                                 Model="@ReestimateCommand"
+                                 OnContinue="@OnInvokeReestimate"
                                  ButtonText="Re-estimate user story" />
 
         <hr/>
 
         <NextStageInvocationForm TModel="InitiateDiscussionStageCommand"
-                                 Model="@this.NextUserStoryCommand"
-                                 OnContinue="@this.OnInvokeNextUserStory"
+                                 Model="@NextUserStoryCommand"
+                                 OnContinue="@OnInvokeNextUserStory"
                                  ButtonText="New user story">
             <div class="field">
                 <div class="control">
@@ -35,8 +35,8 @@
         <hr />
 
         <NextStageInvocationForm TModel="InitiateFinishStageCommand"
-                                 Model="@this.FinishCommand"
-                                 OnContinue="@this.OnInvokeContinueToFinishStage"
+                                 Model="@FinishCommand"
+                                 OnContinue="@OnInvokeContinueToFinishStage"
                                  ButtonText="End session" 
                                  TestButtonId="workflow-end-button"/>
     </Facilitator>
@@ -59,15 +59,15 @@
 
     private InitiateDiscussionStageCommand NextUserStoryCommand { get; } = new InitiateDiscussionStageCommand();
 
-    private Task OnInvokeContinueToFinishStage(InitiateFinishStageCommand command) => this.Mediator.Send(command);
-    private Task OnInvokeReestimate(InitiateDiscussionStageCommand command) => this.Mediator.Send(command);
-    private Task OnInvokeNextUserStory(InitiateDiscussionStageCommand command) => this.Mediator.Send(command);
+    private Task OnInvokeContinueToFinishStage(InitiateFinishStageCommand command) => Mediator.Send(command);
+    private Task OnInvokeReestimate(InitiateDiscussionStageCommand command) => Mediator.Send(command);
+    private Task OnInvokeNextUserStory(InitiateDiscussionStageCommand command) => Mediator.Send(command);
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
 
-        this.ReestimateCommand.UserStoryTitle = this.SessionStatus.UserStory?.Title;
+        ReestimateCommand.UserStoryTitle = SessionStatus.UserStory?.Title;
     }
 
 }

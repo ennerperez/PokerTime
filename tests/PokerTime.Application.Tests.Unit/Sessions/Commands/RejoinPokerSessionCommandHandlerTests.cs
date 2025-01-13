@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : RejoinPokerSessionCommandHandlerTests.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
+﻿namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
     using System.Drawing;
     using System.Threading;
     using System.Threading.Tasks;
@@ -35,9 +28,9 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
                 HashedPassphrase = "abef",
                 FacilitatorHashedPassphrase = "xxx"
             };
-            this._retro1Id = retro.UrlId.StringId;
-            this.Context.Sessions.Add(retro);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            _retro1Id = retro.UrlId.StringId;
+            Context.Sessions.Add(retro);
+            await Context.SaveChangesAsync(CancellationToken.None);
 
             var retro2 = new Session {
                 Title = "Who",
@@ -49,17 +42,17 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
                 HashedPassphrase = "abef",
                 FacilitatorHashedPassphrase = "xxx"
             };
-            this._retro2Id = retro2.UrlId.StringId;
-            this.Context.Sessions.Add(retro2);
-            await this.Context.SaveChangesAsync(CancellationToken.None);
+            _retro2Id = retro2.UrlId.StringId;
+            Context.Sessions.Add(retro2);
+            await Context.SaveChangesAsync(CancellationToken.None);
         }
 
         [Test]
         public async Task RejoinPokerSessionCommandHandler_SetsParticipantInfo_IfFound() {
             // Given
             var authService = Substitute.For<ICurrentParticipantService>();
-            var handler = new RejoinPokerSessionCommandHandler(this.Context, authService);
-            var query = new RejoinPokerSessionCommand(this._retro1Id, /*John*/ 1);
+            var handler = new RejoinPokerSessionCommandHandler(Context, authService);
+            var query = new RejoinPokerSessionCommand(_retro1Id, /*John*/ 1);
 
             // When
             await handler.Handle(query, CancellationToken.None);
@@ -72,8 +65,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
         public void RejoinPokerSessionCommandHandler_ThrowsNotFoundException_IfNotFound1() {
             // Given
             var authService = Substitute.For<ICurrentParticipantService>();
-            var handler = new RejoinPokerSessionCommandHandler(this.Context, authService);
-            var query = new RejoinPokerSessionCommand(this._retro2Id, 2 /*Jane*/);
+            var handler = new RejoinPokerSessionCommandHandler(Context, authService);
+            var query = new RejoinPokerSessionCommand(_retro2Id, 2 /*Jane*/);
 
             // When
             TestDelegate action = () => handler.Handle(query, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -86,8 +79,8 @@ namespace PokerTime.Application.Tests.Unit.Sessions.Commands {
         public void RejoinPokerSessionCommandHandler_IfNotFound2() {
             // Given
             var authService = Substitute.For<ICurrentParticipantService>();
-            var handler = new RejoinPokerSessionCommandHandler(this.Context, authService);
-            var query = new RejoinPokerSessionCommand(this._retro1Id, 3 /*Baz*/);
+            var handler = new RejoinPokerSessionCommandHandler(Context, authService);
+            var query = new RejoinPokerSessionCommand(_retro1Id, 3 /*Baz*/);
 
             // When
             TestDelegate action = () => handler.Handle(query, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
