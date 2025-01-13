@@ -62,14 +62,14 @@ function eraseCookie(name) {
 </script>
 <script>
     function setTheme(theme = ''){
-        let bstheme;
+        let bstheme = 'light';
         if (theme === ''){
             bstheme = getCookie('data-bs-theme');
         }
         else{
             bstheme = theme;
         }
-        if (bstheme === ''){
+        if (bstheme === '' || bstheme === undefined || bstheme === null){
             bstheme = 'light';
         }
         document.getElementsByTagName('html')[0].setAttribute('data-bs-theme',bstheme);
