@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : WebDriverContainer.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using OpenQA.Selenium;
 
@@ -14,16 +7,16 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private IWebDriver _webDriver;
 
         internal WebDriverContainer(IWebDriver webDriver, PokerTimeAppFactory owner) {
-            this._webDriver = webDriver;
-            this._owner = owner;
+            _webDriver = webDriver;
+            _owner = owner;
         }
 
-        public IWebDriver WebDriver => this._webDriver ?? throw new ObjectDisposedException(this.ToString());
+        public IWebDriver WebDriver => _webDriver ?? throw new ObjectDisposedException(ToString());
 
         public void Dispose() {
-            if (this._webDriver != null) {
-                this._owner.Return(this._webDriver);
-                this._webDriver = null;
+            if (_webDriver != null) {
+                _owner.Return(_webDriver);
+                _webDriver = null;
             }
 
             GC.SuppressFinalize(this);

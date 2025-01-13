@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : Session.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -28,7 +21,7 @@ namespace PokerTime.Domain.Entities {
         /// Identifier (random string) of the session
         /// </summary>
         [SuppressMessage("ReSharper", "UnusedMember.Global")]
-        public SessionIdentifier UrlId => this._urlId;
+        public SessionIdentifier UrlId => _urlId;
 
         /// <summary>
         /// Gets or sets the current stage of the session
@@ -53,7 +46,7 @@ namespace PokerTime.Domain.Entities {
         public int SymbolSetId { get; set; }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public ICollection<Participant> Participants => this._participants ??= new Collection<Participant>();
+        public ICollection<Participant> Participants => _participants ??= new Collection<Participant>();
 
         public DateTimeOffset CreationTimestamp { get; set; }
     }

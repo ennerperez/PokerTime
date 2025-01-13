@@ -2,11 +2,11 @@
 @using PokerTime.Web.Components.Layout
 @implements PokerTime.Web.Components.Layout.IPokerSessionLayout
 
-<PokerSessionLobbyTopMenu @ref="this._topMenu"/>
+<PokerSessionLobbyTopMenu @ref="_topMenu"/>
 
 <section class="section">
     <main role="main" id="main-content" class="container p-0">
-        <CascadingValue Value=@this IsFixed="true" TValue="IPokerSessionLayout">
+        <CascadingValue Value=@(this) IsFixed="true" TValue="IPokerSessionLayout">
             @Body
         </CascadingValue>
     </main>
@@ -22,15 +22,15 @@
 
     public void Update(in PokerSessionLayoutInfo layoutInfo)
     {
-        this._layoutInfo = layoutInfo;
+        _layoutInfo = layoutInfo;
 
-        if (this._topMenu != null)
+        if (_topMenu != null)
         {
-            this._topMenu.Update(layoutInfo);
+            _topMenu.Update(layoutInfo);
         }
         else
         {
-            this._needToUpdateTopMenu = true;
+            _needToUpdateTopMenu = true;
         }
     }
 
@@ -38,9 +38,9 @@
     {
         base.OnAfterRender(firstRender);
 
-        if (this._needToUpdateTopMenu && this._topMenu != null)
+        if (_needToUpdateTopMenu && _topMenu != null)
         {
-            this._topMenu.Update(this._layoutInfo);
+            _topMenu.Update(_layoutInfo);
         }
     }
 }

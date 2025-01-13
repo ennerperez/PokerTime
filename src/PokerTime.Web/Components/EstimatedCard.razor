@@ -1,22 +1,22 @@
 @using PokerTime.Application.Common.Models
 @using PokerTime.Application.Sessions.Queries.GetSessionStatus
 
-@if (this.SessionStatus == null || this.Estimation == null)
+@if (SessionStatus == null || Estimation == null)
 {
     return;
 }
 
     <div class="estimated-card @(IsShown ? "estimated-card--shown" : "estimated-card--hidden") @(IsSmall ? "estimated-card--small" : "estimated-card--normal")"
          data-test-element-id="estimation-card"
-         data-id="@this.Estimation.Id"
-         data-symbol-id="@this.Estimation.Symbol.Id"
-         data-participant-id="@this.Estimation.ParticipantId">
+         data-id="@Estimation.Id"
+         data-symbol-id="@Estimation.Symbol.Id"
+         data-participant-id="@Estimation.ParticipantId">
 
         <div class="estimated-card__face estimated-card__face--front"
-             style="background-color: #@this.Estimation.ParticipantColor.HexString">
+             style="background-color: #@Estimation.ParticipantColor.HexString">
             @if (IsShown)
             {
-                <div class="estimated-card__symbol">@this.Estimation.Symbol.AsString</div>
+                <div class="estimated-card__symbol">@Estimation.Symbol.AsString</div>
             }
             else
             {
@@ -25,13 +25,13 @@
                 <div class="estimated-card__symbol">🎈</div>
             }
 
-            <div class="estimated-card__author">@this.Estimation.ParticipantName</div>
+            <div class="estimated-card__author">@Estimation.ParticipantName</div>
         </div>
         <div class="estimated-card__face estimated-card__face--back"
-             style="background-color: #@this.Estimation.ParticipantColor.HexString">
+             style="background-color: #@Estimation.ParticipantColor.HexString">
             <div class="estimated-card__symbol estimated-card__symbol--hidden estimated-card__symbol--backside">?</div>
             
-            <div class="estimated-card__author">@this.Estimation.ParticipantName</div>
+            <div class="estimated-card__author">@Estimation.ParticipantName</div>
         </div>
     </div>
 
@@ -50,5 +50,5 @@
     [Parameter]
     public bool IsSmall { get; set; }
 
-    private bool IsShown => this.SessionStatus.CanViewEstimations || this.Estimation.ParticipantId == this.CurrentParticipant.Id;
+    private bool IsShown => SessionStatus.CanViewEstimations || Estimation.ParticipantId == CurrentParticipant.Id;
 }

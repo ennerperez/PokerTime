@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PlayCardCommand.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Poker.Commands {
+﻿namespace PokerTime.Application.Poker.Commands {
     using MediatR;
 
     public sealed class PlayCardCommand : IRequest {
@@ -16,9 +9,9 @@ namespace PokerTime.Application.Poker.Commands {
         public int SymbolId { get; }
 
         public PlayCardCommand(string sessionId, int userStoryId, int symbolId) {
-            this.SessionId = sessionId;
-            this.UserStoryId = userStoryId;
-            this.SymbolId = symbolId;
+            SessionId = sessionId;
+            UserStoryId = userStoryId;
+            SymbolId = symbolId;
         }
     }
 }

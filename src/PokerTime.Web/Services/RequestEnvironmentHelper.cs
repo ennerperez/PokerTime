@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RequestEnvironmentHelper.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Services
+﻿namespace PokerTime.Web.Services
 {
     using Application.Common.Settings;
     using Microsoft.AspNetCore.Builder;
@@ -18,7 +11,7 @@ namespace PokerTime.Web.Services
     {
         public static void UseRequestEnvironmentDetection(this IApplicationBuilder app)
         {
-            IOptions<SecuritySettings> securitySettingsAccessor = app.ApplicationServices.GetRequiredService<IOptions<SecuritySettings>>();
+            var securitySettingsAccessor = app.ApplicationServices.GetRequiredService<IOptions<SecuritySettings>>();
 
             if (securitySettingsAccessor.Value.EnableProxyMode)
             {

@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ScopeActionsExtensions.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -28,7 +21,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                 SymbolSetId = (await scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>().SymbolSets.FirstAsync()).Id
             };
 
-            CreatePokerSessionCommandResponse result = await scope.Send(command);
+            var result = await scope.Send(command);
 
             return result.Identifier.StringId;
         }
@@ -36,7 +29,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public static async Task SetSession(this IServiceScope scope, string sessionId, Action<Session> action) {
             var dbContext = scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
 
-            Session session = await dbContext.Sessions.FindBySessionId(sessionId, CancellationToken.None);
+            var session = await dbContext.Sessions.FindBySessionId(sessionId, CancellationToken.None);
             action.Invoke(session);
             await dbContext.SaveChangesAsync(CancellationToken.None);
         }
@@ -44,7 +37,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public static async Task SetCurrentUserStory(this IServiceScope scope, string sessionId, Action<UserStory> action = null) {
             var dbContext = scope.ServiceProvider.GetRequiredService<IPokerTimeDbContext>();
 
-            Session session = await dbContext.Sessions.FindBySessionId(sessionId, CancellationToken.None);
+            var session = await dbContext.Sessions.FindBySessionId(sessionId, CancellationToken.None);
             var userStory = new UserStory { Session = session };
             action?.Invoke(userStory);
             dbContext.UserStories.Add(userStory);

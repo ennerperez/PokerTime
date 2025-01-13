@@ -1,12 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PredefinedParticipantColorConfiguration.cs
-//  Project         : PokerTime.Persistence
-// ******************************************************************************
-
-
-namespace PokerTime.Persistence.Configurations {
+﻿namespace PokerTime.Persistence.Configurations {
     using System;
     using Domain.Entities;
     using Microsoft.EntityFrameworkCore;

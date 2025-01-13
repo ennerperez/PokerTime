@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ValueObject.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Common
+﻿namespace PokerTime.Domain.Common
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -29,13 +22,13 @@ namespace PokerTime.Domain.Common
         protected abstract IEnumerable<object> GetAtomicValues();
 
         public override bool Equals(object obj) {
-            if (obj == null || obj.GetType() != this.GetType()) {
+            if (obj == null || obj.GetType() != GetType()) {
                 return false;
             }
 
             var other = (ValueObject)obj;
-            using IEnumerator<object> thisValues = this.GetAtomicValues().GetEnumerator();
-            using IEnumerator<object> otherValues = other.GetAtomicValues().GetEnumerator();
+            using var thisValues = GetAtomicValues().GetEnumerator();
+            using var otherValues = other.GetAtomicValues().GetEnumerator();
 
             while (thisValues.MoveNext() && otherValues.MoveNext()) {
                 if (thisValues.Current is null ^ otherValues.Current is null) {
@@ -52,7 +45,7 @@ namespace PokerTime.Domain.Common
         }
 
         public override int GetHashCode() =>
-            this.GetAtomicValues().
+            GetAtomicValues().
                 Select(selector: x => x != null ? x.GetHashCode() : 0).
                 Aggregate(func: (x, y) => x ^ y);
     }

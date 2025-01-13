@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PlayCardCommandValidator.cs
-//  Project         : PokerTime.Application.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Application.Poker.Commands {
+﻿namespace PokerTime.Application.Poker.Commands {
     using System.Diagnostics.CodeAnalysis;
     using FluentValidation;
 
@@ -14,8 +7,8 @@ namespace PokerTime.Application.Poker.Commands {
         Justification = "This is a validation rule set.")]
     public sealed class PlayCardCommandValidator : AbstractValidator<PlayCardCommand> {
         public PlayCardCommandValidator() {
-            this.RuleFor(x => x.UserStoryId).NotEmpty();
-            this.RuleFor(x => x.SymbolId).NotEmpty();
+            RuleFor(x => x.UserStoryId).NotEmpty();
+            RuleFor(x => x.SymbolId).NotEmpty();
         }
     }
 }

@@ -1,48 +1,79 @@
 @using PokerTime.Domain.Entities
+@inject IJSRuntime JsRuntime
 
 <aside class="menu">
     <TopMenu BrandIsClickable="false">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
                 <NavLink class="nav-link" href="#" Match="NavLinkMatch.All">
-                    @this._layoutInfo.Title
+                    New planning session
                 </NavLink>
             </li>
         </ul>
         <div class="poker-progress-container">
-            <ul class="navbar-nav poker-progress @(this.CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : String.Empty)">
+            <ul class="navbar-nav poker-progress @(CurrentStage == SessionStage.NotStarted ? "poker-progress--inactive" : string.Empty)">
                 <PokerSessionProgressItem
-                    CurrentStage="@this.CurrentStage"
+                    CurrentStage="@CurrentStage"
                     ApplicableTo="@SessionStage.Discussion"
                     Text="Discuss"/>
                 <PokerSessionProgressItem
-                    CurrentStage="@this.CurrentStage"
+                    CurrentStage="@CurrentStage"
                     ApplicableTo="@SessionStage.Estimation"
                     Text="Estimation"/>
                 <PokerSessionProgressItem
-                    CurrentStage="@this.CurrentStage"
+                    CurrentStage="@CurrentStage"
                     ApplicableTo="@SessionStage.EstimationDiscussion"
                     Text="Consolidate"/>
                 <PokerSessionProgressItem
-                    CurrentStage="@this.CurrentStage"
+                    CurrentStage="@CurrentStage"
                     ApplicableTo="@SessionStage.Finished"
                     Text="Finished"/>
             </ul>
+        </div>
+        <div class="d-flex">
+            <div class="navbar-item p-0 mx-2">
+                <div class="btn-group dropstart">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-half-stroke me-1"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-start">
+                        <li>
+                            <button class="dropdown-item" @onclick="() => SetTheme('L')"><i class="fa-regular fa-sun me-2"></i>Light</button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" @onclick="() => SetTheme('D')"><i class="fa-solid fa-moon me-2"></i>Dark</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </TopMenu>
 </aside>
 
 @code
 {
+    
+    private void SetTheme(char theme)
+    {
+        switch (theme)
+        {
+            case 'D':
+                JsRuntime.InvokeAsync<string>("setTheme", "dark");
+                break;
+            default:
+                JsRuntime.InvokeAsync<string>("setTheme", "light");
+                break;
+        }
+    }
 
     private PokerSessionLayoutInfo _layoutInfo = new PokerSessionLayoutInfo("Loading...");
 
-    private SessionStage CurrentStage => this._layoutInfo.Stage ?? SessionStage.NotStarted;
+    private SessionStage CurrentStage => _layoutInfo.Stage ?? SessionStage.NotStarted;
 
     public void Update(in PokerSessionLayoutInfo layoutInfo)
     {
-        this._layoutInfo = layoutInfo;
+        _layoutInfo = layoutInfo;
 
-        this.StateHasChanged();
+        StateHasChanged();
     }
 }

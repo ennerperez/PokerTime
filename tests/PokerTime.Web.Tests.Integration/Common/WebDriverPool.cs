@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : WebDriverPool.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Collections.Concurrent;
     using NUnit.Framework;
@@ -16,21 +9,21 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private readonly ConcurrentBag<IWebDriver> _webDrivers;
 
         public WebDriverPool(Func<IWebDriver> factory) {
-            this._factory = factory;
-            this._webDrivers = new ConcurrentBag<IWebDriver>();
+            _factory = factory;
+            _webDrivers = new ConcurrentBag<IWebDriver>();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Lifetime will be managed externally")]
-        public IWebDriver Get() => this._webDrivers.TryTake(out IWebDriver webDriver) ? webDriver : this._factory.Invoke();
+        public IWebDriver Get() => _webDrivers.TryTake(out var webDriver) ? webDriver : _factory.Invoke();
 
         public void Return(IWebDriver webDriver) {
             if (webDriver == null) throw new ArgumentNullException(nameof(webDriver));
-            this._webDrivers.Add(webDriver);
+            _webDrivers.Add(webDriver);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Dispose the web drivers should all be done")]
         public void Dispose() {
-            while (this._webDrivers.TryTake(out IWebDriver driver)) {
+            while (_webDrivers.TryTake(out var driver)) {
                 try {
                     driver.Close();
                 }

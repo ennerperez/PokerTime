@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : GetSymbolsQueryValidator.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Symbols.Queries {
+﻿namespace PokerTime.Application.Symbols.Queries {
     using System.Diagnostics.CodeAnalysis;
     using FluentValidation;
 
@@ -14,7 +7,7 @@ namespace PokerTime.Application.Symbols.Queries {
         Justification = "This is a validation rule set.")]
     public sealed class GetSymbolsQueryValidator : AbstractValidator<GetSymbolsQuery> {
         public GetSymbolsQueryValidator() {
-            this.RuleFor(x => x.SymbolSetId).NotEmpty();
+            RuleFor(x => x.SymbolSetId).NotEmpty();
         }
     }
 }

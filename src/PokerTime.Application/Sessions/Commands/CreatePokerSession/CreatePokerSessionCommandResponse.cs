@@ -1,13 +1,5 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CreatePokerSessionCommandResponse.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Sessions.Commands.CreatePokerSession
+﻿namespace PokerTime.Application.Sessions.Commands.CreatePokerSession
 {
-    using System.Drawing;
     using Domain.ValueObjects;
     using Net.Codecrete.QrCodeGenerator;
 
@@ -19,9 +11,9 @@ namespace PokerTime.Application.Sessions.Commands.CreatePokerSession
 
         public CreatePokerSessionCommandResponse(SessionIdentifier identifier, QrCode qrCode, string location)
         {
-            this.Identifier = identifier;
-            this.QrCode = qrCode;
-            this.Location = location;
+            Identifier = identifier;
+            QrCode = qrCode;
+            Location = location;
         }
     }
 

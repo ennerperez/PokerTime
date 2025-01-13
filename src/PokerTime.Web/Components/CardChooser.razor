@@ -5,12 +5,12 @@
 @inherits MediatorComponent
 @inject ILogger<CardChooser> Logger
 
-@if (this.ShowErrorMessage)
+@if (ShowErrorMessage)
 {
     <ErrorMessage Text="Something went wrong executing your command. Please try again." />
 }
 
-@if (this.SessionStatus.CanChooseCards)
+@if (SessionStatus.CanChooseCards)
 {
     <h3 class="lead"><span class="icon"><i class="fas fa-exclamation-circle"></i></span> Place your bets...</h3>
 }
@@ -20,11 +20,11 @@ else
 }
 
 <div data-test-element-id="card-chooser">
-    @foreach (SymbolModel cardSymbol in this.AvailableSymbols)
+    @foreach (var cardSymbol in AvailableSymbols)
     {
         // There is no need to use @key here as this is always the same list: within the same session it won't change
 
-        <UserCard Symbol="cardSymbol" OnClick="symbol => this.ChooseCard(symbol)"/>
+        <UserCard Symbol="cardSymbol" OnClick="symbol => ChooseCard(symbol)"/>
     }
 </div>
 
@@ -40,26 +40,26 @@ else
 
     private async Task ChooseCard(SymbolModel symbol)
     {
-        if (this.SessionStatus == null)
+        if (SessionStatus == null)
         {
             return;
         }
 
-        if (!this.SessionStatus.CanChooseCards)
+        if (!SessionStatus.CanChooseCards)
         {
             return;
         }
 
         try
         {
-            this.ShowErrorMessage = false;
-            await this.Mediator.Send(new PlayCardCommand(this.SessionStatus.SessionId, this.SessionStatus.UserStory?.Id ?? 0, symbol.Id));
+            ShowErrorMessage = false;
+            await Mediator.Send(new PlayCardCommand(SessionStatus.SessionId, SessionStatus.UserStory?.Id ?? 0, symbol.Id));
         }
         catch (Exception ex)
         {
-            this.Logger.LogError(ex, $"Unable to choose card: {symbol.AsString}");
+            Logger.LogError(ex, $"Unable to choose card: {symbol.AsString}");
 
-            this.ShowErrorMessage = true;
+            ShowErrorMessage = true;
         }
     }
 }

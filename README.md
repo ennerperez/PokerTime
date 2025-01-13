@@ -4,14 +4,6 @@ Remote planning poker tool built in ASP.NET Core and Blazor
 
 Licensed: GNU GPL v3.0
 
-|                    | master                                                                                                                                                                                                                        | develop                                                                                                                                                                                                                         |
-| ------------------ |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **AppVeyor CI**    | [![Build status](https://ci.appveyor.com/api/projects/status/rbpp4x5f1l0x65jl/branch/master?svg=true)](https://ci.appveyor.com/project/ennerperez/PokerTime/branch/master)                                                    | [![Build status](https://ci.appveyor.com/api/projects/status/rbpp4x5f1l0x65jl/branch/develop?svg=true)](https://ci.appveyor.com/project/ennerperez/PokerTime/branch/develop)                                                    |
-| **CircleCI**       | [![CircleCI](https://circleci.com/gh/ennerperez/PokerTime/tree/master.svg?style=shield)](https://circleci.com/gh/ennerperez/PokerTime/tree/master)                                                                            | [![CircleCI](https://circleci.com/gh/ennerperez/PokerTime/tree/develop.svg?style=shield)](https://circleci.com/gh/ennerperez/PokerTime/tree/develop)                                                                            |
-| **Github actions** | [![Github CI](https://github.com/ennerperez/PokerTime/workflows/Continuous%20integration/badge.svg?branch=master)](https://github.com/ennerperez/PokerTime/actions?workflow=Continuous+integration&branch=master)             | [![Github CI](https://github.com/ennerperez/PokerTime/workflows/Continuous%20integration/badge.svg?branch=develop)](https://github.com/ennerperez/PokerTime/actions?workflow=Continuous+integration&branch=develop)             |
-| **Codeconv**       | [![codecov](https://codecov.io/gh/ennerperez/PokerTime/branch/master/graph/badge.svg)](https://codecov.io/gh/ennerperez/PokerTime)                                                                                            | [![codecov](https://codecov.io/gh/ennerperez/PokerTime/branch/develop/graph/badge.svg)](https://codecov.io/gh/ennerperez/PokerTime)                                                                                             |
-| **Daily build**    | [![Github CI](https://github.com/ennerperez/PokerTime/workflows/Build%20installation%20packages/badge.svg?branch=master)](https://github.com/ennerperez/PokerTime/actions?workflow=Build+installation+packages&branch=master) | [![Github CI](https://github.com/ennerperez/PokerTime/workflows/Build%20installation%20packages/badge.svg?branch=develop)](https://github.com/ennerperez/PokerTime/actions?workflow=Build+installation+packages&branch=develop) |
-
 ## Features
 
 - Realtime planning poker app, ideal for remote teams
@@ -32,14 +24,9 @@ Developed and tested on:
 
 ### Docker
 
-PokerTime is available as a docker image. Simply pull it from the Docker hub, and run it:
-
-    docker pull ennerperez/pokertime:latest
-    docker run -p 80:80 ennerperez/pokertime
-
 For further configuration you may want to mount a directory with [the configuration](doc/Installation.md#Configuration):
 
-    docker run -p 80:80 -v /path/to/my/configuration/directory:/etc/pokertime ennerperez/pokertime
+    docker run -p 80:80 -v /path/to/my/configuration/directory:/etc/pokertime pokertime
 
 ### Manual installation
 
@@ -88,6 +75,6 @@ Application icon:
 
 Built on:
 
-- [Bulma](https://bulma.io) _CSS framework_;
-- [Fontawesome](http://fontawesome.io/) as _icon framework_;
-- [ASP.NET Core 6.0](https://dot.net) (Blazor Server) with [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for _server side logic and data persistence_;
+- [Bootstrap](https://getbootstrap.com/) _CSS framework_;
+- [Fontawesome](https://fontawesome.io/) as _icon framework_;
+- [ASP.NET Core 8.0](https://dotnet.microsoft.com/en-us/) (Blazor Server) with [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for _server side logic and data persistence_;

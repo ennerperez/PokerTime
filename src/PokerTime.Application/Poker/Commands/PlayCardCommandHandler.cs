@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PlayCardCommandHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Poker.Commands {
+﻿namespace PokerTime.Application.Poker.Commands {
     using System;
     using System.Linq;
     using System.Threading;
@@ -27,28 +20,28 @@ namespace PokerTime.Application.Poker.Commands {
         private readonly ICurrentParticipantService _currentParticipantService;
 
         public PlayCardCommandHandler(IMediator mediator, IPokerTimeDbContextFactory dbContextFactory, ICurrentParticipantService currentParticipantService, IMapper mapper) {
-            this._mediator = mediator;
-            this._dbContextFactory = dbContextFactory;
-            this._currentParticipantService = currentParticipantService;
-            this._mapper = mapper;
+            _mediator = mediator;
+            _dbContextFactory = dbContextFactory;
+            _currentParticipantService = currentParticipantService;
+            _mapper = mapper;
         }
 
         public async Task Handle(PlayCardCommand request, CancellationToken cancellationToken) {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            using IPokerTimeDbContext dbContext = this._dbContextFactory.CreateForEditContext();
+            using var dbContext = _dbContextFactory.CreateForEditContext();
 
-            Session session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
+            var session = await dbContext.Sessions.FindBySessionId(request.SessionId, cancellationToken);
             if (session == null) {
                 throw new NotFoundException(nameof(Session), request.SessionId);
             }
 
-            UserStory userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
+            var userStory = await dbContext.UserStories.FirstOrDefaultAsync(x => x != null && x.Session.UrlId.StringId == request.SessionId && x.Id == request.UserStoryId, cancellationToken);
             if (userStory == null) {
                 throw new NotFoundException(nameof(UserStory), request.UserStoryId);
             }
 
-            Symbol desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x != null && x.Id == request.SymbolId, cancellationToken);
+            var desiredSymbol = await dbContext.Symbols.FirstOrDefaultAsync(x => x != null && x.Id == request.SymbolId, cancellationToken);
             if (desiredSymbol == null) {
                 throw new NotFoundException(nameof(Symbol), request.SymbolId);
             }
@@ -57,10 +50,10 @@ namespace PokerTime.Application.Poker.Commands {
                 throw new InvalidOperationException($"The chosen symbol #{request.SymbolId} is not part of symbol set #{session.SymbolSetId}");
             }
 
-            CurrentParticipantModel currentParticipantInfo = await this._currentParticipantService.GetParticipant();
+            var currentParticipantInfo = await _currentParticipantService.GetParticipant();
 
             // Add or update estimation
-            Estimation estimation = await dbContext.Estimations
+            var estimation = await dbContext.Estimations
                 .Include(x => x!.Participant)
                 .Where(x => x != null && x.UserStory != null && x.UserStory.Session.UrlId.StringId == session.UrlId.StringId)
                 .FirstOrDefaultAsync(x => x != null && x.UserStory != null && x.UserStory.Id == userStory.Id && x.ParticipantId == currentParticipantInfo.Id, cancellationToken);
@@ -83,10 +76,10 @@ namespace PokerTime.Application.Poker.Commands {
 
             var estimationNotification = new EstimationGivenNotification(
                 session.UrlId.StringId,
-                this._mapper.Map<EstimationModel>(estimation)
+                _mapper.Map<EstimationModel>(estimation)
             );
 
-            await this._mediator.Publish(estimationNotification, cancellationToken);
+            await _mediator.Publish(estimationNotification, cancellationToken);
         }
     }
 }

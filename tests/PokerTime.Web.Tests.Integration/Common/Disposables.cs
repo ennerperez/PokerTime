@@ -1,16 +1,8 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : CleanupObjects.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
     using NUnit.Framework.Interfaces;
-    using NUnit.Framework.Internal;
 
     public static class Disposables {
         private static List<IDisposable> PerTestDisposables { get; } = new List<IDisposable>();
@@ -24,7 +16,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We shouldn't fail the test if something cannot be disposed")]
         private static void DisposeList(List<IDisposable> list) {
-            foreach (IDisposable disposable in list) {
+            foreach (var disposable in list) {
                 TestContext.WriteLine($"Disposing: {disposable}");
                 try {
                     disposable?.Dispose();

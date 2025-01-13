@@ -1,7 +1,0 @@
-.dotnet/
-.store/
-tools/
-build/
-src/**/obj/
-src/**/node_modules/
-tests/**/obj/

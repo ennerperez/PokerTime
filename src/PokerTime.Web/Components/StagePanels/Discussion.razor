@@ -9,8 +9,8 @@
         </p>
 
         <NextStageInvocationForm TModel="InitiateEstimationStageCommand"
-                                 Model="@this.Command"
-                                 OnContinue="@this.OnInvokeContinueToNextStage"
+                                 Model="@Command"
+                                 OnContinue="@OnInvokeContinueToNextStage"
                                  ButtonText="Enable estimations"/>
     </Facilitator>
     <Participant>
@@ -23,5 +23,5 @@
 @code {
     private InitiateEstimationStageCommand Command { get; } = new InitiateEstimationStageCommand();
 
-    private Task OnInvokeContinueToNextStage(InitiateEstimationStageCommand command) => this.Mediator.Send(command);
+    private Task OnInvokeContinueToNextStage(InitiateEstimationStageCommand command) => Mediator.Send(command);
 }

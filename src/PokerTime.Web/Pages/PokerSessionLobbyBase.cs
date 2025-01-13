@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : PokerSessionLobbyBase.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Pages {
+﻿namespace PokerTime.Web.Pages {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
@@ -59,56 +52,56 @@ namespace PokerTime.Web.Pages {
 #nullable restore
 
         protected override void OnInitialized() {
-            this.SessionIdObject = new SessionIdentifier(this.SessionId);
+            SessionIdObject = new SessionIdentifier(SessionId);
 
-            this.SessionStatusUpdatedSubscription.Subscribe(this);
+            SessionStatusUpdatedSubscription.Subscribe(this);
 
             base.OnInitialized();
         }
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
-                this.SessionStatusUpdatedSubscription.Unsubscribe(this);
+                SessionStatusUpdatedSubscription.Unsubscribe(this);
             }
         }
 
         public void Dispose() {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         protected override async Task OnInitializedAsync() {
-            CurrentParticipantModel currentParticipant = await this.CurrentParticipantService.GetParticipant();
+            var currentParticipant = await CurrentParticipantService.GetParticipant();
 
             if (!currentParticipant.IsAuthenticated) {
-                this.NavigationManager.NavigateTo("/pokertime-session/" + this.SessionId + "/join");
+                NavigationManager.NavigateTo("/pokertime-session/" + SessionId + "/join");
                 return;
             }
 
-            this.CurrentParticipant = currentParticipant;
+            CurrentParticipant = currentParticipant;
 
             try {
-                this.SessionStatus = await this.Mediator.Send(new GetSessionStatusQuery(this.SessionId));
-                this.Layout?.Update(new PokerSessionLayoutInfo(this.SessionStatus.Title, this.SessionStatus.Stage));
+                SessionStatus = await Mediator.Send(new GetSessionStatusQuery(SessionId));
+                Layout?.Update(new PokerSessionLayoutInfo(SessionStatus.Title, SessionStatus.Stage));
             }
             catch (NotFoundException) {
-                this.SessionStatus = null;
+                SessionStatus = null;
             }
             finally {
-                this.HasLoaded = true;
+                HasLoaded = true;
             }
         }
 
         public Task OnSessionStatusUpdated(SessionStatus sessionStatus) {
-            if (sessionStatus.SessionId != this.SessionId) {
+            if (sessionStatus.SessionId != SessionId) {
                 return Task.CompletedTask;
             }
 
-            this.SessionStatus = sessionStatus;
+            SessionStatus = sessionStatus;
 
-            this.InvokeAsync(() => {
-                this.Layout?.Update(new PokerSessionLayoutInfo(sessionStatus.Title, sessionStatus.Stage));
-                this.StateHasChanged();
+            InvokeAsync(() => {
+                Layout?.Update(new PokerSessionLayoutInfo(sessionStatus.Title, sessionStatus.Stage));
+                StateHasChanged();
             });
 
             return Task.CompletedTask;

@@ -16,14 +16,14 @@ namespace PokerTime.Domain.ValueObjects {
         [SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
         public string StringId { get; set; }
 
-        protected override IEnumerable<object> GetAtomicValues() => new[] { this.StringId };
+        protected override IEnumerable<object> GetAtomicValues() => new[] { StringId };
 
         public SessionIdentifier() {
             // Needed for EF construction
         }
 
         public SessionIdentifier(string stringId) {
-            this.StringId = stringId;
+            StringId = stringId;
         }
     }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

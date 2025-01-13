@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : RetryTestAttribute.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using NUnit.Framework;
     using NUnit.Framework.Interfaces;
@@ -25,7 +18,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         /// </summary>
         /// <param name="tryCount">The maximum number of times the test should be run if it fails</param>
         public RetryTestAttribute(int tryCount) {
-            this._tryCount = tryCount;
+            _tryCount = tryCount;
         }
 
         #region IRepeatTest Members
@@ -36,7 +29,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         /// <param name="command">The command to be wrapped</param>
         /// <returns>The wrapped command</returns>
         public TestCommand Wrap(TestCommand command) =>
-            new RetryCommand(innerCommand: command, tryCount: this._tryCount);
+            new RetryCommand(innerCommand: command, tryCount: _tryCount);
 
         #endregion
 
@@ -55,7 +48,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             /// <param name="tryCount">The maximum number of repetitions</param>
             public RetryCommand(TestCommand innerCommand, int tryCount)
                 : base(innerCommand: innerCommand) {
-                this._tryCount = tryCount;
+                _tryCount = tryCount;
             }
 
 
@@ -66,11 +59,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
             /// <returns>A TestResult</returns>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Needed for retry test")]
             public override TestResult Execute(TestExecutionContext context) {
-                int count = this._tryCount;
+                var count = _tryCount;
 
                 while (count-- > 0) {
                     try {
-                        context.CurrentResult = this.innerCommand.Execute(context: context);
+                        context.CurrentResult = innerCommand.Execute(context: context);
                     }
                     // Commands are supposed to catch exceptions, but some don't
                     // and we want to look at restructuring the API in the future.

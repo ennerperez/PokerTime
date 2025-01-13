@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CreatePokerSessionTests.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Pages {
+﻿namespace PokerTime.Web.Tests.Integration.Pages {
     using System.Collections.ObjectModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -13,23 +6,22 @@ namespace PokerTime.Web.Tests.Integration.Pages {
     using NUnit.Framework;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using System.Threading;
 
     [TestFixture]
     public class CreatePokerSessionTests : PageFixture<CreatePokerSessionPage> {
         [Test]
         public void CreatePokerSession_SubmitWithoutValidation_ShowsValidationMessages() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            string[] messages = new DefaultWait<CreatePokerSessionPage>(this.Page)
+            var messages = new DefaultWait<CreatePokerSessionPage>(Page)
                 .Until(p => {
-                    ReadOnlyCollection<IWebElement> collection = p.GetValidationMessages();
+                    var collection = p.GetValidationMessages();
                     if (collection.Count == 0) return null;
                     return collection;
                 })
@@ -43,40 +35,40 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public void CreatePokerSession_SubmitValidWithBothPassphrases_ShowQrCodeAndLink() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
-            this.Page.ParticipantPassphraseInput.SendKeys("the participator password");
+            Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.ParticipantPassphraseInput.SendKeys("the participator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            Assert.That(this.Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
+            Assert.That(Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
 
-            Assert.That(this.Page.FacilitatorInstructions.Text, Contains.Substring("my secret facilitator password"));
-            Assert.That(this.Page.ParticipatorInstructions.Text, Contains.Substring("the participator password"));
+            Assert.That(Page.FacilitatorInstructions.Text, Contains.Substring("my secret facilitator password"));
+            Assert.That(Page.ParticipatorInstructions.Text, Contains.Substring("the participator password"));
         }
 
         [Test]
         public void CreatePokerSession_SubmitValidWithOnlyFacilitatorPassphrase_ShowQrCodeAndLink() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            Assert.That(this.Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
+            Assert.That(Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
 
-            Assert.That(this.Page.FacilitatorInstructions.Text, Contains.Substring("my secret facilitator password"));
-            Assert.That(this.Page.ParticipatorInstructions.Text, Contains.Substring("no password is required"));
+            Assert.That(Page.FacilitatorInstructions.Text, Contains.Substring("my secret facilitator password"));
+            Assert.That(Page.ParticipatorInstructions.Text, Contains.Substring("no password is required"));
         }
 
 
@@ -84,26 +76,26 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global", Justification = "Dynamically instantiated")]
     public sealed class CreatePokerSessionPage : PageObject {
-        public IWebElement SessionTitleInput => this.WebDriver.FindVisibleElement(By.Id("pokertime-title"));
-        public IWebElement FacilitatorPassphraseInput => this.WebDriver.FindVisibleElement(By.Id("pokertime-facilitator-passphrase"));
-        public IWebElement ParticipantPassphraseInput => this.WebDriver.FindVisibleElement(By.Id("pokertime-passphrase"));
-        public IWebElement SubmitButton => this.WebDriver.FindVisibleElement(By.Id("create-pokertime-button"));
-        public IWebElement ModalSubmitButton => this.WebDriver.FindVisibleElement(By.Id("modal-create-pokertime-button"));
+        public IWebElement SessionTitleInput => WebDriver.FindVisibleElement(By.Id("pokertime-title"));
+        public IWebElement FacilitatorPassphraseInput => WebDriver.FindVisibleElement(By.Id("pokertime-facilitator-passphrase"));
+        public IWebElement ParticipantPassphraseInput => WebDriver.FindVisibleElement(By.Id("pokertime-passphrase"));
+        public IWebElement SubmitButton => WebDriver.FindVisibleElement(By.Id("create-pokertime-button"));
+        public IWebElement ModalSubmitButton => WebDriver.FindVisibleElement(By.Id("modal-create-pokertime-button"));
 
-        public IWebElement UrlLocationInput => this.WebDriver.FindVisibleElement(By.Id("pokertime-location"));
-        public IWebElement ParticipatorInstructions => this.WebDriver.FindElementByTestElementId("participator instructions");
-        public IWebElement FacilitatorInstructions => this.WebDriver.FindElementByTestElementId("facilitator instructions");
+        public IWebElement UrlLocationInput => WebDriver.FindVisibleElement(By.Id("pokertime-location"));
+        public IWebElement ParticipatorInstructions => WebDriver.FindElementByTestElementId("participator instructions");
+        public IWebElement FacilitatorInstructions => WebDriver.FindElementByTestElementId("facilitator instructions");
 
-        public IWebElement LobbyCreationPassphraseInput => this.WebDriver.FindVisibleElement(By.Id("pokertime-lobby-creation-passphrase"));
-        public IWebElement LobbyCreationPassphraseModal => this.WebDriver.FindElementByTestElementId("lobby-creation-passphrase-modal");
+        public IWebElement LobbyCreationPassphraseInput => WebDriver.FindVisibleElement(By.Id("pokertime-lobby-creation-passphrase"));
+        public IWebElement LobbyCreationPassphraseModal => WebDriver.FindElementByTestElementId("lobby-creation-passphrase-modal");
 
-        public bool LobbyCreationPassphraseModalIsDisplayed => this.WebDriver.FindElement(By.CssSelector("[data-test-element-id=\"lobby-creation-passphrase-modal\"]")).Displayed;
+        public bool LobbyCreationPassphraseModalIsDisplayed => WebDriver.FindElement(By.CssSelector("[data-test-element-id=\"lobby-creation-passphrase-modal\"]")).Displayed;
 
-        public void Navigate(PokerTimeAppFactory app) => this.WebDriver.NavigateToBlazorPage(app.CreateUri("create-poker-session"));
-        public void Submit() => this.SubmitButton.Click();
-        public void ModalSubmit() => this.ModalSubmitButton.Click();
+        public void Navigate(PokerTimeAppFactory app) => WebDriver.NavigateToBlazorPage(app.CreateUri("create-poker-session"));
+        public void Submit() => SubmitButton.Click();
+        public void ModalSubmit() => ModalSubmitButton.Click();
 
-        public string GetUrlShown() => this.WebDriver.Retry(_ => this.UrlLocationInput.GetAttribute("value"));
-        public ReadOnlyCollection<IWebElement> GetValidationMessages() => this.WebDriver.FindElements(By.ClassName("validation-message"));
+        public string GetUrlShown() => WebDriver.Retry(_ => UrlLocationInput.GetAttribute("value"));
+        public ReadOnlyCollection<IWebElement> GetValidationMessages() => WebDriver.FindElements(By.ClassName("validation-message"));
     }
 }

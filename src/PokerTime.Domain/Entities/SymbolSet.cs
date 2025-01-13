@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SymbolSet.cs
-//  Project         : PokerTime.Domain
-// ******************************************************************************
-
-namespace PokerTime.Domain.Entities {
+﻿namespace PokerTime.Domain.Entities {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
@@ -20,7 +13,7 @@ namespace PokerTime.Domain.Entities {
 
         public string Name { get; set; }
 
-        public ICollection<Symbol> Symbols => this._symbols ??= new Collection<Symbol>();
+        public ICollection<Symbol> Symbols => _symbols ??= new Collection<Symbol>();
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
     }
 }

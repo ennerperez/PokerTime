@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : IPokerSessionLayout.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Components.Layout {
+﻿namespace PokerTime.Web.Components.Layout {
     using System;
     using Domain.Entities;
 
@@ -19,21 +12,21 @@ namespace PokerTime.Web.Components.Layout {
         public string Title { get; }
 
         public PokerSessionLayoutInfo(string title) : this() {
-            this.Title = title;
+            Title = title;
         }
 
         public PokerSessionLayoutInfo(string title, SessionStage? stage) {
-            this.Stage = stage;
-            this.Title = title;
+            Stage = stage;
+            Title = title;
         }
 
-        public bool Equals(PokerSessionLayoutInfo other) => this.Stage == other.Stage && this.Title == other.Title;
+        public bool Equals(PokerSessionLayoutInfo other) => Stage == other.Stage && Title == other.Title;
 
-        public override bool Equals(object obj) => obj is PokerSessionLayoutInfo other && this.Equals(other);
+        public override bool Equals(object obj) => obj is PokerSessionLayoutInfo other && Equals(other);
 
         public override int GetHashCode() {
             unchecked {
-                return (this.Stage.GetHashCode() * 397) ^ (this.Title != null ? this.Title.GetHashCode(StringComparison.InvariantCulture) : 0);
+                return (Stage.GetHashCode() * 397) ^ (Title != null ? Title.GetHashCode(StringComparison.InvariantCulture) : 0);
             }
         }
 

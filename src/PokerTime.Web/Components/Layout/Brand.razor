@@ -1,3 +1,18 @@
-<img src="/images/logo/pokertime.svg" width="64" height="28" alt="logo">
+@inject IJSRuntime JsRuntime
+
+<img id="brand_icon" src="/images/logo/pokertime_light.svg" width="64" height="28" alt="logo">
 
 PokerTime
+
+@code{
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JsRuntime.InvokeAsync<string>("setTheme");
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+}

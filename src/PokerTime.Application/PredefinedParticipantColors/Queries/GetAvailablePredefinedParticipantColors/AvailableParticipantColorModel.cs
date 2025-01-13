@@ -1,14 +1,6 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : AvailableParticipantColorModel.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailablePredefinedParticipantColors {
+﻿namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailablePredefinedParticipantColors {
     using System;
     using AutoMapper;
-    using Common.Mapping;
     using Common.Models;
     using Domain.Entities;
 

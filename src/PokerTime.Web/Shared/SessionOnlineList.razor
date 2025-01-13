@@ -7,7 +7,7 @@
 @using PokerTime.Application.Notifications
 @using PokerTime.Application.Sessions.Queries.GetParticipantsInfo
 
-@if (this.Participants == null)
+@if (Participants == null)
 {
     return;
 }
@@ -17,13 +17,13 @@
         Who already joined?
     </div>
      <div class="card-body p-2">
-        @if (this.Participants.Participants.Count == 0)
+        @if (Participants.Participants.Count == 0)
         {
             <text>No one. You are the first to join this planning poker session.</text>
         }
-        else if (this.Participants.Participants.Count == 1)
+        else if (Participants.Participants.Count == 1)
         {
-            ParticipantInfo participant = this.Participants.Participants[0];
+            var participant = Participants.Participants[0];
 
             <text>@RenderParticipant(participant) has already joined the session</text>
         }
@@ -34,9 +34,9 @@
             </text>
 
             <ul class="online-list">
-                @foreach (ParticipantInfo participant in this.Participants.Participants)
+                @foreach (var participant in Participants.Participants)
                 {
-                    <li class="@(participant.Name == this.CurrentParticipant.Name ? "online-list__item--is-self" : null)">
+                    <li class="@(participant.Name == CurrentParticipant.Name ? "online-list__item--is-self" : null)">
                         @RenderParticipant(participant)
                     </li>
                 }
@@ -50,8 +50,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this.Participants = await this.Mediator.Send(new GetParticipantsInfoQuery(this.SessionId));
-        Debug.Assert(this.Participants != null);
+        Participants = await Mediator.Send(new GetParticipantsInfoQuery(SessionId));
+        Debug.Assert(Participants != null);
     }
 
     protected readonly RenderFragment<ParticipantInfo> RenderParticipant = participantInfo =>
@@ -72,19 +72,19 @@
 
     public Task OnParticipantJoinedSession(SessionEvent<ParticipantInfo> eventArgs)
     {
-        if (eventArgs.SessionId != this.SessionId)
+        if (eventArgs.SessionId != SessionId)
         {
             return Task.CompletedTask;
         }
 
-        ParticipantInfo participantInfo = eventArgs.Argument;
+        var participantInfo = eventArgs.Argument;
 
-        return this.InvokeAsync(() =>
+        return InvokeAsync(() =>
         {
-            this.Participants.Participants.Add(participantInfo);
-            this.Participants.Participants.Sort((a, b) => StringComparer.CurrentCulture.Compare(a.Name, b.Name));
+            Participants.Participants.Add(participantInfo);
+            Participants.Participants.Sort((a, b) => StringComparer.CurrentCulture.Compare(a.Name, b.Name));
 
-            this.NotificationIsHandled();
+            NotificationIsHandled();
         });
     }
 

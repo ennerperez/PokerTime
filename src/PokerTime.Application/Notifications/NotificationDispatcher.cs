@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : NotificationDispatcher.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications {
+﻿namespace PokerTime.Application.Notifications {
     using System;
     using System.Diagnostics;
     using System.Linq;
@@ -20,7 +13,7 @@ namespace PokerTime.Application.Notifications {
 
         protected NotificationDispatcher(ILogger<NotificationDispatcher<TNotification, TSubscriber>> logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "We log and threat this as non-fatal")]
@@ -32,19 +25,19 @@ namespace PokerTime.Application.Notifications {
 
             try
             {
-                this._logger.LogInformation($"Dispatching notification {typeof(TNotification)}");
-                await Task.WhenAll(this._subscriberCollection.GetItems().
-                        Select(subscriber => this.DispatchCore(subscriber, notification))).
+                _logger.LogInformation($"Dispatching notification {typeof(TNotification)}");
+                await Task.WhenAll(_subscriberCollection.GetItems().
+                        Select(subscriber => DispatchCore(subscriber, notification))).
                     WithCancellation(cancellationToken);
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, $"Unable to dispatch notification {typeof(TNotification)} due to exception");
+                _logger.LogError(ex, $"Unable to dispatch notification {typeof(TNotification)} due to exception");
             }
             finally
             {
                 stopwatch.Stop();
-                this._logger.LogInformation(
+                _logger.LogInformation(
                     $"Dispatched notification {typeof(TNotification)} in {stopwatch.Elapsed}"
                 );
             }
@@ -54,30 +47,30 @@ namespace PokerTime.Application.Notifications {
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) {
-                this._subscriberCollection?.Dispose();
+                _subscriberCollection?.Dispose();
             }
         }
 
         public void Dispose() {
-            this.Dispose(true);
+            Dispose(true);
 
             GC.SuppressFinalize(this);
         }
 
         public void Subscribe(TSubscriber subscriber) {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
-            this._subscriberCollection.Subscribe(subscriber);
+            _subscriberCollection.Subscribe(subscriber);
         }
 
         public void Unsubscribe(TSubscriber subscriber) {
             if (subscriber == null) throw new ArgumentNullException(nameof(subscriber));
-            this._subscriberCollection.Unsubscribe(subscriber);
+            _subscriberCollection.Unsubscribe(subscriber);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1033:Interface methods should be callable by child types", Justification = "Direct dispatch")]
         Task INotificationHandler<TNotification>.Handle(TNotification notification, CancellationToken cancellationToken) {
             if (notification == null) throw new ArgumentNullException(nameof(notification));
-            this.Dispatch(notification, cancellationToken);
+            Dispatch(notification, cancellationToken);
             return Task.CompletedTask;
         }
     }

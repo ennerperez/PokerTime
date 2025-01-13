@@ -9,9 +9,9 @@
 
         public ClipboardService(IJSRuntime jsRuntime)
         {
-            this._jsRuntime = jsRuntime;
+            _jsRuntime = jsRuntime;
         }
 
-        public ValueTask WriteTextAsync(string text) => this._jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        public ValueTask WriteTextAsync(string text) => _jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
     }
 }

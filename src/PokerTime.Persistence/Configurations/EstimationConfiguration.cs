@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : EstimationConfiguration.cs
-//  Project         : PokerTime.Persistence
-// ******************************************************************************
-
-namespace PokerTime.Persistence.Configurations {
+﻿namespace PokerTime.Persistence.Configurations {
     using Domain.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;

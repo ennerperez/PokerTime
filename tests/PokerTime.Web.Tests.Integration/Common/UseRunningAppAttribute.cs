@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : UseRunningAppAttribute.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using NUnit.Framework;
     using NUnit.Framework.Interfaces;
@@ -15,7 +8,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public void BeforeTest(ITest test) {
             if (test == null) throw new ArgumentNullException(nameof(test));
             if (!(test.Fixture is IAppFixture appFixture)) {
-                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(this.BeforeTest)}: {test.ClassName} is not {typeof(IAppFixture)}");
+                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(BeforeTest)}: {test.ClassName} is not {typeof(IAppFixture)}");
 
                 return;
             }
@@ -26,7 +19,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                 appFixture.OnInitialized();
             }
             catch (Exception ex) {
-                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(this.BeforeTest)}: {ex}");
+                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(BeforeTest)}: {ex}");
 
                 throw;
             }
@@ -41,7 +34,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                 }
             }
             catch (Exception ex) {
-                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(this.AfterTest)}: {ex}");
+                TestContext.WriteLine($"{nameof(UseRunningAppAttribute)}.{nameof(AfterTest)}: {ex}");
 
                 throw;
             }

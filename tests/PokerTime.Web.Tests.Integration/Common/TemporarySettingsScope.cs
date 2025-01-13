@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : TemporarySettingPersister.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using AutoMapper;
     using Microsoft.Extensions.DependencyInjection;
@@ -22,18 +15,18 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private T _savedSettings;
 
         public TemporarySettingsScope(PokerTimeAppFactory app) {
-            this._app = app;
+            _app = app;
 
             var config =
                 new MapperConfiguration(configure: cfg => { cfg.CreateMap<T, T>(); });
 
-            this._mapper = config.CreateMapper();
+            _mapper = config.CreateMapper();
         }
 
         public void SaveSettings(Action<T> callback) {
-            IOptions<T> settingsAccessor = this._app.Services.GetRequiredService<IOptions<T>>();
+            var settingsAccessor = _app.Services.GetRequiredService<IOptions<T>>();
 
-            this._savedSettings = this._mapper.Map<T>(settingsAccessor.Value);
+            _savedSettings = _mapper.Map<T>(settingsAccessor.Value);
 
             TestContext.WriteLine($"Entering temporary settings scope for {typeof(T)}");
 
@@ -43,14 +36,14 @@ namespace PokerTime.Web.Tests.Integration.Common {
         public void RestoreSettings() {
             TestContext.WriteLine($"Exiting temporary settings scope for {typeof(T)}");
 
-            if (this._savedSettings == null) {
-                throw new InvalidOperationException($"{this.GetType().FullName}: Unable to restore settings, settings not set");
+            if (_savedSettings == null) {
+                throw new InvalidOperationException($"{GetType().FullName}: Unable to restore settings, settings not set");
             }
 
-            IOptions<T> settingsAccessor = this._app.Services.GetRequiredService<IOptions<T>>();
-            this._mapper.Map(this._savedSettings, settingsAccessor.Value);
+            var settingsAccessor = _app.Services.GetRequiredService<IOptions<T>>();
+            _mapper.Map(_savedSettings, settingsAccessor.Value);
 
-            this._savedSettings = null;
+            _savedSettings = null;
             TestContext.WriteLine($"Exited temporary settings scope for {typeof(T)}");
         }
     }

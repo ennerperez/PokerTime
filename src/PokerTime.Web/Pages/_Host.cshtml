@@ -5,27 +5,77 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PokerTime - Planning poker</title>
-  <base href="~/" />
-  <link href="build/css/main.css" asp-append-version="true" rel="stylesheet" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PokerTime - Planning poker</title>
+    <base href="~/"/>
+    <environment include="Development">
+        <link href="css/main.css" rel="stylesheet"/>
+        <link href="lib/font-awesome/css/all.css" rel="stylesheet"/>
+    </environment>
+    <environment exclude="Development">
+        <link href="css/main.min.css" asp-append-version="true" rel="stylesheet"/>
+        <link href="lib/font-awesome/css/all.min.css" asp-append-version="true" rel="stylesheet"/>
+    </environment>
 </head>
 <body>
 <app class="app">
-  @(await Html.RenderComponentAsync<App>(renderMode: RenderMode.ServerPrerendered))
+    @(await Html.RenderComponentAsync<App>(renderMode: RenderMode.ServerPrerendered))
 </app>
-<script>
-  window.Promise || (function () {
-    var tag = document.createElement('script');
-    tag.src = 'build/js/compat/blazor.polyfill.min.js';
-    document.body.appendChild(tag);
-    document.body.classList.add('browser-compat');
-  })();
-</script>
 <script src="_framework/blazor.server.js"></script>
-<script src="build/js/main.js" asp-append-version="true"></script>
+<environment include="Development">
+    <script src="js/main.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="lib/popper.js/umd/popper.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="js/main.min.js" asp-append-version="true"></script>
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/popper.js/umd/popper.min.js"></script>
+</environment>
+
+<script>
+function setCookie(name,value,days) {
+    var expires = '';
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + (value || '')  + expires + '; path=/';
+}
+function getCookie(name) {
+    var nameEQ = name + '=';
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)===' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+function eraseCookie(name) {
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+</script>
+<script>
+    function setTheme(theme = ''){
+        let bstheme = 'light';
+        if (theme === ''){
+            bstheme = getCookie('data-bs-theme');
+        }
+        else{
+            bstheme = theme;
+        }
+        if (bstheme === '' || bstheme === undefined || bstheme === null){
+            bstheme = 'light';
+        }
+        document.getElementsByTagName('html')[0].setAttribute('data-bs-theme',bstheme);
+        setCookie('data-bs-theme', bstheme, 30);
+        document.getElementById('brand_icon').setAttribute('src','/images/logo/pokertime_'+ bstheme +'.svg' );
+    }
+</script>
 </body>
 </html>

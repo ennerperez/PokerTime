@@ -37,8 +37,8 @@ namespace Net.Codecrete.QrCodeGenerator
                 throw new ArgumentOutOfRangeException(nameof(border), "Value out of range");
             }
 
-            int size = qrCode.Size;
-            int dim = ( size + border * 2 ) * scale;
+            var size = qrCode.Size;
+            var dim = ( size + border * 2 ) * scale;
 
             if (dim > short.MaxValue)
             {
@@ -46,22 +46,22 @@ namespace Net.Codecrete.QrCodeGenerator
             }
 
             // create bitmap
-            SKBitmap bitmap = new SKBitmap(dim, dim, SKColorType.Rgb888x, SKAlphaType.Opaque);
+            var bitmap = new SKBitmap(dim, dim, SKColorType.Rgb888x, SKAlphaType.Opaque);
 
-            using (SKCanvas canvas = new SKCanvas(bitmap))
+            using (var canvas = new SKCanvas(bitmap))
             {
                 // draw background
-                using (SKPaint paint = new SKPaint {Color = background})
+                using (var paint = new SKPaint {Color = background})
                 {
                     canvas.DrawRect(0, 0, dim, dim, paint);
                 }
 
                 // draw modules
-                using (SKPaint paint = new SKPaint {Color = foreground})
+                using (var paint = new SKPaint {Color = foreground})
                 {
-                    for (int y = 0; y < size; y++)
+                    for (var y = 0; y < size; y++)
                     {
-                        for (int x = 0; x < size; x++)
+                        for (var x = 0; x < size; x++)
                         {
                             if (qrCode.GetModule(x, y))
                             {
@@ -106,8 +106,8 @@ namespace Net.Codecrete.QrCodeGenerator
         /// <param name="foreground">The foreground color.</param>
         public static byte[] ToPng(this QrCode qrCode, int scale, int border, SKColor foreground, SKColor background)
         {
-            using SKBitmap bitmap = qrCode.ToBitmap(scale, border, foreground, background);
-            using SKData data = bitmap.Encode(SKEncodedImageFormat.Png, 90);
+            using var bitmap = qrCode.ToBitmap(scale, border, foreground, background);
+            using var data = bitmap.Encode(SKEncodedImageFormat.Png, 90);
             return data.ToArray();
         }
 
@@ -148,9 +148,9 @@ namespace Net.Codecrete.QrCodeGenerator
             SKColor background
         )
         {
-            using SKBitmap bitmap = qrCode.ToBitmap(scale, border, foreground, background);
-            using SKData data = bitmap.Encode(SKEncodedImageFormat.Png, 90);
-            using FileStream stream = File.OpenWrite(filename);
+            using var bitmap = qrCode.ToBitmap(scale, border, foreground, background);
+            using var data = bitmap.Encode(SKEncodedImageFormat.Png, 90);
+            using var stream = File.OpenWrite(filename);
             data.SaveTo(stream);
         }
 
@@ -180,8 +180,8 @@ namespace Net.Codecrete.QrCodeGenerator
 
         public static string ToBase64(this QrCode qrCode, int scale = 1, int border = 0)
         {
-            byte[] bytes = qrCode.ToPng(scale, border, SKColors.Black, SKColors.White);
-            string base64String = Convert.ToBase64String(bytes, 0, bytes.Length);
+            var bytes = qrCode.ToPng(scale, border, SKColors.Black, SKColors.White);
+            var base64String = Convert.ToBase64String(bytes, 0, bytes.Length);
             return $"data:image/png;base64,{base64String}";
         }
     }

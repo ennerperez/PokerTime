@@ -2,9 +2,9 @@
 @layout PokerSessionLayout
 @inherits PokerSessionLobbyBase
 
-@if (this.SessionStatus == null)
+@if (SessionStatus == null)
 {
-    if (this.HasLoaded)
+    if (HasLoaded)
     {
         <ErrorMessage Text="This poker session cannot be found!"/>
     }
@@ -16,9 +16,9 @@
     return;
 }
 
-<CascadingValue Value=@this.SessionIdObject IsFixed="true">
-    <CascadingValue Value=@this.CurrentParticipant IsFixed="true">
-        <CascadingValue Value=@this.SessionStatus>
+<CascadingValue Value=@SessionIdObject IsFixed="true">
+    <CascadingValue Value=@CurrentParticipant IsFixed="true">
+        <CascadingValue Value=@SessionStatus>
             <div class="row" data-test-element-id="main-board">
                 <div class="col">
                     <SessionBoard/>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="row pt-3">
                         <div class="col-12">
-                            <SessionOnlineList SessionId="@this.SessionId" CurrentParticipant="@this.CurrentParticipant"/>
+                            <SessionOnlineList SessionId="@SessionId" CurrentParticipant="@CurrentParticipant"/>
                         </div>
                     </div>
                 </div>

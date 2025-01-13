@@ -3,28 +3,28 @@
 @using PokerTime.Application.Sessions.Queries.GetSessionStatus
 @using PokerTime.Application.Symbols.Queries
 
-@if (this.SessionStatus.CanViewOwnCards)
+@if (SessionStatus.CanViewOwnCards)
 {
-    if (this.SessionStatus.UserStory != null)
+    if (SessionStatus.UserStory != null)
     {
-        <h2 class="title is-size-4">Estimation for: @(this.SessionStatus.UserStory.Title ?? "User story")</h2>
+        <h2 class="title is-size-4">Estimation for: @(SessionStatus.UserStory.Title ?? "User story")</h2>
     }
 
-    <CardChooser AvailableSymbols="@this.AvailableSymbols" />
+    <CardChooser AvailableSymbols="@AvailableSymbols" />
 }
 
-@if (this.SessionStatus.CanViewEstimationPanel)
+@if (SessionStatus.CanViewEstimationPanel)
 {
     <EstimationOverview />
 }
-else if (!this.SessionStatus.IsStarted)
+else if (!SessionStatus.IsStarted)
 {
 
     <p data-test-element-id="wait-for-start-message">
         Please wait for the facilitator to start this session.
     </p>
 }
-else if (this.SessionStatus.ShowUserStoriesOverview)
+else if (SessionStatus.ShowUserStoriesOverview)
 {
     <p data-test-element-id="session-finished-message">
         This planning poker session has concluded. You can find an overview of the estimations below.
@@ -44,7 +44,7 @@ else if (this.SessionStatus.ShowUserStoriesOverview)
 
     protected override async Task OnInitializedAsync()
     {
-        GetSymbolsQueryResponse response = await this.Mediator.Send(new GetSymbolsQuery(this.SessionStatus.SymbolSetId));
-        this.AvailableSymbols = response.Symbols;
+        var response = await Mediator.Send(new GetSymbolsQuery(SessionStatus.SymbolSetId));
+        AvailableSymbols = response.Symbols;
     }
 }

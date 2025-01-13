@@ -1,15 +1,6 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : PassphraseServiceTests.cs
-//  Project         : PokerTime.Domain.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Domain.Tests.Unit.Services {
-    using System;
+﻿namespace PokerTime.Domain.Tests.Unit.Services {
     using Domain.Services;
     using NUnit.Framework;
-    using PokerTime.Common;
 
     [TestFixture]
     public sealed class PassphraseServiceTests {
@@ -21,7 +12,7 @@ namespace PokerTime.Domain.Tests.Unit.Services {
             string passphrase = null;
 
             // When
-            TestDelegate action = () => this._passphraseService.CreateHashedPassphrase(passphrase);
+            TestDelegate action = () => _passphraseService.CreateHashedPassphrase(passphrase);
 
             // Then
             Assert.That(action, Throws.ArgumentNullException);
@@ -30,10 +21,10 @@ namespace PokerTime.Domain.Tests.Unit.Services {
         [Test]
         public void PassphraseService_EmptyArgument_ThrowsArgumentException() {
             // Given
-            string passphrase = String.Empty;
+            var passphrase = string.Empty;
 
             // When
-            TestDelegate action = () => this._passphraseService.CreateHashedPassphrase(passphrase);
+            TestDelegate action = () => _passphraseService.CreateHashedPassphrase(passphrase);
 
             // Then
             Assert.That(action, Throws.ArgumentException);
@@ -42,10 +33,10 @@ namespace PokerTime.Domain.Tests.Unit.Services {
         [Test]
         public void PassphraseService_Passphrase_Creates64LengthString() {
             // Given
-            string passphrase = "test";
+            var passphrase = "test";
 
             // When
-            string hashed = this._passphraseService.CreateHashedPassphrase(passphrase);
+            var hashed = _passphraseService.CreateHashedPassphrase(passphrase);
 
             // Then
             Assert.That(hashed, Has.Length.EqualTo(64));
@@ -55,14 +46,14 @@ namespace PokerTime.Domain.Tests.Unit.Services {
         [Repeat(10)]
         public void PassphraseService_Passphrase_CreatesValidPassphrase() {
             // Given
-            string passphrase = TestContext.CurrentContext.Random.NextGuid() + "_" + TestContext.CurrentContext.Random.NextGuid();
+            var passphrase = TestContext.CurrentContext.Random.NextGuid() + "_" + TestContext.CurrentContext.Random.NextGuid();
 
             // When
-            string hashed = this._passphraseService.CreateHashedPassphrase(passphrase);
+            var hashed = _passphraseService.CreateHashedPassphrase(passphrase);
 
             // Then
             Assert.That(hashed, Is.Not.EqualTo(passphrase));
-            Assert.That(this._passphraseService.ValidatePassphrase(passphrase, hashed), Is.True, $"Unable to validate passphrase [{passphrase}]");
+            Assert.That(_passphraseService.ValidatePassphrase(passphrase, hashed), Is.True, $"Unable to validate passphrase [{passphrase}]");
         }
     }
 }

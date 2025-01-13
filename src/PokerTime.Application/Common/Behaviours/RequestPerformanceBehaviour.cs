@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : RequestPerformanceBehaviour.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Behaviours {
+﻿namespace PokerTime.Application.Common.Behaviours {
     using System;
     using System.Diagnostics;
     using System.Threading;
@@ -23,10 +16,10 @@ namespace PokerTime.Application.Common.Behaviours {
             ILogger<TRequest> logger,
             ICurrentParticipantService currentParticipantService
         ) {
-            this._timer = new Stopwatch();
+            _timer = new Stopwatch();
 
-            this._logger = logger;
-            this._currentParticipantService = currentParticipantService;
+            _logger = logger;
+            _currentParticipantService = currentParticipantService;
         }
 
         public async Task<TResponse> Handle(
@@ -36,21 +29,21 @@ namespace PokerTime.Application.Common.Behaviours {
         ) {
             if (next == null) throw new ArgumentNullException(nameof(next));
 
-            this._timer.Start();
+            _timer.Start();
 
-            TResponse response = await next().ConfigureAwait(continueOnCapturedContext: false);
+            var response = await next().ConfigureAwait(continueOnCapturedContext: false);
 
-            this._timer.Stop();
+            _timer.Stop();
 
-            if (this._timer.ElapsedMilliseconds > 500) {
-                string name = typeof(TRequest).Name;
+            if (_timer.ElapsedMilliseconds > 500) {
+                var name = typeof(TRequest).Name;
 
-                this._logger.LogWarning(
+                _logger.LogWarning(
                     message:
                     "PokerTime.App Long running request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@Request}",
                     name,
-                    this._timer.ElapsedMilliseconds,
-                    (await this._currentParticipantService.GetParticipant().ConfigureAwait(false)).Id,
+                    _timer.ElapsedMilliseconds,
+                    (await _currentParticipantService.GetParticipant().ConfigureAwait(false)).Id,
                     request);
             }
 

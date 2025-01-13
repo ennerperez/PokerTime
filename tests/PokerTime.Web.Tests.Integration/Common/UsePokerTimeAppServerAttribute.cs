@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : UseReturnAppServerAttribute.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-[assembly: PokerTime.Web.Tests.Integration.Common.UseReturnAppServer]
+﻿[assembly: PokerTime.Web.Tests.Integration.Common.UseReturnAppServer]
 
 namespace PokerTime.Web.Tests.Integration.Common {
     using System;

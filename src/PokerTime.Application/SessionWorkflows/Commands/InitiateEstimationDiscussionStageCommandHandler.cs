@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : InitiateDiscussionStageCommandHandler.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.SessionWorkflows.Commands {
+﻿namespace PokerTime.Application.SessionWorkflows.Commands {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
@@ -23,9 +16,9 @@ namespace PokerTime.Application.SessionWorkflows.Commands {
 
             session.CurrentStage = SessionStage.EstimationDiscussion;
 
-            await this.DbContext.SaveChangesAsync(cancellationToken);
+            await DbContext.SaveChangesAsync(cancellationToken);
 
-            await this.DispatchUpdate(session, cancellationToken);
+            await DispatchUpdate(session, cancellationToken);
 
             return Unit.Value;
         }

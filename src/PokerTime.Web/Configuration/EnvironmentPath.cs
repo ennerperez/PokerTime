@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : EnvironmentPath.cs
-//  Project         : PokerTime.Web
-// ******************************************************************************
-
-namespace PokerTime.Web.Configuration {
+﻿namespace PokerTime.Web.Configuration {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;

@@ -1,26 +1,18 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : RequestValidationBehaviour.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Common.Behaviours {
+﻿namespace PokerTime.Application.Common.Behaviours {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using FluentValidation;
-    using FluentValidation.Results;
     using MediatR;
-    using ValidationException = PokerTime.Application.Common.ValidationException;
+    using ValidationException = ValidationException;
 
     public sealed class RequestValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull, IRequest<TResponse> {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
         public RequestValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) {
-            this._validators = validators;
+            _validators = validators;
         }
 
         public Task<TResponse> Handle(
@@ -31,7 +23,7 @@ namespace PokerTime.Application.Common.Behaviours {
             if (next == null) throw new ArgumentNullException(nameof(next));
             var context = new ValidationContext<TRequest>(request);
 
-            List<ValidationFailure> failures = this._validators.Select(selector: v => v.Validate(context: context)).
+            var failures = _validators.Select(selector: v => v.Validate(context: context)).
                 SelectMany(selector: result => result.Errors).
                 Where(predicate: f => f != null).
                 ToList();

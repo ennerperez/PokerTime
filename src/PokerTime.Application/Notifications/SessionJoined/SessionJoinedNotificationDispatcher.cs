@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : SessionJoinedNotificationDispatcher.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.Notifications.SessionJoined {
+﻿namespace PokerTime.Application.Notifications.SessionJoined {
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using Sessions.Queries.GetParticipantsInfo;

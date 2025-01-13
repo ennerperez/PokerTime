@@ -1,14 +1,6 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : SessionIdentifierTests.cs
-//  Project         : PokerTime.Domain.Tests.Unit
-// ******************************************************************************
-
-namespace PokerTime.Domain.Tests.Unit.ValueObjects {
+﻿namespace PokerTime.Domain.Tests.Unit.ValueObjects {
     using System.Collections.Generic;
     using Domain.Services;
-    using Domain.ValueObjects;
     using NUnit.Framework;
     using NUnit.Framework.Legacy;
 
@@ -23,8 +15,8 @@ namespace PokerTime.Domain.Tests.Unit.ValueObjects {
             var generatedIds = new HashSet<string>(1000);
 
             // When / then
-            for (int count = 1000; count > 0; count--) {
-                SessionIdentifier identifier = this._sessionIdentifierService.CreateNew();
+            for (var count = 1000; count > 0; count--) {
+                var identifier = _sessionIdentifierService.CreateNew();
 
                 Assert.That(generatedIds.Add(identifier.StringId), Is.True, $"Non-unique identifier created: {identifier}");
             }
@@ -34,10 +26,10 @@ namespace PokerTime.Domain.Tests.Unit.ValueObjects {
         [Repeat(100)]
         public void SessionIdentifier_CreateNew_CreatesValidId() {
             // Given
-            SessionIdentifier sessionIdentifier = this._sessionIdentifierService.CreateNew();
+            var sessionIdentifier = _sessionIdentifierService.CreateNew();
 
             // When
-            bool isValid = this._sessionIdentifierService.IsValid(sessionIdentifier.StringId);
+            var isValid = _sessionIdentifierService.IsValid(sessionIdentifier.StringId);
 
             // Then
             ClassicAssert.IsTrue(isValid, $"Id {sessionIdentifier} is not valid");
@@ -48,7 +40,7 @@ namespace PokerTime.Domain.Tests.Unit.ValueObjects {
         [Repeat(100)]
         public void SessionIdentifier_CreateNew_CreatesIdOfLengthLessThanOrEqualTo32() {
             // Given / when
-            SessionIdentifier sessionIdentifier = this._sessionIdentifierService.CreateNew();
+            var sessionIdentifier = _sessionIdentifierService.CreateNew();
 
             // Then
             Assert.That(sessionIdentifier.StringId, Has.Length.LessThanOrEqualTo(32), $"Id {sessionIdentifier} is not valid");

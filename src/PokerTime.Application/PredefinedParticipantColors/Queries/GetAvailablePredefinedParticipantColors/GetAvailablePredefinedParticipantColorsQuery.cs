@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : ParticipantColor.cs
-//  Project         : PokerTime.Application
-// ******************************************************************************
-
-namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailablePredefinedParticipantColors {
+﻿namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailablePredefinedParticipantColors {
     using System.Collections.Generic;
     using MediatR;
 
@@ -13,10 +6,10 @@ namespace PokerTime.Application.PredefinedParticipantColors.Queries.GetAvailable
         public string SessionId { get; }
 
         public GetAvailablePredefinedParticipantColorsQuery(string sessionId) {
-            this.SessionId = sessionId;
+            SessionId = sessionId;
         }
 
-        public override string ToString() => $"[{nameof(GetAvailablePredefinedParticipantColorsQuery)}] {this.SessionId}";
+        public override string ToString() => $"[{nameof(GetAvailablePredefinedParticipantColorsQuery)}] {SessionId}";
     }
 
 }

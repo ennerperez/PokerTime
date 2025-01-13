@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-// 
-//  File:           : TestContextLogger.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using Microsoft.Extensions.Logging;
     using NUnit.Framework;
@@ -21,11 +14,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
         private string _scopeName;
 
         public TestContextLogger(string categoryName) {
-            this._categoryName = categoryName;
+            _categoryName = categoryName;
         }
 
         public IDisposable BeginScope<TState>(TState state) {
-            this._scopeName = state?.ToString();
+            _scopeName = state?.ToString();
             return new LoggingScope(this);
         }
 
@@ -38,8 +31,8 @@ namespace PokerTime.Web.Tests.Integration.Common {
             Exception exception,
             Func<TState, Exception, string> formatter
         ) {
-            string preamble =
-                $"[{this._categoryName}] {(!String.IsNullOrEmpty(this._scopeName) ? (this._scopeName + " -> ") : "")}";
+            var preamble =
+                $"[{_categoryName}] {(!string.IsNullOrEmpty(_scopeName) ? (_scopeName + " -> ") : "")}";
 
             TestContext.WriteLine($"{preamble} {eventId} {formatter(state, exception)} [{exception}]");
         }
@@ -48,10 +41,10 @@ namespace PokerTime.Web.Tests.Integration.Common {
             private readonly TestContextLogger _parent;
 
             public LoggingScope(TestContextLogger parent) {
-                this._parent = parent;
+                _parent = parent;
             }
 
-            public void Dispose() => this._parent._scopeName = null;
+            public void Dispose() => _parent._scopeName = null;
         }
     }
 }

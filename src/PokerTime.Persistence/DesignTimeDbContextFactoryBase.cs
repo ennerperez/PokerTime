@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  ©  Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : DesignTimeDbContextFactoryBase.cs
-//  Project         : PokerTime.Persistence
-// ******************************************************************************
-
-namespace PokerTime.Persistence {
+﻿namespace PokerTime.Persistence {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
@@ -20,14 +13,14 @@ namespace PokerTime.Persistence {
         private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
 
         public TContext CreateDbContext(string[] args) {
-            string basePath = Directory.GetCurrentDirectory() + String.Format(Culture.Invariant, "{0}..{0}PokerTime.Web", Path.DirectorySeparatorChar);
-            return this.Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
+            var basePath = Directory.GetCurrentDirectory() + string.Format(Culture.Invariant, "{0}..{0}PokerTime.Web", Path.DirectorySeparatorChar);
+            return Create(basePath, Environment.GetEnvironmentVariable(AspNetCoreEnvironment));
         }
 
         protected abstract TContext CreateNewInstance(DbContextOptions<TContext> options);
 
         private TContext Create(string basePath, string environmentName) {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile("appsettings.local.json", optional: true)
@@ -36,13 +29,13 @@ namespace PokerTime.Persistence {
                 .Build();
 
             var databaseOptions = (IDatabaseOptions)configuration.GetSection("Database").Get(Type.GetType("PokerTime.Web.Configuration.DatabaseOptions, PokerTime.Web", true));
-            string connectionString = databaseOptions.CreateConnectionString();
+            var connectionString = databaseOptions.CreateConnectionString();
 
-            return this.Create(connectionString);
+            return Create(connectionString);
         }
 
         private TContext Create(string connectionString) {
-            if (String.IsNullOrEmpty(connectionString)) {
+            if (string.IsNullOrEmpty(connectionString)) {
                 throw new ArgumentException($"Connection string is null or empty.", nameof(connectionString));
             }
 
@@ -52,7 +45,7 @@ namespace PokerTime.Persistence {
 
             optionsBuilder.UseSqlServer(connectionString);
 
-            return this.CreateNewInstance(optionsBuilder.Options);
+            return CreateNewInstance(optionsBuilder.Options);
         }
     }
 }

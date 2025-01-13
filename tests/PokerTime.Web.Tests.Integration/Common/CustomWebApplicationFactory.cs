@@ -1,11 +1,4 @@
-﻿// ******************************************************************************
-//  © 2019 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CustomWebApplicationFactory.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Common {
+﻿namespace PokerTime.Web.Tests.Integration.Common {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
@@ -44,11 +37,11 @@ namespace PokerTime.Web.Tests.Integration.Common {
         [SuppressMessage("ReSharper", "VirtualMemberCallInConstructor", Justification = "Constant config")]
         protected CustomWebApplicationFactory() {
 
-            this._sqliteConnection = new SqliteConnection(this.ConnectionString);
-            this._sqliteConnection.Open();
+            _sqliteConnection = new SqliteConnection(ConnectionString);
+            _sqliteConnection.Open();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Not necessary for tests")]
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Not necessary for tests")]
         protected override void ConfigureWebHost(IWebHostBuilder builder) {
             if (builder == null) throw new ArgumentNullException(nameof(builder));
 
@@ -66,7 +59,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
                     lb.SetMinimumLevel(LogLevel.Trace);
                     lb.AddProvider(new TestContextLoggerProvider());
 
-                    string logFileName = (TestContext.CurrentContext?.Test.ClassName ?? "test-log") + ".log";
+                    var logFileName = (TestContext.CurrentContext?.Test.ClassName ?? "test-log") + ".log";
                     lb.AddFile(Path.Join(Paths.TestArtifactDir, logFileName));
                 })
                 .ConfigureTestServices(services => {
@@ -74,8 +67,8 @@ namespace PokerTime.Web.Tests.Integration.Common {
                     services.RemoveAll<PokerTimeDbContext>();
 
                     services.AddScoped(sp => {
-                        DbContextOptions<PokerTimeDbContext> options = new DbContextOptionsBuilder<PokerTimeDbContext>()
-                            .UseSqlite(this.ConnectionString)
+                        var options = new DbContextOptionsBuilder<PokerTimeDbContext>()
+                            .UseSqlite(ConnectionString)
                             .Options;
 
                         var context = new PokerTimeDbContext(options);
@@ -93,12 +86,12 @@ namespace PokerTime.Web.Tests.Integration.Common {
                 .UseEnvironment(environment: "Test");
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "It's fine for testing")]
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "It's fine for testing")]
         public void InitializeBaseData() {
             // Create a scope to obtain a reference to the database
-            using IServiceScope scope = this.Services.CreateScope();
+            using var scope = Services.CreateScope();
 
-            IServiceProvider scopedServices = scope.ServiceProvider;
+            var scopedServices = scope.ServiceProvider;
             var context = scopedServices.GetRequiredService<PokerTimeDbContext>();
             var logger = scopedServices.
                 GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
@@ -118,9 +111,9 @@ namespace PokerTime.Web.Tests.Integration.Common {
 
         protected override TestServer CreateServer(IWebHostBuilder builder) {
             // See: https://github.com/aspnet/AspNetCore/issues/4892
-            this._webHost = builder.Build();
+            _webHost = builder.Build();
 
-            var testServer = new TestServer(new PassthroughWebHostBuilder(this._webHost));
+            var testServer = new TestServer(new PassthroughWebHostBuilder(_webHost));
             var address = testServer.Host.ServerFeatures.Get<IServerAddressesFeature>();
             testServer.BaseAddress = new Uri(address.Addresses.First());
 
@@ -131,13 +124,13 @@ namespace PokerTime.Web.Tests.Integration.Common {
             private readonly IWebHost _webHost;
 
             public PassthroughWebHostBuilder(IWebHost webHost) {
-                this._webHost = webHost;
+                _webHost = webHost;
             }
 
-            public IWebHost Build() => this._webHost;
+            public IWebHost Build() => _webHost;
 
             public IWebHostBuilder ConfigureAppConfiguration(Action<WebHostBuilderContext, IConfigurationBuilder> configureDelegate) {
-                TestContext.WriteLine($"Ignoring call: {typeof(PassthroughWebHostBuilder)}.{nameof(this.ConfigureAppConfiguration)}");
+                TestContext.WriteLine($"Ignoring call: {typeof(PassthroughWebHostBuilder)}.{nameof(ConfigureAppConfiguration)}");
                 return this;
             }
 
@@ -154,7 +147,7 @@ namespace PokerTime.Web.Tests.Integration.Common {
             public string GetSetting(string key) => throw new NotImplementedException();
 
             public IWebHostBuilder UseSetting(string key, string value) {
-                TestContext.WriteLine($"Ignoring call: {typeof(PassthroughWebHostBuilder)}.{nameof(this.UseSetting)}({key}, {value})");
+                TestContext.WriteLine($"Ignoring call: {typeof(PassthroughWebHostBuilder)}.{nameof(UseSetting)}({key}, {value})");
                 return this;
             }
         }
@@ -163,9 +156,9 @@ namespace PokerTime.Web.Tests.Integration.Common {
             base.Dispose(disposing);
 
             if (disposing) {
-                this._webHost?.Dispose();
-                this._sqliteConnection?.Dispose();
-                this._sqliteConnection = null;
+                _webHost?.Dispose();
+                _sqliteConnection?.Dispose();
+                _sqliteConnection = null;
             }
         }
     }

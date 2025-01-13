@@ -1,13 +1,5 @@
-﻿// ******************************************************************************
-//  © 2020 Sebastiaan Dammann | damsteen.nl
-//
-//  File:           : CreatePokerSessionWithLobbyCreationPassphraseTests.cs
-//  Project         : PokerTime.Web.Tests.Integration
-// ******************************************************************************
-
-namespace PokerTime.Web.Tests.Integration.Pages {
+﻿namespace PokerTime.Web.Tests.Integration.Pages {
     using System;
-    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.Linq;
     using Application.Common.Settings;
@@ -23,53 +15,53 @@ namespace PokerTime.Web.Tests.Integration.Pages {
 
         [SetUp]
         public void SetSecuritySettings() {
-            this._temporarySettingsScope = new TemporarySettingsScope<SecuritySettings>(this.App);
-            this._temporarySettingsScope.SaveSettings(securitySettings => {
+            _temporarySettingsScope = new TemporarySettingsScope<SecuritySettings>(App);
+            _temporarySettingsScope.SaveSettings(securitySettings => {
                 securitySettings.LobbyCreationPassphrase = SecurityPassword;
             });
         }
 
         [TearDown]
-        public void ResetSecuritySettings() => this._temporarySettingsScope.RestoreSettings();
+        public void ResetSecuritySettings() => _temporarySettingsScope.RestoreSettings();
 
         [Test]
         public void LobbyCreationPassphraseActive_CreatePokerSession_SubmitValid_ShowDialog() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
+            Page.ScrollDown();
+            Page.Submit();
 
             // Then
-            Assert.That(this.Page.LobbyCreationPassphraseModal, Has.Property(nameof(IWebElement.Displayed)).EqualTo(true).Retry(),
+            Assert.That(Page.LobbyCreationPassphraseModal, Has.Property(nameof(IWebElement.Displayed)).EqualTo(true).Retry(),
                 "Expected modal for the passphrase to become visible");
         }
 
         [Test]
         public void LobbyCreationPassphraseActive_CreatePokerSession_PasswordDialog_InvalidPassphrase_ShowErrorInsideDialog() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
-            this.EnsurePasswordDialogVisible();
+            Page.ScrollDown();
+            Page.Submit();
+            EnsurePasswordDialogVisible();
 
-            this.Page.LobbyCreationPassphraseInput.SendKeys("invalid password");
-            this.Page.ModalSubmit();
-            this.Page.ScrollDown();
+            Page.LobbyCreationPassphraseInput.SendKeys("invalid password");
+            Page.ModalSubmit();
+            Page.ScrollDown();
 
             // Then
-            string[] messages = new DefaultWait<CreatePokerSessionPage>(this.Page)
+            var messages = new DefaultWait<CreatePokerSessionPage>(Page)
                 .Until(p => {
-                    ReadOnlyCollection<IWebElement> collection = p.GetValidationMessages();
+                    var collection = p.GetValidationMessages();
                     if (collection.Count == 0) return null;
                     return collection;
                 })
@@ -85,45 +77,45 @@ namespace PokerTime.Web.Tests.Integration.Pages {
         [Test]
         public void LobbyCreationPassphraseActive_CreatePokerSessionOnSubmitValidPassphrase_CreateSession() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
-            this.Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.SessionTitleInput.SendKeys(TestContext.CurrentContext.Test.FullName.Split("_").LastOrDefault());
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
-            this.EnsurePasswordDialogVisible();
+            Page.ScrollDown();
+            Page.Submit();
+            EnsurePasswordDialogVisible();
 
-            this.Page.LobbyCreationPassphraseInput.SendKeys(SecurityPassword);
-            this.Page.ModalSubmit();
+            Page.LobbyCreationPassphraseInput.SendKeys(SecurityPassword);
+            Page.ModalSubmit();
 
             // Then
-            Assert.That(this.Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
+            Assert.That(Page.GetUrlShown(), Does.Match(@"http://localhost:\d+/pokertime-session/([A-z0-9]+)/join"));
         }
         [Test]
         public void LobbyCreationPassphraseActive_CreatePokerSessionOnSubmitWithValidPassphraseWithFormErrors_HidesModal() {
             // Given
-            this.Page.Navigate(this.App);
+            Page.Navigate(App);
 
             // When
             // ... (don't enter a title, which is a required field)
-            this.Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
+            Page.FacilitatorPassphraseInput.SendKeys("my secret facilitator password");
 
-            this.Page.ScrollDown();
-            this.Page.Submit();
-            this.EnsurePasswordDialogVisible();
+            Page.ScrollDown();
+            Page.Submit();
+            EnsurePasswordDialogVisible();
 
-            this.Page.LobbyCreationPassphraseInput.SendKeys(SecurityPassword);
-            this.Page.ModalSubmit();
+            Page.LobbyCreationPassphraseInput.SendKeys(SecurityPassword);
+            Page.ModalSubmit();
 
             // Then
-            Assert.That(() => this.Page.LobbyCreationPassphraseModalIsDisplayed, Is.False.Retry(),
+            Assert.That(() => Page.LobbyCreationPassphraseModalIsDisplayed, Is.False.Retry(),
                 "Expected the modal to become hidden because the error is on the form itself");
         }
 
         private void EnsurePasswordDialogVisible() =>
-            Assume.That(this.Page.LobbyCreationPassphraseModal,
+            Assume.That(Page.LobbyCreationPassphraseModal,
                 Has.Property(nameof(IWebElement.Displayed)).EqualTo(true).Retry(),
                 "Expected modal for the passphrase to become visible");
     }
